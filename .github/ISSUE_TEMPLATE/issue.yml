@@ -1,0 +1,19 @@
+name: ISSUE
+description: 새로운 이슈 추가
+body:
+  - type: textarea
+    attributes:
+      label: 📄 Describe
+      description: 해당 이슈에 대한 설명을 상세히 적어주세요
+      placeholder: 오른쪽에 Assignees, Label, Project, MileStone 모두 체크
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ Tasks
+      description: 해야 하는 작업을 task 별로 상세히 작성해주세요
+      placeholder: |
+        - [ ] task1
+        - [ ] task2
+    validations:
+      required: true
