@@ -34,7 +34,7 @@ public enum Allergy {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public static String convertToString(EnumSet<Allergy> allergies){
+    public static String convertToString(EnumSet<Allergy> allergies) {
         if (allergies.isEmpty() || allergies == null) {
             return "";
         }

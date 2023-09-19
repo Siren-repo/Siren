@@ -19,7 +19,7 @@ public enum CategoryType {
     }
 
     @JsonCreator
-    public static CategoryType of(String typeName){
+    public static CategoryType of(String typeName) {
         return Arrays.stream(values())
                 .filter(categoryType -> Objects.equals(categoryType.name(), typeName))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리 타입 입니다."));

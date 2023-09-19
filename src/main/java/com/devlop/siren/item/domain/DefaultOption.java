@@ -1,12 +1,13 @@
 package com.devlop.siren.item.domain;
 
-import java.util.Objects;
+import com.devlop.siren.item.dto.DefaultOptionCreateRequest;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-import com.devlop.siren.item.dto.DefaultOptionCreateRequest;
-import lombok.*;
 
 @Table(name = "default_options")
 @Entity
@@ -52,7 +53,7 @@ public class DefaultOption {
         this.hazelnutSyrupCount = this.hazelnutSyrupCount == null ? 0 : this.hazelnutSyrupCount;
     }
 
-    public void update(DefaultOptionCreateRequest defaultOptionCreateRequest){
+    public void update(DefaultOptionCreateRequest defaultOptionCreateRequest) {
         this.espressoShotCount = defaultOptionCreateRequest.getEspressoShotCount();
         this.vanillaSyrupCount = defaultOptionCreateRequest.getVanillaSyrupCount();
         this.caramelSyrupCount = defaultOptionCreateRequest.getCaramelSyrupCount();

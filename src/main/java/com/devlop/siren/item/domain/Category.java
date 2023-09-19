@@ -1,7 +1,10 @@
 package com.devlop.siren.item.domain;
 
 import com.devlop.siren.item.dto.CategoryCreateRequest;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,12 +28,12 @@ public class Category {
     private CategoryType categoryType;
 
     @Builder
-    public Category(String categoryName, CategoryType categoryType){
+    public Category(String categoryName, CategoryType categoryType) {
         this.categoryName = categoryName;
         this.categoryType = categoryType;
     }
 
-    public void update(CategoryCreateRequest categoryCreateRequest){
+    public void update(CategoryCreateRequest categoryCreateRequest) {
         this.categoryName = categoryCreateRequest.getCategoryName();
         this.categoryType = categoryCreateRequest.getCategoryType();
     }
