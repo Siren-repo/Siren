@@ -1,7 +1,7 @@
 package com.devlop.siren.store.service;
 
-import com.devlop.siren.exception.ErrorCode;
-import com.devlop.siren.exception.GlobalException;
+import com.devlop.siren.global.exception.ErrorCode;
+import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.store.utils.GeocodingApi;
 import com.devlop.siren.store.domain.Store;
 import com.devlop.siren.store.dto.StoreRegisterDto;
@@ -10,6 +10,7 @@ import com.google.maps.model.GeocodingResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,8 @@ public class StoreService {
 
     private final GeocodingApi geocodingApi;
     private final StoreRepository storeRepository;
+
+    @Transactional
     public boolean registerStore(String role, StoreRegisterDto storeRegisterDto) {
         if (role.isEmpty()) {
             throw new GlobalException(ErrorCode.NOT_AUTH_ROLE);

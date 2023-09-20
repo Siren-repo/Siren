@@ -1,4 +1,4 @@
-package com.devlop.siren.exception;
+package com.devlop.siren.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
