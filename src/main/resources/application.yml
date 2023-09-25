@@ -20,6 +20,11 @@ jwt:
   access-token.expire-time-ms: 43200000 #12시간
   refresh-token.expired-time-ms: 604800000 #7일
 
+google:
+  geocoding:
+    key:
+      ${GeocodingService_KEY}
+
 ---
 
 spring:
@@ -43,10 +48,6 @@ spring:
       hibernate:
         format_sql: 'true'
 
-google:
-  geocoding:
-    key:
-      ${GeocodingService_KEY}
 
 ---
 logging:

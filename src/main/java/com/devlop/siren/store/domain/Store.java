@@ -1,9 +1,11 @@
 package com.devlop.siren.store.domain;
 
+import com.devlop.siren.store.dto.request.StoreUpdateRequest;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -47,5 +49,14 @@ public class Store {
         this.closeTime = closeTime;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+    public void update(StoreUpdateRequest storeUpdateRequest){
+        this.storeName = Objects.requireNonNullElse(storeUpdateRequest.getStoreName(), this.storeName);
+        this.storePhone = Objects.requireNonNullElse(storeUpdateRequest.getStorePhone(), this.storePhone);
+        this.city = Objects.requireNonNullElse(storeUpdateRequest.getCity(), this.city);
+        this.street = Objects.requireNonNullElse(storeUpdateRequest.getStreet(), this.street);
+        this.zipCode = Objects.requireNonNullElse(storeUpdateRequest.getZipCode(), this.zipCode);
+        this.openTime = Objects.requireNonNullElse(storeUpdateRequest.getOpenTime(), this.openTime);
+        this.closeTime = Objects.requireNonNullElse(storeUpdateRequest.getCloseTime(), this.closeTime);
     }
 }

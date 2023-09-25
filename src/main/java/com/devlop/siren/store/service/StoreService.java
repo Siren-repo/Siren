@@ -2,6 +2,7 @@ package com.devlop.siren.store.service;
 
 import com.devlop.siren.global.exception.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
+import com.devlop.siren.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.store.utils.GeocodingApi;
 import com.devlop.siren.store.domain.Store;
 import com.devlop.siren.store.dto.StoreRegisterDto;
@@ -51,4 +52,10 @@ public class StoreService {
     }
 
 
+    public void updateStore(Long storeId, StoreUpdateRequest storeUpdateRequest) {
+        Store store = storeRepository.findByStoreId(storeId)
+                .orElseThrow( () -> new GlobalException(ErrorCode.NOT_AUTH_ROLE));
+        // 회원의 권한을 체크 해줄 Member(user) entity 필요
+        store.update(storeUpdateRequest);
+    }
 }
