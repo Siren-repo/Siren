@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.EnumSet;
 
 @Entity
@@ -22,16 +25,20 @@ public class User {
     private Long id;
 
     @Column(unique = true)
+    @Email(message = "이메일 형식에 맞지 않습니다")
     private String email;
 
+    @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다")
     private String password;
 
+    @Size(max = 6, message = "닉네임은 한글로 최대 6자까지 가능합니다")
     private String nickName;
 
+    @Pattern(regexp = "^01(?:0|1|[6-9])-(\\d{3,4})-(\\d{4})$", message = "핸드폰번호 형식에 맞지 않습니다")
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.CUSTOMER;
+    private UserRole role;
 
     @Column(name = "allergy")
     @Convert(converter = AllergyConverter.class)
