@@ -1,6 +1,7 @@
 package com.devlop.siren.unit.domain.user.domain;
 
 import com.devlop.siren.unit.domain.user.util.AllergyConverter;
+import com.devlop.siren.unit.domain.user.util.validator.KoreanNickname;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,8 @@ public class User {
     @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다")
     private String password;
 
-    @Size(max = 6, message = "닉네임은 한글로 최대 6자까지 가능합니다")
+    @KoreanNickname
+    @Size(max = 6, message = "닉네임은 한글로 6자까지 가능합니다")
     private String nickName;
 
     @Pattern(regexp = "^01(?:0|1|[6-9])-(\\d{3,4})-(\\d{4})$", message = "핸드폰번호 형식에 맞지 않습니다")

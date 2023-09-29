@@ -13,10 +13,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.validation.ConstraintViolationException;
 import java.util.EnumSet;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -35,7 +33,7 @@ class UserRepositoryTest {
     void saveUser(){
         //given
         EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
-        User entity = UserFixture.get("test@test.com", "password", UserRole.CUSTOMER, allergies);
+        User entity = UserFixture.get("test@test.com", "password", "닉네임", UserRole.CUSTOMER, allergies);
 
         //when
         User savedUser = userRepository.save(entity);
@@ -50,7 +48,7 @@ class UserRepositoryTest {
         //given
         EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
         String requestEmail = "test@test.com";
-        User entity = UserFixture.get(requestEmail, "password", UserRole.CUSTOMER, allergies);
+        User entity = UserFixture.get(requestEmail, "password", "닉네임", UserRole.CUSTOMER, allergies);
 
         //when
         userRepository.save(entity);
