@@ -1,7 +1,9 @@
 spring:
   profiles:
-    active:  # 1. change active profile to local profile
-    group:   # 2. add local profile to profile group
+    active: local
+    group:
+      local:
+        - common
       prod:
         - common
       test:
@@ -19,7 +21,21 @@ jwt:
 
 ---
 
-### 3. create local profile setting
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATASOURCE_IP}:${DATASOURCE_PORT}/${DATASOURCE_DATABASE}?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 ---
 
