@@ -1,20 +1,12 @@
-package com.devlop.siren.unit.domain.user.dto.request;
+package com.devlop.siren.domain.user.dto.request;
 
-import com.devlop.siren.unit.domain.user.domain.AllergyType;
-import com.devlop.siren.unit.domain.user.domain.UserRole;
-import com.devlop.siren.unit.domain.user.util.AllergyConverter;
-import com.devlop.siren.unit.domain.user.util.validator.KoreanNickname;
+import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.util.validator.KoreanNickname;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.EnumSet;
 
 @Getter
 public class UserRegisterRequest {
@@ -36,4 +28,5 @@ public class UserRegisterRequest {
     private String phone;
 
     private String allergies;
+
 }
