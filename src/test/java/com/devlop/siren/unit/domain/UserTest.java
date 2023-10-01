@@ -1,9 +1,9 @@
 package com.devlop.siren.unit.domain;
 
 import com.devlop.siren.fixture.UserFixture;
-import com.devlop.siren.unit.domain.user.domain.AllergyType;
-import com.devlop.siren.unit.domain.user.domain.User;
-import com.devlop.siren.unit.domain.user.domain.UserRole;
+import com.devlop.siren.domain.user.domain.AllergyType;
+import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.domain.UserRole;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.*;

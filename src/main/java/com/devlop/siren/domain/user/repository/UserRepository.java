@@ -1,6 +1,6 @@
-package com.devlop.siren.unit.repository;
+package com.devlop.siren.domain.user.repository;
 
-import com.devlop.siren.unit.domain.user.domain.User;
+import com.devlop.siren.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

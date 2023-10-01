@@ -1,10 +1,10 @@
 package com.devlop.siren.unit.repository;
 
 import com.devlop.siren.fixture.UserFixture;
-import com.devlop.siren.unit.domain.user.domain.AllergyType;
-import com.devlop.siren.unit.domain.user.domain.User;
-import com.devlop.siren.unit.domain.user.domain.UserRole;
-import com.devlop.siren.unit.repository.UserRepository;
+import com.devlop.siren.domain.user.repository.UserRepository;
+import com.devlop.siren.domain.user.domain.AllergyType;
+import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.domain.UserRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

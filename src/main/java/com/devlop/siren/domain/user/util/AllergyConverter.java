@@ -1,6 +1,6 @@
-package com.devlop.siren.unit.domain.user.util;
+package com.devlop.siren.domain.user.util;
 
-import com.devlop.siren.unit.domain.user.domain.AllergyType;
+import com.devlop.siren.domain.user.domain.AllergyType;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.AttributeConverter;

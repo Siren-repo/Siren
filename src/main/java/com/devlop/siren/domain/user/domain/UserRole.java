@@ -1,4 +1,4 @@
-package com.devlop.siren.unit.domain.user.domain;
+package com.devlop.siren.domain.user.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

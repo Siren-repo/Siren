@@ -1,8 +1,8 @@
 package com.devlop.siren.fixture;
 
-import com.devlop.siren.unit.domain.user.domain.AllergyType;
-import com.devlop.siren.unit.domain.user.domain.User;
-import com.devlop.siren.unit.domain.user.domain.UserRole;
+import com.devlop.siren.domain.user.domain.AllergyType;
+import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.domain.UserRole;
 
 import java.util.EnumSet;
 
