@@ -1,6 +1,8 @@
-package com.devlop.siren.unit.domain.user.controller;
+package com.devlop.siren.domain.user.controller;
 
-import com.devlop.siren.unit.domain.user.service.UserService;
+import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
+import com.devlop.siren.domain.user.service.UserService;
+import com.devlop.siren.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,12 +14,14 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-public class UserRestController {
+public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
     public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request){
-        return ApiResponse.success(userService.register(request));
+        userService.register(request);
+        return ApiResponse.ok();
     }
+
 
 }

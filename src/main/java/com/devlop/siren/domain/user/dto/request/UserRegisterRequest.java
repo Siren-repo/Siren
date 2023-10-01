@@ -2,13 +2,16 @@ package com.devlop.siren.domain.user.dto.request;
 
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.util.validator.KoreanNickname;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
+@NoArgsConstructor
 public class UserRegisterRequest {
 
     @NotBlank(message = "이메일은 필수로 입력해야합니다")
@@ -16,11 +19,11 @@ public class UserRegisterRequest {
 
     @NotBlank(message = "비밀번호는 필수로 입력해야합니다")
     @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다")
-    @KoreanNickname
     private String password;
 
     @NotBlank(message = "비밀번호는 필수로 입력해야합니다")
     @Size(max = 6, message = "닉네임은 한글로 6자까지 가능합니다")
+    @KoreanNickname
     private String nickName;
 
     @NotBlank(message = "핸드폰번호는 필수로 입력해야합니다")
@@ -29,4 +32,12 @@ public class UserRegisterRequest {
 
     private String allergies;
 
+    @Builder
+    public UserRegisterRequest(String email, String password, String nickName, String phone, String allergies) {
+        this.email = email;
+        this.password = password;
+        this.nickName = nickName;
+        this.phone = phone;
+        this.allergies = allergies;
+    }
 }
