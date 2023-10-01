@@ -1,10 +1,7 @@
-package com.devlop.siren.item.domain;
+package com.devlop.siren.domain.item.entity;
 
-import com.devlop.siren.item.dto.DefaultOptionCreateRequest;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,18 +16,23 @@ public class DefaultOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long defaultOptionId;
 
+    @Setter
     @Column(name = "espresso_shot_count", columnDefinition = "TINYINT")
     private Integer espressoShotCount;
 
+    @Setter
     @Column(name = "vanilla_syrup_count", columnDefinition = "TINYINT")
     private Integer vanillaSyrupCount;
 
+    @Setter
     @Column(name = "caramel_syrup_count", columnDefinition = "TINYINT")
     private Integer caramelSyrupCount;
 
+    @Setter
     @Column(name = "hazelnut_syrup_count", columnDefinition = "TINYINT")
     private Integer hazelnutSyrupCount;
 
+    @Setter
     @Column(name = "size")
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -49,16 +51,16 @@ public class DefaultOption {
     public void prePersist() {
         this.espressoShotCount = this.espressoShotCount == null ? 0 : this.espressoShotCount;
         this.vanillaSyrupCount = this.vanillaSyrupCount == null ? 0 : this.vanillaSyrupCount;
-        this.caramelSyrupCount = this.caramelSyrupCount == null ? 0 : this.vanillaSyrupCount;
+        this.caramelSyrupCount = this.caramelSyrupCount == null ? 0 : this.caramelSyrupCount;
         this.hazelnutSyrupCount = this.hazelnutSyrupCount == null ? 0 : this.hazelnutSyrupCount;
     }
 
     public void update(DefaultOptionCreateRequest defaultOptionCreateRequest) {
-        this.espressoShotCount = defaultOptionCreateRequest.getEspressoShotCount();
-        this.vanillaSyrupCount = defaultOptionCreateRequest.getVanillaSyrupCount();
-        this.caramelSyrupCount = defaultOptionCreateRequest.getCaramelSyrupCount();
-        this.hazelnutSyrupCount = defaultOptionCreateRequest.getHazelnutSyrupCount();
-        this.size = defaultOptionCreateRequest.getSize();
+        setEspressoShotCount(defaultOptionCreateRequest.getEspressoShotCount());
+        setVanillaSyrupCount(defaultOptionCreateRequest.getVanillaSyrupCount());
+        setCaramelSyrupCount(defaultOptionCreateRequest.getCaramelSyrupCount());
+        setHazelnutSyrupCount(defaultOptionCreateRequest.getHazelnutSyrupCount());
+        setSize(defaultOptionCreateRequest.getSize());
     }
 
 }
