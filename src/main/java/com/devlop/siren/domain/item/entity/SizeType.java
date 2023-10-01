@@ -1,10 +1,10 @@
-package com.devlop.siren.item.domain;
+package com.devlop.siren.domain.item.entity;
 
+import com.devlop.siren.global.exception.InvalidSizeTypeException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 @Getter
 public enum SizeType {
@@ -24,7 +24,7 @@ public enum SizeType {
     @JsonCreator
     public static SizeType of(String size) {
         return Arrays.stream(values())
-                .filter(sizeType -> Objects.equals(sizeType.englishName, size))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사이즈입니다."));
+                .filter(sizeType -> sizeType.englishName.equals(size) || sizeType.name().equals(size))
+                .findFirst().orElseThrow(() -> new InvalidSizeTypeException());
     }
 }
