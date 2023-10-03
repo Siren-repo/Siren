@@ -5,7 +5,7 @@ import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.repository.CategoryRepository;
 import com.devlop.siren.domain.category.service.CategoryService;
-import com.devlop.siren.global.exception.DuplicateEntityException;
+import com.devlop.siren.global.exception.GlobalException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +59,7 @@ class CategoryServiceTest {
         //when
         when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any())).thenReturn(Optional.ofNullable(category));
         //then
-        assertThrows(DuplicateEntityException.class, () -> categoryService.register(validObject));
+        assertThrows(GlobalException.class, () -> categoryService.register(validObject));
     }
 
 }

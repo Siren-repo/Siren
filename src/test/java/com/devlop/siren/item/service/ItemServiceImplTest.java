@@ -4,8 +4,6 @@ import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.repository.CategoryRepository;
-import com.devlop.siren.domain.item.service.ItemServiceImpl;
-import com.devlop.siren.global.exception.EntityNotFoundException;
 import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
@@ -15,7 +13,10 @@ import com.devlop.siren.domain.item.entity.SizeType;
 import com.devlop.siren.domain.item.repository.DefaultOptionRepository;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.repository.NutritionRepository;
+import com.devlop.siren.domain.item.service.ItemServiceImpl;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.exception.GlobalException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,11 +63,11 @@ class ItemServiceImplTest {
         validObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
                 , 5000, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0,2,3,0,1,2,2,0,0,0));
+                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         inValidObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "dd")
                 , "아메리카노"
                 , -5, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0,2,3,0,1,2,2,0,0,0));
+                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
 
     }
 
@@ -109,8 +110,8 @@ class ItemServiceImplTest {
         Throwable throwable = catchThrowable(() -> itemService.create(inValidObject));
         // Then
         assertThat(throwable)
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining(EntityNotFoundException.errorMessage);
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY.getMESSAGE());
     }
 
 
@@ -124,8 +125,8 @@ class ItemServiceImplTest {
                 , inValidObject.getCategoryRequest().getCategoryName()));
         // Then
         assertThat(throwable)
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining(EntityNotFoundException.errorMessage);
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY.getMESSAGE());
     }
 
     @Test
@@ -137,8 +138,8 @@ class ItemServiceImplTest {
         Throwable throwable = catchThrowable(() -> itemService.findItemDetailById(itemId));
         // Then
         assertThat(throwable)
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining(EntityNotFoundException.errorMessage);
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
     }
 
     @Test
@@ -152,8 +153,8 @@ class ItemServiceImplTest {
 
         // Then
         assertThat(throwable)
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining(EntityNotFoundException.errorMessage);
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
     }
 
 

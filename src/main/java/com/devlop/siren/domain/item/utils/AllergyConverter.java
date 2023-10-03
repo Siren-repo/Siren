@@ -1,7 +1,8 @@
 package com.devlop.siren.domain.item.utils;
 
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.global.exception.InvalidAllergyTypeException;
+import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.exception.GlobalException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class AllergyConverter implements AttributeConverter<EnumSet<AllergyType>
         return Arrays.stream(AllergyType.values())
                 .filter(o -> o.getAllergyName().equals(allergyName))
                 .findAny()
-                .orElseThrow(() -> new InvalidAllergyTypeException());
+                .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.INVALID_ALLERGY_TYPE));
     }
 
     private List<String> convertEnumToString(EnumSet<AllergyType> attribute) {

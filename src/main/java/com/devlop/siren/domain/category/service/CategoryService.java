@@ -6,8 +6,8 @@ import com.devlop.siren.domain.category.dto.response.CategoryResponse;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.repository.CategoryRepository;
-import com.devlop.siren.global.exception.DuplicateEntityException;
-import com.devlop.siren.global.exception.EntityNotFoundException;
+import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,14 +35,16 @@ public class CategoryService {
 
     protected void validateDuplicateCategory(CategoryType categoryType, String categoryName) {
         categoryRepository.findByCategoryTypeAndCategoryName(categoryType, categoryName)
-                .ifPresent(o -> {throw new DuplicateEntityException();});
+                .ifPresent(o -> {
+                    throw new GlobalException(ResponseCode.ErrorCode.DUPLICATE_CATEGORY);
+                });
     }
 
 
     // 카테고리 타입별 모든 카테고리 이름 출력
     public CategoriesResponse findAllByType(CategoryType categoryType) {
         List<CategoryResponse> categoryResponses = categoryRepository.findByCategoryTypeOrderByCategoryId(categoryType)
-                .orElseThrow(() -> new EntityNotFoundException())
+                .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY))
                 .stream()
                 .map(category -> CategoryResponse.from(category))
                 .collect(Collectors.toUnmodifiableList());

@@ -1,6 +1,7 @@
 package com.devlop.siren.domain.item.entity;
 
-import com.devlop.siren.global.exception.InvalidSizeTypeException;
+import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.exception.GlobalException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
@@ -25,6 +26,6 @@ public enum SizeType {
     public static SizeType of(String size) {
         return Arrays.stream(values())
                 .filter(sizeType -> sizeType.englishName.equals(size) || sizeType.name().equals(size))
-                .findFirst().orElseThrow(() -> new InvalidSizeTypeException());
+                .findFirst().orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.INVALID_SIZE_TYPE));
     }
 }

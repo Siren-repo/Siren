@@ -1,6 +1,7 @@
 package com.devlop.siren.domain.category.entity;
 
-import com.devlop.siren.global.exception.InvalidCategoryTypeException;
+import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.exception.GlobalException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
@@ -22,7 +23,7 @@ public enum CategoryType {
     public static CategoryType of(String typeName) {
         return Arrays.stream(values())
                 .filter(categoryType -> categoryType.name.equals(typeName) || categoryType.name().equals(typeName))
-                .findFirst().orElseThrow(() -> new InvalidCategoryTypeException());
+                .findFirst().orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.INVALID_CATEGORY_TYPE));
     }
 
     @Override
