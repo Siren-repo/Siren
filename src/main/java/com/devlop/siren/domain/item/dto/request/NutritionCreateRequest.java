@@ -35,22 +35,23 @@ public class NutritionCreateRequest {
 
     @Getter
     public
-    enum Unit{
+    enum Unit {
         GRAM("g"),
         MILLI_GRAM("mg"),
         KCAL("Kcal");
 
         private final String unit;
+
         Unit(String unit) {
             this.unit = unit;
         }
     }
 
-    public String addUnit(Integer nutrition, Unit unit){
+    public String addUnit(Integer nutrition, Unit unit) {
         return String.valueOf(Optional.ofNullable(nutrition).orElse(0)).concat(unit.getUnit());
     }
 
-    public static Nutrition toEntity(NutritionCreateRequest nutrition){
+    public static Nutrition toEntity(NutritionCreateRequest nutrition) {
         return Nutrition.builder()
                 .calorie(nutrition.addUnit(nutrition.getCalorie(), NutritionCreateRequest.Unit.KCAL))
                 .carbohydrate(nutrition.addUnit(nutrition.getCarbohydrate(), NutritionCreateRequest.Unit.GRAM))

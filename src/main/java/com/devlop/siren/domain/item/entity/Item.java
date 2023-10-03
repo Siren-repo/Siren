@@ -56,8 +56,8 @@ public class Item {
 
     @PrePersist
     public void prePersist() {
-        this.isBest = this.isBest == null ? false : this.isBest;
-        this.isNew = this.isNew == null ? false : this.isNew;
+        this.isBest = this.isBest != null && this.isBest;
+        this.isNew = this.isNew != null && this.isNew;
     }
 
     @Builder

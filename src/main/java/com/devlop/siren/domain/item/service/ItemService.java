@@ -6,7 +6,6 @@ import com.devlop.siren.domain.item.dto.response.ItemDetailResponse;
 import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 
-// 추후에 custom을 확장하기 위해
 public interface ItemService {
 
     ItemResponse create(ItemCreateRequest request);

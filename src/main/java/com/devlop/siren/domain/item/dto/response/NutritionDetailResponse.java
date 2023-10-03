@@ -20,7 +20,7 @@ public class NutritionDetailResponse {
     String caffeine;
     String saturatedFat;
 
-    public static NutritionDetailResponse from(Item item){
+    public static NutritionDetailResponse from(Item item) {
         return NutritionDetailResponse.builder()
                 .itemId(item.getItemId())
                 .itemName(item.getItemName())
