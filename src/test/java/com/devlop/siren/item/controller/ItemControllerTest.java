@@ -43,11 +43,11 @@ class ItemControllerTest {
         validObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
                 , 5000, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0,2,3,0,1,2,2,0,0,0));
+                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         inValidObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
                 , -5, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0,2,3,0,1,2,2,0,0,0));
+                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
 
     }
 
@@ -76,7 +76,7 @@ class ItemControllerTest {
                         .content(objectMapper.writeValueAsString(inValidObject))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
 
     }
@@ -98,7 +98,7 @@ class ItemControllerTest {
         mvc.perform(get("/api/items")
                         .param("categoryType", categoryType)
                         .param("categoryName", inValidObject.getCategoryRequest().getCategoryName()))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
     }
 
@@ -116,7 +116,7 @@ class ItemControllerTest {
     @DisplayName("Invalid 조건에 맞는 파라미터를 넘기면 아이템 상세 조회에 실패한다 - DTO 검증")
     void inValidFindItemDetail(Long itemId) throws Exception {
         mvc.perform(get("/api/items/{itemId}", itemId))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
     }
 
@@ -134,7 +134,7 @@ class ItemControllerTest {
     @DisplayName("Invalid 조건에 맞는 파라미터를 넘기면 아이템 삭제에 실패한다 - DTO 검증")
     void inValidDeleteItem(Long itemId) throws Exception {
         mvc.perform(delete("/api/items/{itemId}", itemId))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
     }
 
@@ -158,7 +158,7 @@ class ItemControllerTest {
                         .content(objectMapper.writeValueAsString(inValidObject))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
     }
 

@@ -28,14 +28,14 @@ public class CategoryController {
     @PostMapping
     public ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest categoryCreateRequest) {
         CategoryResponse categoryResponse = categoryService.register(categoryCreateRequest);
-        return ApiResponse.createSuccess(ResponseCode.Normal.CREATE, categoryResponse);
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, categoryResponse);
     }
 
     // 카테고리 타입(음료) 별 카테고리 이름(에스프레소) 리스트 조회
     @GetMapping
     public ApiResponse<CategoriesResponse> findCategoriesByCategoryType(@NotBlank @RequestParam("categoryType") String categoryType) {
         CategoriesResponse categories = categoryService.findAllByType(CategoryType.of(categoryType));
-        return ApiResponse.createSuccess(ResponseCode.Normal.RETRIEVE, categories);
+        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, categories);
     }
 
 }

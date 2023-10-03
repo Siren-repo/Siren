@@ -66,7 +66,7 @@ class CategoryControllerTest {
                         .content(objectMapper.writeValueAsString(inValidObject))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
 
     }
@@ -87,7 +87,7 @@ class CategoryControllerTest {
     void inValidFindCategoriesByCategoryType(String categoryType) throws Exception {
         mvc.perform(get("/api/categories")
                         .param("categoryType", categoryType))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotAcceptable())
                 .andDo(print());
 
     }
