@@ -1,6 +1,5 @@
 package com.devlop.siren.domain.user.domain;
 
-import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.util.AllergyConverter;
 import com.devlop.siren.domain.user.util.validator.KoreanNickname;
 import com.devlop.siren.global.common.BaseEntity;
@@ -15,6 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.EnumSet;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -54,25 +54,13 @@ public class User extends BaseEntity {
     @Builder
     private User(String email, String password, String nickName, String phone,
                  UserRole role, EnumSet<AllergyType> allergies) {
-        this.email = email;
-        this.password = password;
-        this.nickName = nickName;
-        this.phone = phone;
+        this.email = Objects.requireNonNull(email);
+        this.password = Objects.requireNonNull(password);
+        this.nickName = Objects.requireNonNull(nickName);
+        this.phone = Objects.requireNonNull(phone);
         this.role = role;
         this.allergies = allergies;
         this.isDeleted = false;
-    }
-
-    public static User fromDto(UserRegisterRequest request, String encodedPassword,
-                               UserRole role, EnumSet<AllergyType> allergies){
-        return User.builder()
-                .email(request.getEmail())
-                .password(encodedPassword)
-                .nickName(request.getNickName())
-                .phone(request.getPhone())
-                .role(role)
-                .allergies(allergies)
-                .build();
     }
 
     public void delete(){
