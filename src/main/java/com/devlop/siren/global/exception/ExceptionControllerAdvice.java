@@ -35,4 +35,11 @@ public class ExceptionControllerAdvice {
                 .body(ApiResponse.error(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),errorMessages));
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> applicationHandler(RuntimeException e){
+        log.error("Error occurs {}", e.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.name(), null));
+    }
+
 }
