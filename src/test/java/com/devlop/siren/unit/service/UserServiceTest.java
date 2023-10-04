@@ -63,7 +63,7 @@ public class UserServiceTest {
                 .allergies("allergies")
                 .build();
         EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT);
-        User duplicatedUser = User.fromDto(request, "encodedPassword", UserRole.CUSTOMER, allergies);
+        User duplicatedUser = UserRegisterRequest.fromDto(request, "encodedPassword", UserRole.CUSTOMER, allergies);
 
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(duplicatedUser));
         GlobalException e = Assertions.assertThrows(GlobalException.class, () -> service.register(request));

@@ -1,6 +1,8 @@
 package com.devlop.siren.domain.user.dto.request;
 
+import com.devlop.siren.domain.user.domain.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.util.validator.KoreanNickname;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.EnumSet;
 
 @Getter
 @NoArgsConstructor
@@ -39,5 +42,17 @@ public class UserRegisterRequest {
         this.nickName = nickName;
         this.phone = phone;
         this.allergies = allergies;
+    }
+
+    public static User fromDto(UserRegisterRequest request, String encodedPassword,
+                               UserRole role, EnumSet<AllergyType> allergies){
+        return User.builder()
+                .email(request.getEmail())
+                .password(encodedPassword)
+                .nickName(request.getNickName())
+                .phone(request.getPhone())
+                .role(role)
+                .allergies(allergies)
+                .build();
     }
 }

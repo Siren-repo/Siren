@@ -26,7 +26,7 @@ public class UserService {
             throw new GlobalException(ErrorCode.DUPLICATED_MEMBER);
         });
 
-        User entity = User.fromDto(request, encoder.encode(request.getPassword()),
+        User entity = UserRegisterRequest.fromDto(request, encoder.encode(request.getPassword()),
                 UserRole.CUSTOMER, converter.convertToEntityAttribute(request.getAllergies()));
 
         userRepository.save(entity);
