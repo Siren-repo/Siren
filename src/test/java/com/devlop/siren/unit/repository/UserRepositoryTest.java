@@ -33,22 +33,22 @@ class UserRepositoryTest {
     void saveUser(){
         //given
         EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
-        User entity = UserFixture.get("test@test.com", "password", "닉네임", UserRole.CUSTOMER, allergies);
+        String requestEmail = "test@test.com";
+        User entity = UserFixture.get(requestEmail, "password", "닉네임");
 
         //when
         User savedUser = userRepository.save(entity);
 
         //then
         Assertions.assertEquals(savedUser.getAllergies(), allergies);
-        Assertions.assertEquals(savedUser.getEmail(), "test@test.com");
+        Assertions.assertEquals(savedUser.getEmail(), requestEmail);
     }
 
     @Test
     void findByEmail(){
         //given
-        EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
         String requestEmail = "test@test.com";
-        User entity = UserFixture.get(requestEmail, "password", "닉네임", UserRole.CUSTOMER, allergies);
+        User entity = UserFixture.get(requestEmail, "password", "닉네임");
 
         //when
         userRepository.save(entity);

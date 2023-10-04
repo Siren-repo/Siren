@@ -7,6 +7,7 @@ import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.domain.user.util.AllergyConverter;
+import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.exception.GlobalException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -39,12 +40,9 @@ public class UserServiceTest {
     @Test
     @DisplayName("요청한 내용으로 회원가입을 진행한다")
     void register(){
-        UserRegisterRequest request = UserRegisterRequest.builder()
-                .email("test@test.com")
-                .password("password")
-                .allergies("allergies")
-                .build();
-        EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT);
+
+        UserRegisterRequest request = UserFixture.get("email", "encodedPassword");
+        EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
 
         when(encoder.encode(request.getPassword())).thenReturn("encodedPassword");
         when(converter.convertToEntityAttribute(request.getAllergies())).thenReturn(allergies);
@@ -57,12 +55,8 @@ public class UserServiceTest {
     @Test
     @DisplayName("이메일이 중복되어 요청한 정보로 회원가입을 할 수 없다")
     void registerWithDuplicatedUser(){
-        UserRegisterRequest request = UserRegisterRequest.builder()
-                .email("test@test.com")
-                .password("password")
-                .allergies("allergies")
-                .build();
-        EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT);
+        UserRegisterRequest request = UserFixture.get("email", "password");
+        EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
         User duplicatedUser = UserRegisterRequest.fromDto(request, "encodedPassword", UserRole.CUSTOMER, allergies);
 
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(duplicatedUser));

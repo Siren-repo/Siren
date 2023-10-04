@@ -1,13 +1,11 @@
 package com.devlop.siren.unit.domain;
 
 import com.devlop.siren.fixture.UserFixture;
-import com.devlop.siren.domain.user.domain.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.*;
-import java.util.EnumSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserTest {
     @Test
     void changeUserRole(){
-        User entity = UserFixture.get("test@test.com", "password", "닉네임", UserRole.CUSTOMER, EnumSet.of(AllergyType.PEANUT));
+        User entity = UserFixture.get("test@test.com", "password", "닉네임");
 
         entity.changeRole(UserRole.STAFF);
 
@@ -25,7 +23,7 @@ public class UserTest {
     @Test
     void validatePasswordLength(){
         //given
-        User entity = UserFixture.get("test@test.com", "wrong", "닉네임", UserRole.CUSTOMER, EnumSet.of(AllergyType.PEANUT));
+        User entity = UserFixture.get("test@test.com", "wrong", "닉네임");
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -41,7 +39,7 @@ public class UserTest {
     @Test
     void validateNickName(){
         //given
-        User entity = UserFixture.get("test@test.com", "password", "harper", UserRole.CUSTOMER, EnumSet.of(AllergyType.PEANUT));
+        User entity = UserFixture.get("test@test.com", "password", "harper");
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -51,6 +49,6 @@ public class UserTest {
         ConstraintViolation<User> violation = violations.iterator().next();
 
         //then
-        assertEquals("닉네임은 한글로만 입력 가능합니다", violation.getMessage()); // 예상한 메세지와 비교합니다.
+        assertEquals("닉네임은 한글로만 설정할 수 있습니다", violation.getMessage()); // 예상한 메세지와 비교합니다.
     }
 }
