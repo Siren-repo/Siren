@@ -16,8 +16,9 @@ spring:
 
 jwt:
   secret-key: 2023-wanted-internship-siren-order-project.secret_key
-  access-token.expire-time-ms: 43200000 #12시간
+  access-token.expired-time-ms: 43200000 #12시간
   refresh-token.expired-time-ms: 604800000 #7일
+
 
 ---
 
@@ -25,6 +26,9 @@ spring:
   config:
     activate:
       on-profile: local
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DATASOURCE_IP}:${DATASOURCE_PORT}/${DATASOURCE_DATABASE}?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -43,6 +47,9 @@ spring:
   config:
     activate:
       on-profile: prod
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -58,6 +65,9 @@ spring:
   config:
     activate:
       on-profile: test
+  redis:
+      host: localhost
+      port: 16379
   datasource:
     username: sa
     password:
