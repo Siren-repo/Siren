@@ -1,6 +1,9 @@
 package com.devlop.siren.domain.user.controller;
 
+import com.devlop.siren.domain.user.dto.UserTokenDto;
+import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
+import com.devlop.siren.domain.user.dto.response.UserLoginResponse;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,11 @@ public class UserController {
     public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request){
         userService.register(request);
         return ApiResponse.ok();
+    }
+
+    @PostMapping("/login")
+    public ApiResponse<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request){
+        return ApiResponse.ok(userService.login(request));
     }
 
 
