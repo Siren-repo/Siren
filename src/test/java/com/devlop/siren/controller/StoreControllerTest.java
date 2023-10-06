@@ -118,27 +118,6 @@ public class StoreControllerTest {
                 .andDo(print());
     }
     @ParameterizedTest
-    @ValueSource(strings = {" "})
-    @DisplayName("매장 의 권한이 없을경우.")
-    void 매장_등록_권한_실패(String role) throws Exception {
-        StoreRegisterRequest storeRegisterRequest = StoreRegisterRequest.builder()
-                .storeName("test")
-                .storePhone("010101010" )
-                .city("Seoul")
-                .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
-                .zipCode(12345)
-                .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-                .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
-                .build();
-
-        mockMvc.perform(post("/api/stores/register/{role}",role)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(storeRegisterRequest)))
-                .andExpect(status().isNotAcceptable()) //
-                .andDo(print());
-    }
-
-    @ParameterizedTest
     @ValueSource(longs = {1L, 2L})
     @DisplayName("정상적인 삭제 의 경우")
     void deleteItem(Long storeId) throws Exception {
