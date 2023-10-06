@@ -4,6 +4,7 @@ import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.AttributeConverter;
@@ -14,14 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Convert
-@Service
+@Component
 public class AllergyConverter implements AttributeConverter<EnumSet<AllergyType>, String> {
 
     private static final String DELIMITER = ",";
 
     @Override
     public String convertToDatabaseColumn(EnumSet<AllergyType> attribute) {
-        if (attribute.isEmpty() || attribute == null) {
+        if (attribute == null || attribute.isEmpty()) {
             return "";
         }
         List<String> allergies = convertEnumToString(attribute);
