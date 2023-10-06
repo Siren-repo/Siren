@@ -1,4 +1,4 @@
-package com.devlop.siren.store.dto;
+package com.devlop.siren.store.request;
 
 import com.devlop.siren.store.domain.Store;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreRegisterDto {
+public class StoreRegisterRequest {
 
     @NotBlank(message = "매장 이름을 입력해주세요 ")
     @Length(min = 2, max = 255, message = "매장 이름은 최소 2글자 ~ 255글자 입니다.")
@@ -37,7 +37,7 @@ public class StoreRegisterDto {
     private LocalDateTime openTime;
     private LocalDateTime closeTime;
 
-    public static Store from(StoreRegisterDto registerDto,Double lat,Double lon){
+    public static Store from(StoreRegisterRequest registerDto, Double lat, Double lon){
         return Store.builder()
                 .storeName(registerDto.storeName)
                 .storePhone(registerDto.storePhone)

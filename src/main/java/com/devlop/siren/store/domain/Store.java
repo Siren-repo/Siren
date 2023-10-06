@@ -1,6 +1,6 @@
 package com.devlop.siren.store.domain;
 
-import com.devlop.siren.store.dto.request.StoreUpdateRequest;
+import com.devlop.siren.store.request.StoreUpdateRequest;
 import lombok.*;
 
 import javax.persistence.*;
@@ -50,6 +50,7 @@ public class Store {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
     public void update(StoreUpdateRequest storeUpdateRequest){
         this.storeName = Objects.requireNonNullElse(storeUpdateRequest.getStoreName(), this.storeName);
         this.storePhone = Objects.requireNonNullElse(storeUpdateRequest.getStorePhone(), this.storePhone);
