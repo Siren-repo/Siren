@@ -13,6 +13,17 @@ import java.security.Key;
 import java.util.Date;
 @Slf4j
 public class JwtTokenUtils {
+    public static String getUserEmail(String token, String secretKey){
+        return extractClaims(token, secretKey).get("email", String.class);
+    }
+    public static boolean isExpired(String token, String secretKey){
+        Date expiredDate = extractClaims(token, secretKey).getExpiration();
+        return expiredDate.before(new Date());
+    }
+    private static Claims extractClaims(String token, String secretKey){
+        return Jwts.parserBuilder().setSigningKey(getKey(secretKey))
+                .build().parseClaimsJws(token).getBody();
+    }
     public static UserTokenDto generateToken(String email, String secretKey, Long accessExpiredTimeMs, Long refreshExpiredTimeMs){
         Claims claims = Jwts.claims();
         claims.put("email", email);

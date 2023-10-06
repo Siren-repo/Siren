@@ -1,5 +1,6 @@
 package com.devlop.siren.global.configuration;
 
+import com.devlop.siren.domain.user.service.RedisService;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.global.configuration.filter.JwtTokenFilter;
 import com.devlop.siren.global.exception.CustomAuthenticationEntryPoint;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AuthenticationConfig {
 
     private final UserService userService;
+    private final RedisService redisService;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -36,7 +38,7 @@ public class AuthenticationConfig {
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
-                .addFilterBefore(new JwtTokenFilter(secretKey, userService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(secretKey, userService, redisService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
