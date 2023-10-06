@@ -4,7 +4,6 @@ import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.domain.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
-import com.devlop.siren.domain.user.domain.UserRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,8 @@ import java.util.EnumSet;
 
 
 @DataJpaTest
-@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 class UserRepositoryTest {
 
     @Autowired
