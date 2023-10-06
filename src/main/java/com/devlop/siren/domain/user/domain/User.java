@@ -48,7 +48,7 @@ public class User extends BaseEntity {
     @Convert(converter = AllergyConverter.class)
     private EnumSet<AllergyType> allergies;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
     private boolean isDeleted;
 
     @Builder
