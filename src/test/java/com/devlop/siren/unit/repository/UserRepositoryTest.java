@@ -4,20 +4,17 @@ import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.domain.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
-import com.devlop.siren.domain.user.domain.UserRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.EnumSet;
 
 
 @DataJpaTest
-@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
 
