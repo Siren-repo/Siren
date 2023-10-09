@@ -27,6 +27,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+//	testImplementation 'junit:junit:4.13.1'
 	runtimeOnly 'com.h2database:h2'
 
 
@@ -35,6 +36,8 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// @Valid 예외를 커스텀하기 위한 디펜던시
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 test{
