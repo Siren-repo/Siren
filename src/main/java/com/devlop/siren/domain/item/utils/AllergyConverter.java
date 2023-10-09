@@ -5,7 +5,6 @@ import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Convert;

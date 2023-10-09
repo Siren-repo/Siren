@@ -38,7 +38,6 @@ public class ItemServiceImpl implements ItemService {
     private final AllergyConverter allergyConverter;
 
 
-    // 아이템 생성
     @Override
     @Transactional
     public ItemResponse create(ItemCreateRequest request) {
@@ -58,7 +57,6 @@ public class ItemServiceImpl implements ItemService {
         return ItemResponse.from(itemRepository.save(item));
     }
 
-    // 카테고리 이름별 아이템 출력
     @Override
     public CategoryItemsResponse findAllByCategory(String categoryType, String categoryName) {
         return new CategoryItemsResponse(categoryName,
@@ -68,7 +66,6 @@ public class ItemServiceImpl implements ItemService {
                         .collect(Collectors.toUnmodifiableList()));
     }
 
-    // 아이템 상세 조회
     @Override
     public ItemDetailResponse findItemDetailById(Long itemId) {
         Item item = itemRepository.findByIdWithOption(itemId).orElseThrow(() -> {
@@ -87,7 +84,6 @@ public class ItemServiceImpl implements ItemService {
         return NutritionDetailResponse.from(item);
     }
 
-    // 아이템 삭제
     @Override
     @Transactional
     public Long deleteItemById(Long itemId) {
@@ -95,7 +91,6 @@ public class ItemServiceImpl implements ItemService {
         return itemId;
     }
 
-    // 아이템 수정
     @Override
     @Transactional
     public Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest) {

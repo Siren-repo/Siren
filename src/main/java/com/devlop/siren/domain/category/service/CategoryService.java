@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    // 카테고리 등록
     @Transactional
     public CategoryResponse register(CategoryCreateRequest request) {
 
@@ -41,7 +40,6 @@ public class CategoryService {
     }
 
 
-    // 카테고리 타입별 모든 카테고리 이름 출력
     public CategoriesResponse findAllByType(CategoryType categoryType) {
         List<CategoryResponse> categoryResponses = categoryRepository.findByCategoryTypeOrderByCategoryId(categoryType)
                 .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY))

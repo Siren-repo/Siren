@@ -23,14 +23,12 @@ import javax.validation.constraints.NotBlank;
 public class ItemController {
     private final ItemService itemService;
 
-    // 아이템 셍성
     @PostMapping
     public ApiResponse<ItemResponse> createItem(@RequestBody @Valid ItemCreateRequest itemCreateRequest) {
 
         return ApiResponse.ok(ResponseCode.Normal.CREATE, itemService.create(itemCreateRequest));
     }
 
-    // 카테고리(에스프레소)에 따른 아이템 리스트 조회
     @GetMapping
     public ApiResponse<CategoryItemsResponse> findAllByCategory(
             @RequestParam("categoryType") @NotBlank String categoryType,
@@ -39,31 +37,26 @@ public class ItemController {
         return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, itemService.findAllByCategory(categoryType, categoryName));
     }
 
-    // 아이템 상세 조회
     @GetMapping(value = "/{itemId}")
     public ApiResponse<ItemDetailResponse> findItemDetail(@PathVariable @Min(1L) Long itemId) {
         return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, itemService.findItemDetailById(itemId));
     }
 
-    // 아이템에 따른 영양성분 조회
     @GetMapping(value = "/{itemId}/nutrition")
     public ApiResponse<NutritionDetailResponse> findNutritionDetail(@PathVariable @Min(1L) Long itemId) {
         return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, itemService.findNutritionDetailById(itemId));
     }
 
-    // 아이템 삭제
     @DeleteMapping(value = "/{itemId}")
     public ApiResponse<?> deleteItem(@PathVariable @Min(1L) Long itemId) {
         Long id = itemService.deleteItemById(itemId);
         return ApiResponse.ok(ResponseCode.Normal.DELETE, String.format("ItemId = %d", id));
     }
 
-    // 아이템 수정
     @PutMapping(value = "/{itemId}")
     public ApiResponse<?> updateItem(@PathVariable @Min(1L) Long itemId, @RequestBody @Valid ItemCreateRequest itemCreateRequest) {
         Long id = itemService.updateItemById(itemId, itemCreateRequest);
         return ApiResponse.ok(ResponseCode.Normal.UPDATE, String.format("ItemId = %d", id));
     }
-
 
 }

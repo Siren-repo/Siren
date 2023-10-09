@@ -3,19 +3,13 @@ package com.devlop.siren.global.exception;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 
@@ -23,7 +17,6 @@ import javax.validation.ConstraintViolationException;
 @Slf4j
 public class ExceptionControllerAdvice {
 
-    //@Valid 검증 실패 시 Catch
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
         BindingResult result = e.getBindingResult();
@@ -40,8 +33,6 @@ public class ExceptionControllerAdvice {
     }
 
 
-
-    //@Valid 검증 실패 시 Catch - Get
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResponse<?>> handleConstraintViolationException(ConstraintViolationException e) {
         log.error("Error occurs {}", e.toString());
@@ -49,7 +40,6 @@ public class ExceptionControllerAdvice {
 
     }
 
-    //DeletedById에서 내부적으로 생기는 예외처리
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<ApiResponse<?>> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
         log.error("Error occurs {}", e.toString());
