@@ -13,9 +13,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,11 +46,13 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("Valid 조건에 맞는 파라미터를 넘기면 카테고리 생성에 성공한다 - DTO 검증")
+    @WithMockUser
     void createCategory() throws Exception {
         //given
         //when
         //then
         mvc.perform(post("/api/categories")
+                        .with(csrf())
                         .content(objectMapper.writeValueAsString(validObject))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -58,11 +63,13 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("Invalid 조건에 맞는 파라미터를 넘기면 카테고리 생성에 실패한다 - DTO 검증")
+    @WithMockUser
     void inValidCreateCategory() throws Exception {
         //given
         //when
         //then
         mvc.perform(post("/api/categories")
+                        .with(csrf())
                         .content(objectMapper.writeValueAsString(inValidObject))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -73,6 +80,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("Valid 조건에 맞는 파라미터를 넘기면 카테고리 조회에 성공한다 - DTO 검증")
+    @WithMockUser
     void findCategoriesByCategoryType() throws Exception {
         mvc.perform(get("/api/categories")
                         .param("categoryType", validObject.getCategoryType().getName()))
@@ -84,6 +92,7 @@ class CategoryControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " "})
     @DisplayName("InValid 조건에 맞는 파라미터를 넘기면 카테고리 조회에 실패한다 - DTO 검증")
+    @WithMockUser
     void inValidFindCategoriesByCategoryType(String categoryType) throws Exception {
         mvc.perform(get("/api/categories")
                         .param("categoryType", categoryType))
