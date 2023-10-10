@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ItemController.class)
+@MockBean(JpaMetamodelMappingContext.class)
 class ItemControllerTest {
 
     @Autowired

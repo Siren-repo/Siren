@@ -59,16 +59,14 @@ spring:
     activate:
       on-profile: test
   datasource:
-    username: sa
-    password:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
-    hikari.jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    hikari.jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL
   jpa:
     defer-datasource-initialization: true
     properties:
       hibernate:
         dialect=org.hibernate.dialect.H2Dialect
+    show-sql: true
   h2:
     console:
       enabled: true

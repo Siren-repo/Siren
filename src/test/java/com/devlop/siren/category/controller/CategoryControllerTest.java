@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CategoryController.class)
+@MockBean(JpaMetamodelMappingContext.class)
 class CategoryControllerTest {
     @Autowired
     MockMvc mvc;
