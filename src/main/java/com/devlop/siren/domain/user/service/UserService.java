@@ -5,7 +5,7 @@ import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.util.AllergyConverter;
-import com.devlop.siren.global.exception.ErrorCode;
+import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +23,7 @@ public class UserService {
     @Transactional
     public void register(UserRegisterRequest request) {
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            throw new GlobalException(ErrorCode.DUPLICATED_MEMBER);
+            throw new GlobalException(ResponseCode.ErrorCode.DUPLICATED_MEMBER);
         });
 
         User entity = UserRegisterRequest.fromDto(request, encoder.encode(request.getPassword()),

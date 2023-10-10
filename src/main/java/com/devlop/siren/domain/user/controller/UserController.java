@@ -2,7 +2,8 @@ package com.devlop.siren.domain.user.controller;
 
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.service.UserService;
-import com.devlop.siren.global.common.ApiResponse;
+import com.devlop.siren.global.common.response.ApiResponse;
+import com.devlop.siren.global.common.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class UserController {
     @PostMapping("/register")
     public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request){
         userService.register(request);
-        return ApiResponse.ok();
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
     }
 
 

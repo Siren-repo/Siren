@@ -1,6 +1,5 @@
-package com.devlop.siren.global.common;
+package com.devlop.siren.global.common.response;
 
-import com.devlop.siren.global.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +18,16 @@ public class ApiResponse<T> {
         this.message = message;
         this.data = data;
     }
-    public static <T> ApiResponse<T> error(ErrorCode errorCode){
+    public static <T> ApiResponse<T> error(ResponseCode.ErrorCode errorCode){
         return new ApiResponse<>(errorCode.getStatus(), errorCode.name(), null);
     }
-    public static <T> ApiResponse<T> error(HttpStatus status, String message, T data){
-        return new ApiResponse<>(status, message, data);
+    public static <T> ApiResponse<T> error(HttpStatus status, String message){
+        return new ApiResponse<>(status, message, null);
     }
-
-    public static <T> ApiResponse<T> ok(T data){
-        return new ApiResponse<>(HttpStatus.OK, HttpStatus.OK.name(), data);
+    public static <T> ApiResponse<T> ok(ResponseCode.Normal normal, T data) {
+        return new ApiResponse<>(normal.getStatus(), normal.getMESSAGE(), data);
     }
-    public static <T> ApiResponse<T> ok(){
+    public static <T> ApiResponse<T> ok() {
         return new ApiResponse<>(HttpStatus.OK, HttpStatus.OK.name(), null);
     }
 }
