@@ -1,23 +1,20 @@
 package com.devlop.siren.global.common.response;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ApiResponse<T> {
 
     private HttpStatus status;
     private String message;
     private T data;
 
-    public ApiResponse(HttpStatus status, String message, T data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
     public static <T> ApiResponse<T> error(ResponseCode.ErrorCode errorCode){
         return new ApiResponse<>(errorCode.getStatus(), errorCode.name(), null);
     }

@@ -23,6 +23,7 @@ public class ExceptionControllerAdvice {
         BindingResult result = e.getBindingResult();
         StringBuilder errMessage = new StringBuilder();
         log.error("Error occurs {}", e.toString());
+      
         for (FieldError error : result.getFieldErrors()) {
             errMessage.append("[")
                     .append(error.getField())
@@ -30,6 +31,7 @@ public class ExceptionControllerAdvice {
                     .append(":")
                     .append(error.getDefaultMessage());
         }
+      
         return ResponseEntity.status(ResponseCode.ErrorCode.NOT_VALID.getStatus())
                 .body(ApiResponse.error(ResponseCode.ErrorCode.NOT_VALID.getStatus(), e.getMessage()));
     }
@@ -39,7 +41,6 @@ public class ExceptionControllerAdvice {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(ResponseCode.ErrorCode.NOT_VALID.getStatus())
                 .body(ApiResponse.error(ResponseCode.ErrorCode.NOT_VALID.getStatus(), e.getMessage()));
-
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
