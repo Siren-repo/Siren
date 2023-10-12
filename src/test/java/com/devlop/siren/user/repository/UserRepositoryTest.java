@@ -1,4 +1,4 @@
-package com.devlop.siren.unit.repository;
+package com.devlop.siren.user.repository;
 
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.domain.user.repository.UserRepository;

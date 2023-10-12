@@ -1,4 +1,4 @@
-package com.devlop.siren.unit.domain;
+package com.devlop.siren.user.domain;
 
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.domain.user.domain.User;
