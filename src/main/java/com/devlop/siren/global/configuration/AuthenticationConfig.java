@@ -20,16 +20,14 @@ public class AuthenticationConfig {
     private final UserService userService;
     private final RedisService redisService;
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
-                                .antMatchers("/", "/auth/**", "/api/users/register", "/api/users/login").permitAll()
+                                .antMatchers("/", "/auth/**", "/api/users/register",
+                                        "/api/users/login", "/api/users/reissue").permitAll()
                                 .antMatchers("/api/**").authenticated()
                 )
                 .sessionManagement((sessionManagement) ->
@@ -38,7 +36,7 @@ public class AuthenticationConfig {
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
-                .addFilterBefore(new JwtTokenFilter(secretKey, userService, redisService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(userService, redisService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
