@@ -4,16 +4,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 public class UserTokenDto {
-    private final String accessToken;
+    private String accessToken;
     private final String refreshToken;
-    private final Long refreshTokenExpiredMs;
 
     @Builder
-    public UserTokenDto(String accessToken, String refreshToken, Long refreshTokenExpiredMs) {
+    public UserTokenDto(String accessToken, String refreshToken) {
+        this.accessToken = Objects.requireNonNull(accessToken);
+        this.refreshToken = Objects.requireNonNull(refreshToken);
+    }
+
+    public void setAccessToken(String accessToken){
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-        this.refreshTokenExpiredMs = refreshTokenExpiredMs;
     }
 }

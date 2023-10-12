@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,9 +21,17 @@ public class RedisService {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         values.set(key, value, duration);
     }
-    public String getValues(String key){
+    public Optional<String> getValues(String key){
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(key);
+        String value = values.get(key);
+        return Optional.ofNullable(value);
+    }
+
+    public boolean existRefreshToken(String email){
+        return getValues(email).isPresent();
+    }
+    public boolean existAccessToken(String accessToken){
+        return getValues(accessToken).isPresent();
     }
     public void deleteValue(String key){
         redisTemplate.delete(key);

@@ -15,7 +15,10 @@ public enum ErrorCode {
     DUPLICATED_MEMBER(HttpStatus.CONFLICT, "이미 가입된 이메일입니다"),
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "가입된 유저가 아닙니다"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다"),
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다"),
+    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다"),
+    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 만료되었습니다"),
+    ALREADY_LOGGED_IN(HttpStatus.UNAUTHORIZED, "이미 로그인 된 계정입니다"),
+    ALREADY_LOGGED_OUT(HttpStatus.UNAUTHORIZED, "이미 로그아웃 된 계정입니다"),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효한 패스워드가 아닙니다"),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러")

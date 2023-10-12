@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -15,27 +16,20 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDetailsDto implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetailsDto implements UserDetails {
     private Long id;
     private String email;
     private String password;
-    private String nickName;
     private UserRole userRole;
     private boolean isDeleted;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime modifiedDateTime;
 
     @Builder
-    public UserDetailsDto(Long id, String email, String password, String nickName, UserRole userRole,
-                          boolean isDeleted, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+    public UserDetailsDto(Long id, String email, String password, UserRole userRole, boolean isDeleted) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.nickName = nickName;
         this.userRole = userRole;
         this.isDeleted = isDeleted;
-        this.createdDateTime = createdDateTime;
-        this.modifiedDateTime = modifiedDateTime;
     }
 
     public static UserDetailsDto fromEntity(User user){
@@ -44,8 +38,6 @@ public class UserDetailsDto implements org.springframework.security.core.userdet
                 .password(user.getPassword())
                 .email(user.getEmail())
                 .userRole(user.getRole())
-                .createdDateTime(user.getCreatedDateTIme())
-                .modifiedDateTime(user.getModifiedDateTime())
                 .isDeleted(user.isDeleted())
                 .build();
     }

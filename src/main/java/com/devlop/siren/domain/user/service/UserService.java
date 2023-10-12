@@ -6,7 +6,6 @@ import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
-import com.devlop.siren.domain.user.dto.response.UserLoginResponse;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.util.AllergyConverter;
 import com.devlop.siren.global.exception.ErrorCode;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 
 @Service
@@ -27,9 +27,10 @@ import java.time.Duration;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
-    private final RedisService redisService;
     private final BCryptPasswordEncoder encoder;
     private final AllergyConverter converter;
+    private final RedisService redisService;
+    private final JwtTokenUtils utils;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -41,7 +42,6 @@ public class UserService {
     public UserDetailsDto loadMemberByEmail(String email) {
         User registeredUser = userRepository.findByEmail(email).orElseThrow(() ->
                 new GlobalException(ErrorCode.NOT_FOUND_MEMBER));
-        registeredUser.isDeleted();
         return UserDetailsDto.fromEntity(registeredUser);
     }
 
@@ -58,16 +58,52 @@ public class UserService {
     }
 
     @Transactional
-    public UserLoginResponse login(UserLoginRequest request){
-        User savedUser = userRepository.findByEmail(request.getEmail()).orElseThrow( () ->
+    public UserTokenDto login(UserLoginRequest request, HttpServletResponse response) {
+        User savedUser = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
                 new GlobalException(ErrorCode.NOT_FOUND_MEMBER));
 
-        if(!encoder.matches(request.getPassword(), savedUser.getPassword()))
+        if (!encoder.matches(request.getPassword(), savedUser.getPassword()))
             throw new GlobalException(ErrorCode.INVALID_PASSWORD);
 
-        UserTokenDto tokenDto = JwtTokenUtils.generateToken(request.getEmail(), secretKey, accessExpiredTimeMs, refreshExpiredTimeMs);
-        redisService.setValue(savedUser.getEmail(), tokenDto.getRefreshToken(), Duration.ofMillis(tokenDto.getRefreshTokenExpiredMs()));
+        if (redisService.existRefreshToken(savedUser.getEmail())) {
+            throw new GlobalException(ErrorCode.ALREADY_LOGGED_IN);
+        }
 
-        return new UserLoginResponse(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+        UserTokenDto token = generateToken(savedUser.getEmail());
+        utils.setAccessTokenInHeader(token.getAccessToken(), response);
+        utils.setRefreshTokenInHeader(token.getRefreshToken(), response);
+
+        return token;
+    }
+    private UserTokenDto generateToken(String requestEmail){
+        UserTokenDto tokenDto = UserTokenDto.builder()
+                .accessToken(utils.generateAccessToken(requestEmail, secretKey, accessExpiredTimeMs))
+                .refreshToken(utils.generateRefreshToken(requestEmail, secretKey, refreshExpiredTimeMs))
+                .build();
+
+        redisService.setValue(requestEmail, tokenDto.getRefreshToken(), Duration.ofMillis(refreshExpiredTimeMs));
+        return new UserTokenDto(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+    }
+
+    public void logout(UserTokenDto tokenDto){
+        String requestUserEmail = JwtTokenUtils.extractClaims(tokenDto.getRefreshToken()).getSubject();
+        if(redisService.existRefreshToken(requestUserEmail)){
+            redisService.deleteValue(requestUserEmail);
+            redisService.setValue(tokenDto.getAccessToken(), "logout", Duration.ofMillis(accessExpiredTimeMs));
+        } else{
+            throw new GlobalException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+        }
+    }
+
+    public String reissueAccessToken(String refreshToken, HttpServletResponse response){
+        String requestEmail = utils.extractClaims(refreshToken).getSubject();
+        if(!redisService.existRefreshToken(requestEmail)) {
+            throw new GlobalException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+        }
+
+        UserDetailsDto userDetail = loadMemberByEmail(requestEmail);
+        String newAccessToken = utils.generateAccessToken(userDetail.getEmail(), secretKey, accessExpiredTimeMs);
+        utils.setAccessTokenInHeader(newAccessToken, response);
+        return newAccessToken;
     }
 }
