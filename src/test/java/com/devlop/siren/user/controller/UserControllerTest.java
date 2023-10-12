@@ -1,10 +1,13 @@
-package com.devlop.siren.unit.controller;
+package com.devlop.siren.user.controller;
 
 import com.devlop.siren.domain.user.controller.UserController;
+import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
+import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.UserFixture;
+import com.devlop.siren.global.util.JwtTokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,17 +15,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc
@@ -35,6 +49,9 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private JwtTokenUtils utils;
 
     @Test
     @DisplayName("요청한 정보로 유저 회원가입에 성공한다")
@@ -121,5 +138,74 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
+    }
+
+    @Test
+    @DisplayName("유저 로그인 시 필수값 검증에서 예외가 발생하여 회원가입에 실패한다")
+    @WithMockUser
+    void loginWithBlankString() throws Exception {
+        UserLoginRequest request = new UserLoginRequest("", "");
+        mockMvc.perform(post("/api/users/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(request)))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이미 로그인 된 유저를 로그아웃 처리한다")
+    @WithMockUser
+    void logout() throws Exception {
+        mockMvc.perform(patch("/api/users/logout")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("요청헤더에 인증 정보가 없어서 로그아웃 할 수 없다")
+    @WithAnonymousUser
+    void logoutWithNotAuthHeader() throws Exception {
+        mockMvc.perform(patch("/api/users/logout")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andReturn();
+    }
+    @Test
+    @DisplayName("토큰이 만료되어 토큰을 재발행한다")
+    @WithMockUser
+    void reissue() throws Exception {
+        String accessToken = "accessToken";
+        String refreshToken = "refreshToken";
+        UserTokenDto dto = new UserTokenDto(accessToken, refreshToken);
+        String newAccessToken = "newAccessToken";
+
+        when(utils.resolveToken(any(HttpServletRequest.class))).thenReturn(dto);
+        when(userService.reissueAccessToken(eq(refreshToken), any(HttpServletResponse.class)))
+                .thenReturn(newAccessToken);
+
+        mockMvc.perform(patch("/api/users/reissue")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", accessToken)
+                        .header("Refresh", refreshToken))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("요청헤더에 인증 정보가 없어서 토큰을 재발행 할 수 없다")
+    @WithAnonymousUser
+    void reissueWithNotAuthHeader() throws Exception {
+        mockMvc.perform(patch("/api/users/reissue")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
     }
 }
