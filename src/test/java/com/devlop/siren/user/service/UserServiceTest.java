@@ -111,7 +111,7 @@ public class UserServiceTest {
 
         GlobalException e = assertThrows(GlobalException.class, () -> userService.login(request, response));
         Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.NOT_FOUND);
-        Assertions.assertEquals(e.getErrorCode().getMessage(), "가입된 유저가 아닙니다");
+        Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "가입된 유저가 아닙니다");
     }
 
     @Test
@@ -125,7 +125,7 @@ public class UserServiceTest {
 
         GlobalException e = assertThrows(GlobalException.class, () -> userService.login(request, response));
         Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.UNAUTHORIZED);
-        Assertions.assertEquals(e.getErrorCode().getMessage(), "유효한 패스워드가 아닙니다");
+        Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "유효한 패스워드가 아닙니다");
     }
 
     @Test
@@ -140,7 +140,7 @@ public class UserServiceTest {
 
         GlobalException e = assertThrows(GlobalException.class, () -> userService.login(request, response));
         Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.UNAUTHORIZED);
-        Assertions.assertEquals(e.getErrorCode().getMessage(), "이미 로그인 된 계정입니다");
+        Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "이미 로그인 된 계정입니다");
     }
     @Test
     @DisplayName("로그인 중인 계정을 로그아웃 한다 - 리프레시 토큰 삭제 및 엑세스 토큰 로그아웃 처리")
@@ -187,7 +187,7 @@ public class UserServiceTest {
             when(redisService.existRefreshToken(requestEmail)).thenReturn(false);
             GlobalException e = assertThrows(GlobalException.class, () -> userService.logout(dto));
             Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.UNAUTHORIZED);
-            Assertions.assertEquals(e.getErrorCode().getMessage(), "리프레시 토큰이 만료되었습니다");
+            Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "리프레시 토큰이 만료되었습니다");
         }
     }
 
@@ -226,7 +226,7 @@ public class UserServiceTest {
 
             GlobalException e = assertThrows(GlobalException.class, () -> userService.reissueAccessToken(refreshToken, response));
             Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.NOT_FOUND);
-            Assertions.assertEquals(e.getErrorCode().getMessage(), "가입된 유저가 아닙니다");
+            Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "가입된 유저가 아닙니다");
         }
     }
 
@@ -248,7 +248,7 @@ public class UserServiceTest {
 
             GlobalException e = assertThrows(GlobalException.class, () -> userService.reissueAccessToken(refreshToken, response));
             Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.UNAUTHORIZED);
-            Assertions.assertEquals(e.getErrorCode().getMessage(), "리프레시 토큰이 만료되었습니다");
+            Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "리프레시 토큰이 만료되었습니다");
         }
     }
 }

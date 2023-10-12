@@ -3,8 +3,8 @@ package com.devlop.siren.global.configuration.filter;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.domain.user.service.RedisService;
 import com.devlop.siren.domain.user.service.UserService;
-import com.devlop.siren.global.common.ApiResponse;
-import com.devlop.siren.global.exception.ErrorCode;
+import com.devlop.siren.global.common.response.ApiResponse;
+import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,16 +50,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             final String header = request.getHeader(AUTHORIZATION_HEADER);
             if(header == null || !header.startsWith("Bearer ")){
                 log.error("Authorization Header does not start with Bearer {}", request.getRequestURI());
-                throw new GlobalException(ErrorCode.INVALID_TOKEN);
+                throw new GlobalException(ResponseCode.ErrorCode.INVALID_TOKEN);
             }
 
             final String token = header.split(" ")[1].trim();
             if (JwtTokenUtils.isExpired(token)) {
-                throw new GlobalException(ErrorCode.EXPIRED_ACCESS_TOKEN);
+                throw new GlobalException(ResponseCode.ErrorCode.EXPIRED_ACCESS_TOKEN);
             }
 
             if (redisService.existAccessToken(token)) {
-                throw new GlobalException(ErrorCode.INVALID_TOKEN);
+                throw new GlobalException(ResponseCode.ErrorCode.INVALID_TOKEN);
             }
 
             String email = JwtTokenUtils.getUserEmail(token);

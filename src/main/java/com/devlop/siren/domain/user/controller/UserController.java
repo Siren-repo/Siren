@@ -1,17 +1,14 @@
 package com.devlop.siren.domain.user.controller;
 
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.service.UserService;
-import com.devlop.siren.global.common.ApiResponse;
+import com.devlop.siren.global.common.response.ApiResponse;
+import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,20 +26,20 @@ public class UserController {
     @PostMapping("/register")
     public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request){
         userService.register(request);
-        return ApiResponse.ok();
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
     }
 
     @PostMapping("/login")
     public ApiResponse<UserTokenDto> login(@Valid @RequestBody UserLoginRequest request, HttpServletResponse response){
         UserTokenDto tokenDto = userService.login(request, response);
-        return ApiResponse.ok(tokenDto);
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, tokenDto);
     }
 
     @PatchMapping("/logout")
     public ApiResponse<Void> logout(HttpServletRequest request){
         UserTokenDto token = utils.resolveToken(request);
         userService.logout(token);
-        return ApiResponse.ok();
+        return ApiResponse.ok(ResponseCode.Normal.UPDATE, null);
     }
 
     @PatchMapping("/reissue")
@@ -50,7 +47,7 @@ public class UserController {
         UserTokenDto token = utils.resolveToken(request);
         String newAccessToken = userService.reissueAccessToken(token.getRefreshToken(), response);
         token.setAccessToken(newAccessToken);
-        return ApiResponse.ok(token);
+        return ApiResponse.ok(ResponseCode.Normal.UPDATE, token);
     }
 
 

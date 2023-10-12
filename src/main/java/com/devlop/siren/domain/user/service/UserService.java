@@ -8,7 +8,7 @@ import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.util.AllergyConverter;
-import com.devlop.siren.global.exception.ErrorCode;
+import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,14 +41,14 @@ public class UserService {
 
     public UserDetailsDto loadMemberByEmail(String email) {
         User registeredUser = userRepository.findByEmail(email).orElseThrow(() ->
-                new GlobalException(ErrorCode.NOT_FOUND_MEMBER));
+                new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
         return UserDetailsDto.fromEntity(registeredUser);
     }
 
     @Transactional
     public void register(UserRegisterRequest request) {
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            throw new GlobalException(ErrorCode.DUPLICATED_MEMBER);
+            throw new GlobalException(ResponseCode.ErrorCode.DUPLICATED_MEMBER);
         });
 
         User entity = UserRegisterRequest.fromDto(request, encoder.encode(request.getPassword()),
@@ -60,13 +60,13 @@ public class UserService {
     @Transactional
     public UserTokenDto login(UserLoginRequest request, HttpServletResponse response) {
         User savedUser = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
-                new GlobalException(ErrorCode.NOT_FOUND_MEMBER));
+                new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
 
         if (!encoder.matches(request.getPassword(), savedUser.getPassword()))
-            throw new GlobalException(ErrorCode.INVALID_PASSWORD);
+            throw new GlobalException(ResponseCode.ErrorCode.INVALID_PASSWORD);
 
         if (redisService.existRefreshToken(savedUser.getEmail())) {
-            throw new GlobalException(ErrorCode.ALREADY_LOGGED_IN);
+            throw new GlobalException(ResponseCode.ErrorCode.ALREADY_LOGGED_IN);
         }
 
         UserTokenDto token = generateToken(savedUser.getEmail());
@@ -91,14 +91,14 @@ public class UserService {
             redisService.deleteValue(requestUserEmail);
             redisService.setValue(tokenDto.getAccessToken(), "logout", Duration.ofMillis(accessExpiredTimeMs));
         } else{
-            throw new GlobalException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+            throw new GlobalException(ResponseCode.ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
     }
 
     public String reissueAccessToken(String refreshToken, HttpServletResponse response){
         String requestEmail = utils.extractClaims(refreshToken).getSubject();
         if(!redisService.existRefreshToken(requestEmail)) {
-            throw new GlobalException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+            throw new GlobalException(ResponseCode.ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
         UserDetailsDto userDetail = loadMemberByEmail(requestEmail);
