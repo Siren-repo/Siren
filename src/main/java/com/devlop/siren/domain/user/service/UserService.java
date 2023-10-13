@@ -1,5 +1,6 @@
 package com.devlop.siren.domain.user.service;
 
+import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
@@ -7,7 +8,6 @@ import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.repository.UserRepository;
-import com.devlop.siren.domain.user.util.AllergyConverter;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
