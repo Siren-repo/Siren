@@ -59,7 +59,7 @@ public class UserControllerTest {
     void register() throws Exception {
         UserRegisterRequest request = UserFixture.get("test@test.com", "password");
 
-        mockMvc.perform(post("/api/users/register")
+        mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -73,7 +73,7 @@ public class UserControllerTest {
         UserRegisterRequest request = UserRegisterRequest.builder()
                 .email("")
                 .build();
-        mockMvc.perform(post("/api/users/register")
+        mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -92,7 +92,7 @@ public class UserControllerTest {
                 .phone("010-0000-0000")
                 .build();
 
-        MvcResult result = mockMvc.perform(post("/api/users/register")
+        MvcResult result = mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -114,7 +114,7 @@ public class UserControllerTest {
                 .phone("010-0000-0000")
                 .build();
 
-        MvcResult result = mockMvc.perform(post("/api/users/register")
+        MvcResult result = mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -131,7 +131,7 @@ public class UserControllerTest {
     void login() throws Exception {
         UserLoginRequest request = new UserLoginRequest("test@test.com", "password");
 
-        mockMvc.perform(post("/api/users/login")
+        mockMvc.perform(post("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -145,7 +145,7 @@ public class UserControllerTest {
     @WithMockUser
     void loginWithBlankString() throws Exception {
         UserLoginRequest request = new UserLoginRequest("", "");
-        mockMvc.perform(post("/api/users/login")
+        mockMvc.perform(post("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -157,7 +157,7 @@ public class UserControllerTest {
     @DisplayName("이미 로그인 된 유저를 로그아웃 처리한다")
     @WithMockUser
     void logout() throws Exception {
-        mockMvc.perform(patch("/api/users/logout")
+        mockMvc.perform(patch("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -169,7 +169,7 @@ public class UserControllerTest {
     @DisplayName("요청헤더에 인증 정보가 없어서 로그아웃 할 수 없다")
     @WithAnonymousUser
     void logoutWithNotAuthHeader() throws Exception {
-        mockMvc.perform(patch("/api/users/logout")
+        mockMvc.perform(patch("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
@@ -189,7 +189,7 @@ public class UserControllerTest {
         when(userService.reissueAccessToken(eq(refreshToken), any(HttpServletResponse.class)))
                 .thenReturn(newAccessToken);
 
-        mockMvc.perform(patch("/api/users/reissue")
+        mockMvc.perform(patch("/api/users/sessions/renew")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", accessToken)
@@ -202,7 +202,7 @@ public class UserControllerTest {
     @DisplayName("요청헤더에 인증 정보가 없어서 토큰을 재발행 할 수 없다")
     @WithAnonymousUser
     void reissueWithNotAuthHeader() throws Exception {
-        mockMvc.perform(patch("/api/users/reissue")
+        mockMvc.perform(patch("/api/users/sessions/renew")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
