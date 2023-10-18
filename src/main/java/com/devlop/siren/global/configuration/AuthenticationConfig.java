@@ -23,20 +23,20 @@ public class AuthenticationConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
-                .csrf(csrf -> csrf.disable())
+                .cors().and().csrf().disable()
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
-                                .antMatchers("/", "/auth/**", "/api/users/register",
-                                        "/api/users/login", "/api/users/reissue").permitAll()
+                                .antMatchers("/", "/auth/**", "/api/users",
+                                        "/api/users/sessions", "/api/users/sessions/renew").permitAll()
                                 .antMatchers("/api/**").authenticated()
                 )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .addFilterBefore(new JwtTokenFilter(userService, redisService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                )
-                .addFilterBefore(new JwtTokenFilter(userService, redisService), UsernamePasswordAuthenticationFilter.class);
+                );
 
         return http.build();
     }
