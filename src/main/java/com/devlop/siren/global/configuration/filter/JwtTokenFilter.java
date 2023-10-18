@@ -34,9 +34,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final static List<String> PERMIT_URLS = List.of(
             "/",
             "/h2",
-            "/api/users/register",
-            "/api/users/login",
-            "/api/users/reissue");
+            "/api/users",
+            "/api/users/sessions",
+            "/api/users/sessions/renew");
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {

@@ -1,6 +1,6 @@
 package com.devlop.siren.fixture;
 
-import com.devlop.siren.domain.user.domain.AllergyType;
+import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;

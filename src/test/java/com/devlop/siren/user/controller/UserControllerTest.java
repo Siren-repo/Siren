@@ -4,7 +4,6 @@ import com.devlop.siren.domain.user.controller.UserController;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
-import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.util.JwtTokenUtils;
@@ -12,25 +11,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -39,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
-@AutoConfigureMockMvc
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -59,7 +51,7 @@ public class UserControllerTest {
     void register() throws Exception {
         UserRegisterRequest request = UserFixture.get("test@test.com", "password");
 
-        mockMvc.perform(post("/api/users/register")
+        mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -73,7 +65,7 @@ public class UserControllerTest {
         UserRegisterRequest request = UserRegisterRequest.builder()
                 .email("")
                 .build();
-        mockMvc.perform(post("/api/users/register")
+        mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -92,7 +84,7 @@ public class UserControllerTest {
                 .phone("010-0000-0000")
                 .build();
 
-        MvcResult result = mockMvc.perform(post("/api/users/register")
+        MvcResult result = mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -114,7 +106,7 @@ public class UserControllerTest {
                 .phone("010-0000-0000")
                 .build();
 
-        MvcResult result = mockMvc.perform(post("/api/users/register")
+        MvcResult result = mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -131,7 +123,7 @@ public class UserControllerTest {
     void login() throws Exception {
         UserLoginRequest request = new UserLoginRequest("test@test.com", "password");
 
-        mockMvc.perform(post("/api/users/login")
+        mockMvc.perform(post("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -145,7 +137,7 @@ public class UserControllerTest {
     @WithMockUser
     void loginWithBlankString() throws Exception {
         UserLoginRequest request = new UserLoginRequest("", "");
-        mockMvc.perform(post("/api/users/login")
+        mockMvc.perform(post("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request)))
@@ -157,7 +149,7 @@ public class UserControllerTest {
     @DisplayName("이미 로그인 된 유저를 로그아웃 처리한다")
     @WithMockUser
     void logout() throws Exception {
-        mockMvc.perform(patch("/api/users/logout")
+        mockMvc.perform(patch("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -169,7 +161,7 @@ public class UserControllerTest {
     @DisplayName("요청헤더에 인증 정보가 없어서 로그아웃 할 수 없다")
     @WithAnonymousUser
     void logoutWithNotAuthHeader() throws Exception {
-        mockMvc.perform(patch("/api/users/logout")
+        mockMvc.perform(patch("/api/users/sessions")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
@@ -189,7 +181,7 @@ public class UserControllerTest {
         when(userService.reissueAccessToken(eq(refreshToken), any(HttpServletResponse.class)))
                 .thenReturn(newAccessToken);
 
-        mockMvc.perform(patch("/api/users/reissue")
+        mockMvc.perform(patch("/api/users/sessions/renew")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", accessToken)
@@ -202,7 +194,7 @@ public class UserControllerTest {
     @DisplayName("요청헤더에 인증 정보가 없어서 토큰을 재발행 할 수 없다")
     @WithAnonymousUser
     void reissueWithNotAuthHeader() throws Exception {
-        mockMvc.perform(patch("/api/users/reissue")
+        mockMvc.perform(patch("/api/users/sessions/renew")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
