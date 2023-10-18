@@ -1,17 +1,10 @@
 package com.devlop.siren.domain.user.dto.request;
 
-import com.devlop.siren.domain.user.domain.AllergyType;
-import com.devlop.siren.domain.user.domain.User;
-import com.devlop.siren.domain.user.domain.UserRole;
-import com.devlop.siren.domain.user.util.validator.KoreanNickname;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.EnumSet;
 
 @Getter
 @NoArgsConstructor

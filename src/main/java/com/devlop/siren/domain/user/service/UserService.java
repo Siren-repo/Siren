@@ -1,5 +1,6 @@
 package com.devlop.siren.domain.user.service;
 
+import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
@@ -7,7 +8,6 @@ import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import com.devlop.siren.domain.user.repository.UserRepository;
-import com.devlop.siren.domain.user.util.AllergyConverter;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
@@ -62,18 +62,37 @@ public class UserService {
         User savedUser = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
                 new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
 
-        if (!encoder.matches(request.getPassword(), savedUser.getPassword()))
-            throw new GlobalException(ResponseCode.ErrorCode.INVALID_PASSWORD);
-
-        if (redisService.existRefreshToken(savedUser.getEmail())) {
-            throw new GlobalException(ResponseCode.ErrorCode.ALREADY_LOGGED_IN);
-        }
+        checkPassword(request.getPassword(),savedUser.getPassword());
+        checkSavedRefreshTokenInRedis(savedUser.getEmail());
 
         UserTokenDto token = generateToken(savedUser.getEmail());
         utils.setAccessTokenInHeader(token.getAccessToken(), response);
         utils.setRefreshTokenInHeader(token.getRefreshToken(), response);
 
         return token;
+    }
+
+    public void logout(UserTokenDto tokenDto){
+        String requestUserEmail = utils.extractClaims(tokenDto.getRefreshToken()).getSubject();
+        checkRefreshTokenInRedis(requestUserEmail);
+
+        redisService.deleteValue(requestUserEmail);
+        redisService.setValue(tokenDto.getAccessToken(), "logout", Duration.ofMillis(accessExpiredTimeMs));
+    }
+
+    public String reissueAccessToken(String refreshToken, HttpServletResponse response){
+        String requestEmail = utils.extractClaims(refreshToken).getSubject();
+        checkRefreshTokenInRedis(requestEmail);
+
+        UserDetailsDto userDetail = loadMemberByEmail(requestEmail);
+        String newAccessToken = utils.generateAccessToken(userDetail.getEmail(), secretKey, accessExpiredTimeMs);
+        utils.setAccessTokenInHeader(newAccessToken, response);
+        return newAccessToken;
+    }
+
+    private void checkPassword(String request, String password){
+        if (!encoder.matches(request, password))
+            throw new GlobalException(ResponseCode.ErrorCode.INVALID_PASSWORD);
     }
     private UserTokenDto generateToken(String requestEmail){
         UserTokenDto tokenDto = UserTokenDto.builder()
@@ -84,26 +103,12 @@ public class UserService {
         redisService.setValue(requestEmail, tokenDto.getRefreshToken(), Duration.ofMillis(refreshExpiredTimeMs));
         return new UserTokenDto(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
     }
-
-    public void logout(UserTokenDto tokenDto){
-        String requestUserEmail = JwtTokenUtils.extractClaims(tokenDto.getRefreshToken()).getSubject();
-        if(redisService.existRefreshToken(requestUserEmail)){
-            redisService.deleteValue(requestUserEmail);
-            redisService.setValue(tokenDto.getAccessToken(), "logout", Duration.ofMillis(accessExpiredTimeMs));
-        } else{
+    private void checkRefreshTokenInRedis(String email){
+        if(!redisService.existRefreshToken(email))
             throw new GlobalException(ResponseCode.ErrorCode.EXPIRED_REFRESH_TOKEN);
-        }
     }
-
-    public String reissueAccessToken(String refreshToken, HttpServletResponse response){
-        String requestEmail = utils.extractClaims(refreshToken).getSubject();
-        if(!redisService.existRefreshToken(requestEmail)) {
-            throw new GlobalException(ResponseCode.ErrorCode.EXPIRED_REFRESH_TOKEN);
-        }
-
-        UserDetailsDto userDetail = loadMemberByEmail(requestEmail);
-        String newAccessToken = utils.generateAccessToken(userDetail.getEmail(), secretKey, accessExpiredTimeMs);
-        utils.setAccessTokenInHeader(newAccessToken, response);
-        return newAccessToken;
+    private void checkSavedRefreshTokenInRedis(String email){
+        if(redisService.existRefreshToken(email))
+            throw new GlobalException(ResponseCode.ErrorCode.ALREADY_LOGGED_IN);
     }
 }

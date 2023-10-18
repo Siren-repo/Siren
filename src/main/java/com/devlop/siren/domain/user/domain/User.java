@@ -1,7 +1,8 @@
 package com.devlop.siren.domain.user.domain;
-
-import com.devlop.siren.domain.user.util.AllergyConverter;
-import com.devlop.siren.domain.user.util.validator.KoreanNickname;
+//
+import com.devlop.siren.domain.item.entity.AllergyType;
+import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.user.utils.KoreanNickname;
 import com.devlop.siren.global.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
