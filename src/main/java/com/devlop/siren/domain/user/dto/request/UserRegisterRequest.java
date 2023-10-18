@@ -3,7 +3,7 @@ package com.devlop.siren.domain.user.dto.request;
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
-import com.devlop.siren.domain.user.util.validator.KoreanNickname;
+import com.devlop.siren.domain.user.utils.KoreanNickname;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
