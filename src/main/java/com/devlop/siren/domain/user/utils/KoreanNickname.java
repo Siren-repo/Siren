@@ -1,4 +1,4 @@
-package com.devlop.siren.domain.user.util.validator;
+package com.devlop.siren.domain.user.utils;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
