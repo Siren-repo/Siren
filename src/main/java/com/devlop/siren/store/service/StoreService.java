@@ -1,5 +1,6 @@
 package com.devlop.siren.store.service;
 
+import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.store.request.StoreUpdateRequest;
@@ -26,7 +27,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private static final double EARTH_RADIUS_KM = 6371.0;
     @Transactional
-    public boolean registerStore(StoreRegisterRequest storeRegisterRequest) {
+    public Boolean registerStore(StoreRegisterRequest storeRegisterRequest) {
 
         try {
             GeocodingResult[] latLong = geocodingApi.geocodeAddress(storeRegisterRequest.getStreet());
@@ -40,15 +41,14 @@ public class StoreService {
 
                 Store store = StoreRegisterRequest.from(storeRegisterRequest, latitude, longitude);
                 storeRepository.save(store);
-
                 return true;
             } else {
                 log.error("저장 실패");
-                return false;
+                throw new GlobalException(ResponseCode.ErrorCode.FAIL_STORE_SAVE);
             }
         } catch (Exception e) {
             log.error("gecoding 파싱 중 에러 발생");
-            return false;
+            throw new GlobalException(ResponseCode.ErrorCode.GEOCODING_PARSING_ERROR);
         }
     }
 

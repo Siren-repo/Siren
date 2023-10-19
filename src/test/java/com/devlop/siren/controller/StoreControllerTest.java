@@ -94,7 +94,7 @@ public class StoreControllerTest {
         mockMvc.perform(post("/api/stores/register/{role}",role)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(storeRegisterRequest)))
-                .andExpect(status().isNotAcceptable()) //
+                .andExpect(status().isBadRequest()) //
                 .andDo(print());
     }
     @ParameterizedTest

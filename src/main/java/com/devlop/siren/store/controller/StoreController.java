@@ -25,9 +25,10 @@ public class StoreController {
     public ApiResponse<Boolean> registerStore(@PathVariable("role") String role, @RequestBody @Valid StoreRegisterRequest storeRegisterRequest){
         if(role.equals("") || role.length() <= 1){
             return ApiResponse.error(ResponseCode.ErrorCode.NOT_AUTH_ROLE);
+        }else {
+            boolean success = storeService.registerStore(storeRegisterRequest);
+            return ApiResponse.ok(ResponseCode.Normal.CREATE, success);
         }
-        boolean success = storeService.registerStore(storeRegisterRequest);
-            return ApiResponse.ok(ResponseCode.Normal.CREATE,success);
     }
     @GetMapping("/details/{storeId}")
     public ApiResponse<StoreResponse> detailsStore(@PathVariable("storeId") Long storeId){

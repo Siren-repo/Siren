@@ -4,11 +4,10 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 
-@Service
+@Component
 public class GeocodingApi {
     private final GeoApiContext context;
 
