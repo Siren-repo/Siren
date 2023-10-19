@@ -24,29 +24,32 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'com.google.maps:google-maps-services:0.15.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.0'
 
-	testImplementation 'junit:junit:4.13.1'
-	testImplementation 'org.projectlombok:lombok:1.18.22'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 
-	runtimeOnly 'com.h2database:h2'
-
-
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'mysql:mysql-connector-java:8.0.33'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	runtimeOnly 'com.h2database:h2'
-
 
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'junit:junit:4.13.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.projectlombok:lombok:1.18.22'
+	testImplementation 'org.mockito:mockito-inline:3.11.2'
+	// @Valid 예외를 커스텀하기 위한 디펜던시
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 test{
