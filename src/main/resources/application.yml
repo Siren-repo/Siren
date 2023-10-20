@@ -19,7 +19,11 @@ jwt:
   access-token.expired-time-ms: 43200000 #12시간
   refresh-token.expired-time-ms: 604800000 #7일
 
-
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force : true
 ---
 
 spring:
