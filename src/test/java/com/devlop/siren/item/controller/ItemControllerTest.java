@@ -11,7 +11,6 @@ import com.devlop.siren.domain.item.service.ItemService;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.util.UserInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -19,11 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -65,9 +62,10 @@ class ItemControllerTest {
     }
 
     @AfterAll
-    private static void cleanUp(){
+    private static void cleanUp() {
         userInformationMock.close();
     }
+
     @Test
     @DisplayName("Valid 조건에 맞는 파라미터를 넘기면 아이템 생성에 성공한다 - DTO 검증")
     @WithMockUser
@@ -153,7 +151,7 @@ class ItemControllerTest {
     void deleteItem(Long itemId) throws Exception {
         when(UserInformation.validAdmin(any(UserDetailsDto.class))).thenReturn(true);
         mvc.perform(delete("/api/items/{itemId}", itemId)
-                .with(csrf()))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
