@@ -4,20 +4,26 @@ import com.devlop.siren.domain.category.controller.CategoryController;
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.service.CategoryService;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.global.util.UserInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,11 +43,18 @@ class CategoryControllerTest {
     private ObjectMapper objectMapper;
     static CategoryCreateRequest validObject;
     static CategoryCreateRequest inValidObject;
+    private static MockedStatic<UserInformation> userInformationMock;
 
     @BeforeAll
     private static void setUp() {
         validObject = new CategoryCreateRequest(CategoryType.BEVERAGE, "에스프레소");
         inValidObject = new CategoryCreateRequest(CategoryType.BEVERAGE, " ");
+        userInformationMock = mockStatic(UserInformation.class);
+    }
+
+    @AfterAll
+    private static void cleanUp() {
+        userInformationMock.close();
     }
 
     @Test
@@ -50,6 +63,7 @@ class CategoryControllerTest {
     void createCategory() throws Exception {
         //given
         //when
+        when(UserInformation.validAdmin(any(UserDetailsDto.class))).thenReturn(true);
         //then
         mvc.perform(post("/api/categories")
                         .with(csrf())
