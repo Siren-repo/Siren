@@ -1,9 +1,10 @@
 package com.devlop.siren.store.service;
 
+import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.global.exception.GlobalException;
-import com.devlop.siren.store.domain.Store;
-import com.devlop.siren.store.repository.StoreRepository;
-import com.devlop.siren.store.response.StoreResponse;
+import com.devlop.siren.domain.store.domain.Store;
+import com.devlop.siren.domain.store.repository.StoreRepository;
+import com.devlop.siren.domain.store.dto.response.StoreResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -119,7 +120,9 @@ public class StoreGetServiceTest {
         // Given
         Long nonExistentStoreId = 999L;
         // When
-        when(storeRepository.findByStoreId(nonExistentStoreId)).thenReturn(Optional.empty());
+        when(storeRepository.findByStoreId(nonExistentStoreId))
+                .thenReturn(Optional.empty()
+                );
 
         // Then
         assertThrows(GlobalException.class,

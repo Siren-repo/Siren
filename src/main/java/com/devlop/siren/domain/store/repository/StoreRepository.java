@@ -1,6 +1,6 @@
-package com.devlop.siren.store.repository;
+package com.devlop.siren.domain.store.repository;
 
-import com.devlop.siren.store.domain.Store;
+import com.devlop.siren.domain.store.domain.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,8 @@
 package com.devlop.siren.store.service;
 
-import com.devlop.siren.store.domain.Store;
-import com.devlop.siren.store.repository.StoreRepository;
+import com.devlop.siren.domain.store.domain.Store;
+import com.devlop.siren.domain.store.repository.StoreRepository;
+import com.devlop.siren.domain.store.service.StoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
-package com.devlop.siren.store.response;
+package com.devlop.siren.domain.store.dto.response;
 
-import com.devlop.siren.store.domain.Store;
+import com.devlop.siren.domain.store.domain.Store;
 import lombok.Builder;
 import lombok.Getter;
 

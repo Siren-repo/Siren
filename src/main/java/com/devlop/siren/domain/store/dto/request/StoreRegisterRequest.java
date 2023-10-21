@@ -1,6 +1,6 @@
-package com.devlop.siren.store.request;
+package com.devlop.siren.domain.store.dto.request;
 
-import com.devlop.siren.store.domain.Store;
+import com.devlop.siren.domain.store.domain.Store;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 

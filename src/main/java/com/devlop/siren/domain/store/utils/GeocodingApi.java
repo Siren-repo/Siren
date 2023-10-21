@@ -1,4 +1,4 @@
-package com.devlop.siren.store.utils;
+package com.devlop.siren.domain.store.utils;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;

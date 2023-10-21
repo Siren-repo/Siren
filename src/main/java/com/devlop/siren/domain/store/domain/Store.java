@@ -1,6 +1,6 @@
-package com.devlop.siren.store.domain;
+package com.devlop.siren.domain.store.domain;
 
-import com.devlop.siren.store.request.StoreUpdateRequest;
+import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import lombok.*;
 
 import javax.persistence.*;
