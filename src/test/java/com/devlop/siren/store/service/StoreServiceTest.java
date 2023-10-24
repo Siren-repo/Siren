@@ -115,7 +115,7 @@ class StoreServiceTest {
                 () -> storeService.registerStore(registerRequest,customer)
         );
 
-        assertEquals(exception.getErrorCode().getMESSAGE(),"권한이 없는 사용자입니다.");
+        assertEquals(exception.getErrorCode().getMESSAGE(),"권한이 없는 사용자입니다");
 
     }
     @Test
@@ -158,7 +158,7 @@ class StoreServiceTest {
                 () ->  storeService.updateStore(storeId, storeUpdateRequest, customer)
         );
 
-        assertEquals(exception.getErrorCode().getMESSAGE(),"권한이 없는 사용자입니다.");
+        assertEquals(exception.getErrorCode().getMESSAGE(),"권한이 없는 사용자입니다");
 
     }
     @Test
@@ -225,7 +225,7 @@ class StoreServiceTest {
                 () ->  storeService.deleteStore(storeId, customer)
         );
 
-        assertEquals(exception.getErrorCode().getMESSAGE(),"권한이 없는 사용자입니다.");
+        assertEquals(exception.getErrorCode().getMESSAGE(),"권한이 없는 사용자입니다");
     }
     @Test
     @DisplayName("존재 하지 않는 매장 삭제 (권한 : ADMIN) ")

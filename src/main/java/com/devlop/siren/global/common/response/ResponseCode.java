@@ -33,8 +33,7 @@ public class ResponseCode {
         NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "해당하는 카테고리를 찾을 수 없습니다"),
         NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "해당하는 아이템을 찾을 수 없습니다"),
         NOT_VALID(HttpStatus.NOT_ACCEPTABLE, "적합하지 않은 입력입니다"),
-        NOT_AUTHORITY_USER(HttpStatus.UNAUTHORIZED,"권한이 없는 사용자입니다.")
-        ;
+        NOT_AUTHORITY_USER(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자입니다");
 
 
         private final HttpStatus status;
