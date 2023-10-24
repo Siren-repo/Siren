@@ -19,6 +19,12 @@ jwt:
   access-token.expired-time-ms: 43200000 #12시간
   refresh-token.expired-time-ms: 604800000 #7일
 
+
+google:
+  geocoding:
+    key:
+      ${GeocodingService_KEY}
+
 server:
   servlet:
     encoding:
@@ -85,3 +91,5 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+---

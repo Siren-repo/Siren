@@ -9,7 +9,10 @@ public class ResponseCode {
     @RequiredArgsConstructor
     public enum ErrorCode {
 
-        NOT_AUTH_ROLE(HttpStatus.UNAUTHORIZED, "매장 등록 권한이 없습니다"),
+        NOT_AUTH_ROLE(HttpStatus.UNAUTHORIZED, "매장 권한이 없습니다"),
+        NOT_FOUND_STORE(HttpStatus.NOT_FOUND,"매장이 존재하지 않습니다."),
+        FAIL_STORE_SAVE(HttpStatus.BAD_REQUEST, "매장 등록에 실패 하였습니다."),
+        WRONG_LAT_LONG_DATA(HttpStatus.INTERNAL_SERVER_ERROR, "잘못된 데이터 입니다."),
         GEOCODING_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "지오코딩 위도 경도 조회시 에러발생"),
 
         DUPLICATED_MEMBER(HttpStatus.CONFLICT, "이미 가입된 이메일입니다"),
@@ -17,8 +20,8 @@ public class ResponseCode {
         INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다"),
         EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다"),
         EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 만료되었습니다"),
-        ALREADY_LOGGED_IN(HttpStatus.UNAUTHORIZED, "이미 로그인 된 계정입니다"),
         ALREADY_LOGGED_OUT(HttpStatus.UNAUTHORIZED, "이미 로그아웃 된 계정입니다"),
+        ALREADY_LOGGED_IN(HttpStatus.UNAUTHORIZED, "이미 로그인 된 계정입니다"),
         INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효한 패스워드가 아닙니다"),
 
         INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러"),
