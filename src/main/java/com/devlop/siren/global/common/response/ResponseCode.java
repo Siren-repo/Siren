@@ -10,7 +10,7 @@ public class ResponseCode {
     public enum ErrorCode {
 
         NOT_AUTH_ROLE(HttpStatus.UNAUTHORIZED, "매장 권한이 없습니다"),
-        NOT_FOUND_STORE(HttpStatus.NOT_FOUND,"매장이 존재하지 않습니다."),
+        NOT_FOUND_STORE(HttpStatus.NOT_FOUND, "매장이 존재하지 않습니다."),
         FAIL_STORE_SAVE(HttpStatus.BAD_REQUEST, "매장 등록에 실패 하였습니다."),
         WRONG_LAT_LONG_DATA(HttpStatus.INTERNAL_SERVER_ERROR, "잘못된 데이터 입니다."),
         GEOCODING_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "지오코딩 위도 경도 조회시 에러발생"),
@@ -33,7 +33,10 @@ public class ResponseCode {
         NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "해당하는 카테고리를 찾을 수 없습니다"),
         NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "해당하는 아이템을 찾을 수 없습니다"),
         NOT_VALID(HttpStatus.NOT_ACCEPTABLE, "적합하지 않은 입력입니다"),
-        NOT_AUTHORITY_USER(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자입니다");
+        NOT_AUTHORITY_USER(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자입니다"),
+
+        NOT_FOUND_STOCKS_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 재고가 존재하지 않습니다."),
+        NOT_FOUND_STOCK_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 해당하는 아이템 재고가 존재하지 않습니다.");
 
 
         private final HttpStatus status;
