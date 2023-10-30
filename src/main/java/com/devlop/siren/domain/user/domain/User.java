@@ -2,6 +2,7 @@ package com.devlop.siren.domain.user.domain;
 //
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.user.utils.KoreanNickname;
 import com.devlop.siren.global.common.BaseEntity;
 import lombok.AccessLevel;
@@ -14,7 +15,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -48,6 +51,9 @@ public class User extends BaseEntity {
     @Column(name = "allergy")
     @Convert(converter = AllergyConverter.class)
     private EnumSet<AllergyType> allergies;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<Order>();
 
     @Column(name = "is_deleted", columnDefinition = "TINYINT(1)")
     private boolean isDeleted;
