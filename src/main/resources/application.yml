@@ -24,6 +24,12 @@ google:
   geocoding:
     key:
       ${GeocodingService_KEY}
+toss:
+  payment:
+    client-key: ${TOSS_CLIENT_KEY}
+    secret-key: ${TOSS_SECRET_KEY}
+    success-url: "http://localhost:8080/api/toss/payments/success"
+    fail-url: "http://localhost:8080/api/toss/payments/fail"
 
 server:
   servlet:
