@@ -11,6 +11,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,8 +43,9 @@ public class StockController {
     // 매장별 모든 재고를 조회
     @GetMapping(value = "/{storeId}")
     public ApiResponse<StocksResponse> findAllByStore(@PathVariable @Min(1L) Long storeId,
-                                                      @AuthenticationPrincipal UserDetailsDto user) {
-        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, stockService.findAllByStore(storeId, user));
+                                                      @AuthenticationPrincipal UserDetailsDto user,
+                                                      @PageableDefault(size = 5, sort = "stockId", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, stockService.findAllByStore(storeId, user, pageable));
     }
 
     // 매장별 특정 상품 재고를 조회
