@@ -12,6 +12,7 @@ public class StockResponse {
     private String itemName;
     private Long storeId;
     private String storeName;
+    private Integer stock;
 
     public static StockResponse from(Stock stock) {
         return StockResponse.builder()
@@ -20,6 +21,7 @@ public class StockResponse {
                 .itemName(stock.getItem().getItemName())
                 .storeId(stock.getStore().getStoreId())
                 .storeName(stock.getStore().getStoreName())
+                .stock(stock.getStock())
                 .build();
     }
 }
