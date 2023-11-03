@@ -2,6 +2,8 @@ package com.devlop.siren.stock.service;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
@@ -30,15 +32,14 @@ import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.UserInformation;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
 class StockServiceTest {
@@ -58,20 +59,20 @@ class StockServiceTest {
     private StockCreateRequest validStockDto;
     private StockCreateRequest inValidStoreInStockDto;
     private StockCreateRequest inValidItemInStockDto;
-    private MockedStatic<UserInformation> userInformationMock;
     private Store store;
     private Item item;
     private ItemCreateRequest validItemDto;
     private UserDetailsDto staff;
+    private UserDetailsDto customer;
 
 
     @BeforeEach
     private void setUp() {
+        customer = new UserDetailsDto(2L, "test@test", "test", UserRole.CUSTOMER, false);
         staff = new UserDetailsDto(1L, "test@test.com", "testtest", UserRole.ADMIN, false);
         validStockDto = new StockCreateRequest(STORE_ID, ITEM_ID, 1);
         inValidItemInStockDto = new StockCreateRequest(STORE_ID, 0L, -1);
         inValidStoreInStockDto = new StockCreateRequest(0L, ITEM_ID, -1);
-        userInformationMock = mockStatic(UserInformation.class);
         validItemDto = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
                 , 5000, "아메리카노입니다", null, false, true,
@@ -102,21 +103,16 @@ class StockServiceTest {
                 .allergies(allergyConverter.convertToEntityAttribute(validItemDto.getAllergy())).build();
     }
 
-    @AfterEach
-    private void cleanUp() {
-        userInformationMock.close();
-    }
 
     @Test
     @DisplayName("재고 생성에 성공한다")
     void createStock() {
-        Long stockId = 1L;
-        Stock stock = new Stock(stockId, item, store, 1);
+        Stock stock = new Stock(item, store, 1);
         when(storeRepository.findByStoreId(STORE_ID)).thenReturn(Optional.ofNullable(store));
         when(itemRepository.findById(ITEM_ID)).thenReturn(Optional.ofNullable(item));
         when(stockRepository.save(any(Stock.class))).thenReturn(stock);
 
-        assertThat(stockService.create(validStockDto, staff).getStockId()).isEqualTo(stockId);
+        assertThat(stockService.create(validStockDto, staff).getItemId()).isEqualTo(validStockDto.getItemId());
     }
 
     @Test
@@ -147,16 +143,29 @@ class StockServiceTest {
     }
 
     @Test
+    @DisplayName("권한이 없는 경우 재고 생성을 실패한다")
+    void inValidAuthorityToCreateStock() {
+        // Given
+        // When
+        Throwable throwable = catchThrowable(() -> stockService.create(validStockDto, customer));
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
+
+    }
+
+    @Test
     @DisplayName("존재하지 않는 매장 id가 입력되는 경우 매장 재고 조회에 실패한다")
     void inValidFindAllByStore() {
         // Given
         // When
         Throwable throwable = catchThrowable(
-                () -> stockService.findAllByStore(inValidStoreInStockDto.getStoreId(), staff));
+                () -> stockService.findAllByStore(inValidStoreInStockDto.getStoreId(), staff, PageRequest.of(1,1)));
         // Then
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
-                .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_STOCKS_IN_STORE.getMESSAGE());
+                .hasMessageContaining(ErrorCode.NOT_FOUND_STORE.getMESSAGE());
     }
 
     @Test
@@ -170,6 +179,19 @@ class StockServiceTest {
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
                 .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_STOCK_IN_STORE.getMESSAGE());
+    }
+
+    @Test
+    @DisplayName("권한이 없는 경우 재고 조회에 실패한다")
+    void inValidAuthorityToRetrieveStock() {
+        // Given
+        // When
+        Throwable throwable = catchThrowable(() -> stockService.findByStoreAndItem(STORE_ID, ITEM_ID, customer));
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
+
     }
 
     @Test
@@ -201,6 +223,18 @@ class StockServiceTest {
     }
 
     @Test
+    @DisplayName("권한이 없는 경우 재고 수정에 실패한다")
+    void inValidAuthorityToUpdateStock() {
+        // Given
+        // When
+        Throwable throwable = catchThrowable(() -> stockService.updateStock(STORE_ID, ITEM_ID, validStockDto.getStock(), customer));
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
+    }
+
+    @Test
     @DisplayName("존재하지 않는 매장 id가 입력되는 경우 매장 재고 삭제에 실패한다")
     void inValidStoreDeleteStock() {
         // Given
@@ -224,6 +258,19 @@ class StockServiceTest {
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
                 .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_STOCK_IN_STORE.getMESSAGE());
+    }
+
+    @Test
+    @DisplayName("권한이 없는 경우 재고 삭제에 실패한다")
+    void inValidAuthorityToDeleteStock() {
+        // Given
+        // When
+        Throwable throwable = catchThrowable(() -> stockService.deleteStock(STORE_ID, ITEM_ID, customer));
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
+
     }
 
 }
