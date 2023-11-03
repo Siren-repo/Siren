@@ -42,10 +42,11 @@ public class Stock {
         this.stock = stock;
     }
 
-    public void consumed(){
+    public void consumed() {
         this.stock--;
     }
-    public void revert(){
+
+    public void revert() {
         this.stock++;
     }
 }
