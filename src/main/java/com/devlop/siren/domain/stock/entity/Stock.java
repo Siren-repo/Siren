@@ -32,8 +32,7 @@ public class Stock {
     private Integer stock;
 
     @Builder
-    public Stock(Long stockId, Item item, Store store, int stock) {
-        this.stockId = stockId;
+    public Stock(Item item, Store store, int stock) {
         this.item = item;
         this.store = store;
         this.stock = stock;
@@ -41,5 +40,12 @@ public class Stock {
 
     public void update(Integer stock) {
         this.stock = stock;
+    }
+
+    public void consumed(){
+        this.stock--;
+    }
+    public void revert(){
+        this.stock++;
     }
 }
