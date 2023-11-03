@@ -109,8 +109,8 @@ class StockControllerTest {
     @WithMockUser
     void updateStock() throws Exception {
         mvc.perform(put("/api/stocks/{storeId}/{itemId}", STORE_ID, ITEM_ID)
+                        .param("stock", validObject.getStock().toString())
                         .with(csrf())
-                        .content(objectMapper.writeValueAsString(validObject.getStock()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
