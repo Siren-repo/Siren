@@ -34,7 +34,7 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderState status;
 
-    private Integer totalPrice = 0;
+    private Integer totalAmount = 0;
 
     public static Order of(User user, Store store, List<OrderItem> items){
         Order newOrder = new Order();
@@ -42,13 +42,13 @@ public class Order extends BaseEntity {
         newOrder.setStore(store);
         newOrder.setStatus(OrderState.INIT);
         newOrder.setOrderItem(items);
-        newOrder.setTotalPrice(getTotalPrice(items));
+        newOrder.setTotalAmount(getTotalAmount(items));
         return newOrder;
     }
-    private static int getTotalPrice(List<OrderItem> items){
+    private static int getTotalAmount(List<OrderItem> items){
         return items.stream()
                 .mapToInt(item -> item.getItem().getPrice() * item.getQuantity()
-                        + item.getCustomOption().getPrice())
+                        + item.getCustomOption().getAdditionalAmount())
                 .sum();
     }
     public void cancel(){
@@ -62,8 +62,8 @@ public class Order extends BaseEntity {
         this.store = store;
         store.getOrders().add(this);
     }
-    private void setTotalPrice(Integer totalPrice) {
-        this.totalPrice = totalPrice;
+    private void setTotalAmount(Integer amount) {
+        this.totalAmount = amount;
     }
     private void setOrderItem(List<OrderItem> items){
         items.stream()
