@@ -1,7 +1,7 @@
 package com.devlop.siren.domain.item.dto.request;
 
-import com.devlop.siren.domain.item.entity.DefaultOption;
-import com.devlop.siren.domain.item.entity.SizeType;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
+import com.devlop.siren.domain.item.entity.option.SizeType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
