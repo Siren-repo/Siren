@@ -1,5 +1,7 @@
 package com.devlop.siren.domain.order.domain.option;
 
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.*;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,22 +11,18 @@ public abstract class CustomOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "take_out", nullable = false)
-    private Boolean takeout;
-    @Column(name = "cold", nullable = false)
+    protected Boolean takeout;
+
+    @Column(name = "temperature", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Temperature temperature;
-    @Column(name = "additional_price")
-    private int price = 0;
+    protected Temperature temperature;
 
-    public abstract int getPrice();
-    public void setTemperature(Temperature temperature) {
-        this.temperature = temperature;
-    }
+    @Column(name = "additional_amount")
+    protected Integer amount = 0;
 
-    enum Temperature{
-        HOT, COLD
-    }
+    public abstract int getAdditionalAmount();
 }
 
 
