@@ -10,13 +10,13 @@ public enum PriceType {
     ADD_ESPRESSO_SHOT(600),
     ADD_SYRUP(600),
     ADD_DRIZZLE(600),
-    ADD_WHIPPED_CREAM(600)
+    ADD_FOAM(600)
     ;
 
     private int price;
 
-    PriceType(int additionalPrice){
-        this.price = additionalPrice;
+    PriceType(int price){
+        this.price = price;
     }
 
 }
