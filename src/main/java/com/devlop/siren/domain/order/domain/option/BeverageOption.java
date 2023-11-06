@@ -48,9 +48,10 @@ public class BeverageOption extends CustomOption {
     private Set<DrizzleDetail> drizzle = new HashSet<DrizzleDetail>();
 
     @Builder
-    public BeverageOption(Boolean takeout, SizeType cupSize, EspressoDetail espresso, MilkDetail milk,
+    public BeverageOption(Boolean takeout, Temperature temperature, SizeType cupSize, EspressoDetail espresso, MilkDetail milk,
                           FoamDetail foam, Set<SyrupDetail> syrup, Set<DrizzleDetail> drizzle) {
         this.takeout = takeout;
+        this.temperature = temperature;
         this.cupSize = cupSize;
         this.espresso = espresso;
         this.milk = milk;
