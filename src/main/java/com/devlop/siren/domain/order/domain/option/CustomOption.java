@@ -6,10 +6,11 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "TYPE")
+@DiscriminatorColumn
 public abstract class CustomOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "custom_option_id")
     private Long id;
 
     @Column(name = "take_out", nullable = false)
@@ -20,7 +21,7 @@ public abstract class CustomOption {
     protected Temperature temperature;
 
     @Column(name = "additional_amount")
-    protected Integer amount = 0;
+    protected int amount = 0;
 
     public abstract int getAdditionalAmount();
 }
