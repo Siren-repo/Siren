@@ -51,7 +51,7 @@ public class FoodOption extends CustomOption{
     public int getAdditionalAmount() {
         if(potion.size() > 0){
             amount += potion.stream()
-                    .mapToInt(potion -> potion.getType().getPrice() * potion.getCnt())
+                    .mapToInt(potion -> potion.getPotionType().getPrice() * potion.getCnt())
                     .sum();
         }
         return amount;

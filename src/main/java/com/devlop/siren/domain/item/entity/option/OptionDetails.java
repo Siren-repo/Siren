@@ -15,11 +15,11 @@ public class OptionDetails {
     @NoArgsConstructor
     public class SyrupDetail {
         @Enumerated(EnumType.STRING)
-        private SyrupType type;
+        private SyrupType syrupType;
 
         private Integer cnt;
         public SyrupDetail(SyrupType type, int cnt){
-            this.type = type;
+            this.syrupType = type;
             this.cnt = cnt;
         }
     }
@@ -28,12 +28,12 @@ public class OptionDetails {
     @NoArgsConstructor
     public static class DrizzleDetail {
         @Enumerated(EnumType.STRING)
-        private DrizzleType type;
+        private DrizzleType drizzleType;
 
         private Integer cnt;
 
         public DrizzleDetail(DrizzleType type, int cnt){
-            this.type = type;
+            this.drizzleType = type;
             this.cnt = cnt;
         }
     }
@@ -42,12 +42,12 @@ public class OptionDetails {
     @NoArgsConstructor
     public static class EspressoDetail{
         @Enumerated(EnumType.STRING)
-        private EspressoType type;
+        private EspressoType espressoType;
 
         private Integer cnt;
 
         public EspressoDetail(EspressoType type, int cnt){
-            this.type = type;
+            this.espressoType = type;
             this.cnt = cnt;
         }
     }
@@ -56,14 +56,14 @@ public class OptionDetails {
     @NoArgsConstructor
     public static class MilkDetail{
         @Enumerated(EnumType.STRING)
-        private MilkType type;
+        private MilkType milkType;
 
         @Enumerated(EnumType.STRING)
-        private Amount amount;
+        private Amount milkAmount;
 
         public MilkDetail(MilkType type, Amount amount){
-            this.type = type;
-            this.amount = amount;
+            this.milkType = type;
+            this.milkAmount = amount;
         }
     }
     @Embeddable
@@ -71,14 +71,14 @@ public class OptionDetails {
     @NoArgsConstructor
     public static class FoamDetail{
         @Enumerated(EnumType.STRING)
-        private FoamType type;
+        private FoamType foamType;
 
         @Enumerated(EnumType.STRING)
-        private Amount amount;
+        private Amount foamAmount;
 
         public FoamDetail(FoamType type, Amount amount){
-            this.type = type;
-            this.amount = amount;
+            this.foamType = type;
+            this.foamAmount = amount;
         }
     }
 
@@ -87,11 +87,11 @@ public class OptionDetails {
     @NoArgsConstructor
     public static class PotionDetail{
         @Enumerated(EnumType.STRING)
-        private PotionType type;
+        private PotionType potionType;
         private Integer cnt;
 
         public PotionDetail(PotionType type, int cnt){
-            this.type = type;
+            this.potionType = type;
             this.cnt = cnt;
         }
     }

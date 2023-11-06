@@ -68,7 +68,7 @@ public class BeverageOption extends CustomOption {
         if(espresso != null)
             amount += PriceType.ADD_ESPRESSO_SHOT.getPrice() * espresso.getCnt();
 
-        if(milk != null && milk.getType().equals(MilkType.OAT))
+        if(milk != null && milk.getMilkType().equals(MilkType.OAT))
             amount += PriceType.CHANGE_OAT_MILK.getPrice();
 
         if(foam != null)
