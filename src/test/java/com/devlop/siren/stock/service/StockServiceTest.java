@@ -270,4 +270,21 @@ class StockServiceTest {
 
     }
 
+    @Test
+    @DisplayName("재고 감소에 성공한다")
+    void consumed(){
+        Stock stock = new Stock(item, store, 3);
+        when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+        stockService.consumed(STORE_ID, ITEM_ID);
+        assertThat(stock.getStock()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("재고 증가에 성공한다")
+    void revert(){
+        Stock stock = new Stock(item, store, 3);
+        when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+        stockService.revert(STORE_ID, ITEM_ID);
+        assertThat(stock.getStock()).isEqualTo(4);
+    }
 }
