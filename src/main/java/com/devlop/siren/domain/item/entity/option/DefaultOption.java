@@ -1,4 +1,4 @@
-package com.devlop.siren.domain.item.entity;
+package com.devlop.siren.domain.item.entity.option;
 
 import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import lombok.*;

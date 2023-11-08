@@ -11,7 +11,7 @@ import com.devlop.siren.domain.item.dto.response.ItemDetailResponse;
 import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.domain.item.entity.DefaultOption;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.entity.Nutrition;
 import com.devlop.siren.domain.item.repository.DefaultOptionRepository;

@@ -6,7 +6,7 @@ import com.devlop.siren.domain.item.controller.ItemController;
 import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
-import com.devlop.siren.domain.item.entity.SizeType;
+import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.service.ItemService;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.util.UserInformation;

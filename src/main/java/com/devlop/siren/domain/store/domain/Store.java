@@ -1,10 +1,13 @@
 package com.devlop.siren.domain.store.domain;
 
+import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -35,6 +38,8 @@ public class Store {
     private Double latitude;
     @Column(name = "longitude", columnDefinition = "NVARCHAR(255) NOT NULL" )
     private Double longitude;
+    @OneToMany(mappedBy = "store")
+    private List<Order> orders = new ArrayList<Order>();
 
     @Builder
     public Store(Long storeId, String storeName, String storePhone, String city, String street,

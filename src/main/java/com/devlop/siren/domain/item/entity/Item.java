@@ -2,6 +2,7 @@ package com.devlop.siren.domain.item.entity;
 
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.devlop.siren.domain.item.dto.response;
 
-import com.devlop.siren.domain.item.entity.DefaultOption;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

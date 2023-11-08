@@ -1,4 +1,4 @@
-package com.devlop.siren.domain.item.entity;
+package com.devlop.siren.domain.item.entity.option;
 
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
