@@ -2,8 +2,11 @@ package com.devlop.siren.user.service;
 
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.order.dto.request.UserRoleChangeRequest;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.domain.user.dto.UserReadResponse;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
@@ -11,8 +14,10 @@ import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.service.RedisService;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.UserFixture;
+import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
+import com.devlop.siren.global.util.UserInformation;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.MalformedJwtException;
 import org.junit.jupiter.api.*;
@@ -31,7 +36,7 @@ import java.time.Duration;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -251,4 +256,38 @@ public class UserServiceTest {
             Assertions.assertEquals(e.getErrorCode().getMESSAGE(), "리프레시 토큰이 만료되었습니다");
         }
     }
+
+    @Test
+    @DisplayName("관리자가 이메일에 해당하는 유저의 권한을 요청한 권한으로 수정한다")
+    void changeUserRole(){
+        UserRoleChangeRequest request = new UserRoleChangeRequest("test@test.com", "STAFF");
+        User registedUser = UserFixture.get("test@test.com", "password", "nickname");
+
+        try(MockedStatic<UserInformation> userInformationMock = mockStatic(UserInformation.class)) {
+            userInformationMock.when(() -> UserInformation.validAdmin(any())).thenAnswer(invocation -> {
+                return null;
+            });
+            when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(registedUser));
+            UserReadResponse user = userService.changeRole(request, mock(UserDetailsDto.class));
+
+            assertEquals(user.getUserRole(), UserRole.STAFF.getDesc());
+        }
+    }
+    @Test
+    @DisplayName("관리자가 아니면 유저 역할 변경을 변경할 수 없다")
+    void changeUserRoleWithNotAdmin(){
+        UserRoleChangeRequest request = new UserRoleChangeRequest("test@test.com", "STAFF");
+        User registedUser = UserFixture.get("test@test.com", "password", "nickname");
+
+        try(MockedStatic<UserInformation> userInformationMock = mockStatic(UserInformation.class)) {
+            userInformationMock.when(() -> UserInformation.validAdmin(any()))
+                    .thenThrow(new GlobalException(ResponseCode.ErrorCode.NOT_AUTHORITY_USER));
+
+            GlobalException e = assertThrows(GlobalException.class, () ->
+                    userService.changeRole(request, UserDetailsDto.fromEntity(registedUser)));
+            Assertions.assertEquals(e.getErrorCode().getStatus(), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
 }
