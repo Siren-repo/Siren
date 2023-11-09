@@ -1,12 +1,12 @@
 package com.devlop.siren.user.controller;
 
-import com.devlop.siren.domain.order.dto.request.UserRoleChangeRequest;
 import com.devlop.siren.domain.user.controller.UserController;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.domain.user.dto.UserReadResponse;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
+import com.devlop.siren.domain.user.dto.request.UserRoleChangeRequest;
+import com.devlop.siren.domain.user.dto.response.UserReadResponse;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.util.JwtTokenUtils;

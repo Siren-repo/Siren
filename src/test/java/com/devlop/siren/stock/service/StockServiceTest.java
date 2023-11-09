@@ -7,7 +7,7 @@ import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
 import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.item.entity.SizeType;
+import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;

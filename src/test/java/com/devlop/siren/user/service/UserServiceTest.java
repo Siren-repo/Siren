@@ -2,14 +2,14 @@ package com.devlop.siren.user.service;
 
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
-import com.devlop.siren.domain.order.dto.request.UserRoleChangeRequest;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.domain.user.dto.UserReadResponse;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
+import com.devlop.siren.domain.user.dto.request.UserRoleChangeRequest;
+import com.devlop.siren.domain.user.dto.response.UserReadResponse;
 import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.service.RedisService;
 import com.devlop.siren.domain.user.service.UserService;

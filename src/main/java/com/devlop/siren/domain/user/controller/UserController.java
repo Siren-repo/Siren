@@ -1,14 +1,18 @@
 package com.devlop.siren.domain.user.controller;
 
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
+import com.devlop.siren.domain.user.dto.request.UserRoleChangeRequest;
+import com.devlop.siren.domain.user.dto.response.UserReadResponse;
 import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +28,8 @@ public class UserController {
     private final JwtTokenUtils utils;
 
     @PostMapping
-    public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request){
-        userService.register(request);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
+    public ApiResponse<UserReadResponse> register(@Valid @RequestBody UserRegisterRequest request){
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, userService.register(request));
     }
 
     @PostMapping("/sessions")
@@ -50,5 +53,9 @@ public class UserController {
         return ApiResponse.ok(ResponseCode.Normal.UPDATE, token);
     }
 
-
+    @PatchMapping("/role")
+    public ApiResponse<UserReadResponse> changeRole(@Valid @RequestBody UserRoleChangeRequest request,
+                                                    @AuthenticationPrincipal UserDetailsDto userDto){
+        return ApiResponse.ok(ResponseCode.Normal.UPDATE, userService.changeRole(request, userDto));
+    }
 }

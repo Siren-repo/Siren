@@ -1,11 +1,9 @@
-package com.devlop.siren.domain.user.dto;
+package com.devlop.siren.domain.user.dto.response;
 
 import com.devlop.siren.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @Getter

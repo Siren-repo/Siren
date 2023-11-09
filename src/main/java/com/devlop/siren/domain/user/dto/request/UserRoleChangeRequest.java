@@ -1,4 +1,4 @@
-package com.devlop.siren.domain.order.dto.request;
+package com.devlop.siren.domain.user.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
