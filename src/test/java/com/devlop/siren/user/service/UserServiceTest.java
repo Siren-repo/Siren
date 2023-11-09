@@ -70,15 +70,15 @@ public class UserServiceTest {
     @Test
     @DisplayName("요청한 내용으로 회원가입한다")
     void register(){
-        UserRegisterRequest request = UserFixture.get("email", "encodedPassword");
+        UserRegisterRequest request = UserFixture.get("test@test.com", "password");
+        User registedUser = UserFixture.get("test@test.com", "password", "닉네임");
         EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
 
         when(encoder.encode(request.getPassword())).thenReturn("encodedPassword");
         when(converter.convertToEntityAttribute(request.getAllergies())).thenReturn(allergies);
+        when(userRepository.save(any())).thenReturn(registedUser);
 
-        userService.register(request);
-
-        verify(userRepository).save(any(User.class));
+        Assertions.assertDoesNotThrow(() -> userService.register(request));
     }
 
     @Test
