@@ -1,9 +1,11 @@
 package com.devlop.siren.domain.user.service;
 
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.order.dto.request.UserRoleChangeRequest;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.domain.user.dto.UserReadResponse;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
@@ -11,6 +13,7 @@ import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
+import com.devlop.siren.global.util.UserInformation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,6 +91,15 @@ public class UserService {
         String newAccessToken = utils.generateAccessToken(userDetail.getEmail(), secretKey, accessExpiredTimeMs);
         utils.setAccessTokenInHeader(newAccessToken, response);
         return newAccessToken;
+    }
+
+    @Transactional
+    public UserReadResponse changeRole(UserRoleChangeRequest request, UserDetailsDto requestUser){
+        UserInformation.validAdmin(requestUser);
+        User user = userRepository.findByEmail(request.getUserEmail()).orElseThrow(() ->
+                new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
+        user.changeRole(UserRole.valueOf(request.getRoleType()));
+        return UserReadResponse.of(user);
     }
 
     private void checkPassword(String request, String password){

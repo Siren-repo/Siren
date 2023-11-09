@@ -1,5 +1,8 @@
 package com.devlop.siren.domain.user.controller;
 
+import com.devlop.siren.domain.order.dto.request.UserRoleChangeRequest;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.domain.user.dto.UserReadResponse;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
@@ -9,11 +12,14 @@ import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/users")
@@ -50,5 +56,9 @@ public class UserController {
         return ApiResponse.ok(ResponseCode.Normal.UPDATE, token);
     }
 
-
+    @PatchMapping("/role")
+    public ApiResponse<UserReadResponse> changeRole(@Valid @RequestBody UserRoleChangeRequest request,
+                                                    @AuthenticationPrincipal UserDetailsDto userDto){
+        return ApiResponse.ok(ResponseCode.Normal.UPDATE, userService.changeRole(request, userDto));
+    }
 }
