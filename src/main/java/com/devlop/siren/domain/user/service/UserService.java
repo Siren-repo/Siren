@@ -49,7 +49,7 @@ public class UserService {
     }
 
     @Transactional
-    public void register(UserRegisterRequest request) {
+    public UserReadResponse register(UserRegisterRequest request) {
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
             throw new GlobalException(ResponseCode.ErrorCode.DUPLICATED_MEMBER);
         });
@@ -57,7 +57,7 @@ public class UserService {
         User entity = UserRegisterRequest.fromDto(request, encoder.encode(request.getPassword()),
                 UserRole.CUSTOMER, converter.convertToEntityAttribute(request.getAllergies()));
 
-        userRepository.save(entity);
+        return UserReadResponse.of(userRepository.save(entity));
     }
 
     @Transactional

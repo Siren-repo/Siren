@@ -30,9 +30,8 @@ public class UserController {
     private final JwtTokenUtils utils;
 
     @PostMapping
-    public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request){
-        userService.register(request);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
+    public ApiResponse<UserReadResponse> register(@Valid @RequestBody UserRegisterRequest request){
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, userService.register(request));
     }
 
     @PostMapping("/sessions")
