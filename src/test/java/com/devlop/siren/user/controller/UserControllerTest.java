@@ -1,6 +1,9 @@
 package com.devlop.siren.user.controller;
 
+import com.devlop.siren.domain.order.dto.request.UserRoleChangeRequest;
 import com.devlop.siren.domain.user.controller.UserController;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.domain.user.dto.UserReadResponse;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
@@ -198,6 +201,32 @@ public class UserControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("관리자가 요청한 정보로 유저 권한을 수정한다")
+    @WithMockUser
+    void changeRole() throws Exception {
+        UserRoleChangeRequest request = new UserRoleChangeRequest("test@test.com", "STAFF");
+        when(userService.changeRole(request, mock(UserDetailsDto.class))).thenReturn(mock(UserReadResponse.class));
+        mockMvc.perform(patch("/api/users/role")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("유저 권한 변경 시 필수 요청값이 없어 예외가 발생한다")
+    @WithMockUser
+    void changeRoleWithNotRequest() throws Exception {
+        UserLoginRequest request = new UserLoginRequest("test@test.com", "");
+        mockMvc.perform(patch("/api/users/role")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(request)))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 }

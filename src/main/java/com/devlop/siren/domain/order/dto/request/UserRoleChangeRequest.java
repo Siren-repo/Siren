@@ -14,4 +14,9 @@ public class UserRoleChangeRequest {
 
     @NotBlank
     private String roleType;
+
+    public UserRoleChangeRequest(String userEmail, String roleType) {
+        this.userEmail = userEmail;
+        this.roleType = roleType;
+    }
 }
