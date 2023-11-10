@@ -4,9 +4,9 @@ package com.devlop.siren.domain.item.dto.request;
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.entity.Nutrition;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,18 +35,14 @@ public class ItemCreateRequest {
     @NotBlank(message = "상품 설명이 입력되지않았습니다.")
     private String description;
 
-    private String image;
-
     private Boolean isBest;
 
     private Boolean isNew;
 
-    @NotNull(message = "아이템 default 옵션이 입력되지않았습니다.")
     private DefaultOptionCreateRequest defaultOptionRequest;
 
     private String allergy;
 
-    @NotNull(message = "아이템 영양정보 옵션이 입력되지 않았습니다.")
     private NutritionCreateRequest nutritionCreateRequest;
 
 
@@ -55,7 +51,6 @@ public class ItemCreateRequest {
                 .itemName(itemCreateRequest.itemName)
                 .price(itemCreateRequest.price)
                 .description(itemCreateRequest.description)
-                .image(itemCreateRequest.image)
                 .isBest(itemCreateRequest.isBest)
                 .isNew(itemCreateRequest.isNew)
                 .allergies(allergies)

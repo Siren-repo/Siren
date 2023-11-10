@@ -30,9 +30,6 @@ public class Item {
     @Column(name = "description", columnDefinition = "TEXT NOT NULL")
     private String description;
 
-    @Column(name = "image")
-    private String image;
-
     @Column(name = "is_best", columnDefinition = "TINYINT(1)")
     private Boolean isBest;
 
@@ -62,12 +59,11 @@ public class Item {
     }
 
     @Builder
-    public Item(Long itemId, String itemName, Integer price, String description, String image, Boolean isBest, Boolean isNew, EnumSet<AllergyType> allergies, Category category, DefaultOption defaultOption, Nutrition nutrition) {
+    public Item(Long itemId, String itemName, Integer price, String description, Boolean isBest, Boolean isNew, EnumSet<AllergyType> allergies, Category category, DefaultOption defaultOption, Nutrition nutrition) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.price = price;
         this.description = description;
-        this.image = image;
         this.isBest = isBest;
         this.isNew = isNew;
         this.allergies = allergies;
@@ -80,7 +76,6 @@ public class Item {
         setItemName(itemCreateRequest.getItemName());
         setPrice(itemCreateRequest.getPrice());
         setDescription(itemCreateRequest.getDescription());
-        setImage(itemCreateRequest.getImage());
         setBest(itemCreateRequest.getIsBest());
         setNew(itemCreateRequest.getIsNew());
         setAllergies(allergies);
@@ -96,10 +91,6 @@ public class Item {
 
     private void setDescription(String description) {
         this.description = description;
-    }
-
-    private void setImage(String image) {
-        this.image = image == null ? this.image : image;
     }
 
     private void setBest(Boolean best) {

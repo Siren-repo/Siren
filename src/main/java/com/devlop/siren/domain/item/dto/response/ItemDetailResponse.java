@@ -10,8 +10,6 @@ public class ItemDetailResponse {
 
     private Long itemId;
 
-    private String image;
-
     private String itemName;
 
     private String description;
@@ -29,7 +27,6 @@ public class ItemDetailResponse {
     public static ItemDetailResponse from(Item item, String allergy) {
         return ItemDetailResponse.builder()
                 .itemId(item.getItemId())
-                .image(item.getImage())
                 .itemName(item.getItemName())
                 .description(item.getDescription())
                 .price(item.getPrice())
