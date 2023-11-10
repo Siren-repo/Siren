@@ -11,9 +11,9 @@ import com.devlop.siren.domain.item.dto.response.ItemDetailResponse;
 import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.entity.Nutrition;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.repository.DefaultOptionRepository;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.repository.NutritionRepository;
@@ -44,7 +44,20 @@ public class ItemServiceImpl implements ItemService {
         Category itemCategory = categoryRepository.findByCategoryTypeAndCategoryName(request.getCategoryRequest().getCategoryType(),
                         request.getCategoryRequest().getCategoryName())
                 .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY));
+        if (itemCategory.getCategoryType() == CategoryType.FOOD) {
+            return createFood(request, itemCategory);
+        }
+        return createBeverage(request, itemCategory);
+    }
 
+    // Food에 들어가는 디폴트 옵션과 영양정보 옵션이 Beverage와 달라 우선은 null처리
+    private ItemResponse createFood(ItemCreateRequest request, Category itemCategory) {
+        EnumSet<AllergyType> allergies = allergyConverter.convertToEntityAttribute(request.getAllergy());
+        Item item = ItemCreateRequest.toEntity(request, itemCategory, null, allergies, null);
+        return ItemResponse.from(itemRepository.save(item));
+    }
+
+    private ItemResponse createBeverage(ItemCreateRequest request, Category itemCategory) {
         DefaultOption defaultOption = DefaultOptionCreateRequest.toEntity(request.getDefaultOptionRequest());
         defaultOptionRepository.save(defaultOption);
 
