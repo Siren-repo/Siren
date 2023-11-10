@@ -6,6 +6,8 @@ import com.devlop.siren.domain.item.controller.ItemController;
 import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
+import com.devlop.siren.domain.item.entity.option.OptionDetails;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
 import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.service.ItemService;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
@@ -24,6 +26,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
@@ -52,12 +56,18 @@ class ItemControllerTest {
     private static void setUp() {
         validObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
-                , 5000, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+                , 5000, "아메리카노입니다", false, true,
+                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
+                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
+                        , OptionTypeGroup.MilkType.ORIGINAL
+                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         inValidObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
-                , -5, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+                , -5, "아메리카노입니다", false, true,
+                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
+                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
+                        , OptionTypeGroup.MilkType.ORIGINAL
+                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         userInformationMock = mockStatic(UserInformation.class);
     }
 

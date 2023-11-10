@@ -7,7 +7,9 @@ import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
 import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.item.entity.SizeType;
+import com.devlop.siren.domain.item.entity.option.OptionDetails;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
+import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
@@ -32,6 +34,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -72,9 +75,11 @@ class StockServiceTest {
         inValidStoreInStockDto = new StockCreateRequest(0L, ITEM_ID, -1);
         validItemDto = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
-                , 5000, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두",
-                new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+                , 5000, "아메리카노입니다", false, true,
+                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
+                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
+                        , OptionTypeGroup.MilkType.ORIGINAL
+                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         store = Store.builder()
                 .storeId(STORE_ID)
                 .storeName("First Store Name")
@@ -89,7 +94,6 @@ class StockServiceTest {
                 .itemId(ITEM_ID)
                 .itemName(validItemDto.getItemName())
                 .price(validItemDto.getPrice())
-                .image(null)
                 .category(Category.builder()
                         .categoryName(validItemDto.getCategoryRequest().getCategoryName())
                         .categoryType(validItemDto.getCategoryRequest().getCategoryType()).build())
@@ -272,7 +276,7 @@ class StockServiceTest {
 
     @Test
     @DisplayName("재고 감소에 성공한다")
-    void consumed(){
+    void consumed() {
         Stock stock = new Stock(item, store, 3);
         when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
         stockService.consumed(STORE_ID, ITEM_ID);
@@ -281,7 +285,7 @@ class StockServiceTest {
 
     @Test
     @DisplayName("재고 증가에 성공한다")
-    void revert(){
+    void revert() {
         Stock stock = new Stock(item, store, 3);
         when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
         stockService.revert(STORE_ID, ITEM_ID);
