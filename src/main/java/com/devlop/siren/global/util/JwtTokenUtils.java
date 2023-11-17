@@ -5,16 +5,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
 @Slf4j
 @Component
 public class JwtTokenUtils {
@@ -38,7 +38,8 @@ public class JwtTokenUtils {
                 .signWith(getKey(secretKey), SignatureAlgorithm.HS256)
                 .compact();
     }
-    public static String generateRefreshToken(String email, String secretKey, Long refreshExpiredTimeMs){
+
+    public static String generateRefreshToken(String email, String secretKey, Long refreshExpiredTimeMs) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -46,6 +47,7 @@ public class JwtTokenUtils {
                 .signWith(getKey(secretKey), SignatureAlgorithm.HS256)
                 .compact();
     }
+
     public UserTokenDto resolveToken(HttpServletRequest request) {
         String access = request.getHeader(AUTHORIZATION_HEADER);
         String refresh = request.getHeader(REFRESH_HEADER);
@@ -57,24 +59,30 @@ public class JwtTokenUtils {
         }
         return null;
     }
+
     public static void setAccessTokenInHeader(String accessToken, HttpServletResponse response) {
         response.setHeader(AUTHORIZATION_HEADER, "Bearer " + accessToken);
     }
+
     public static void setRefreshTokenInHeader(String refreshToken, HttpServletResponse response) {
         response.setHeader(REFRESH_HEADER, refreshToken);
     }
-    public static String getUserEmail(String token){
+
+    public static String getUserEmail(String token) {
         return extractClaims(token).get("email", String.class);
     }
-    public static boolean isExpired(String token){
+
+    public static boolean isExpired(String token) {
         Date expiredDate = extractClaims(token).getExpiration();
         return expiredDate.before(new Date());
     }
-    public static Claims extractClaims(String token){
+
+    public static Claims extractClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(getKey(secretKey))
                 .build().parseClaimsJws(token).getBody();
     }
-    public static Key getKey(String secretKey){
+
+    public static Key getKey(String secretKey) {
         byte[] keyByte = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyByte);
     }

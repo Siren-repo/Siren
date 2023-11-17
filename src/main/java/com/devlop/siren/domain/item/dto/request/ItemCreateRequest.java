@@ -4,18 +4,17 @@ package com.devlop.siren.domain.item.dto.request;
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.entity.Nutrition;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
+import java.util.EnumSet;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.EnumSet;
 
 @Getter
 @Builder
@@ -50,7 +49,8 @@ public class ItemCreateRequest {
     private NutritionCreateRequest nutritionCreateRequest;
 
 
-    public static Item toEntity(ItemCreateRequest itemCreateRequest, Category category, DefaultOption defaultOption, EnumSet<AllergyType> allergies, Nutrition nutrition) {
+    public static Item toEntity(ItemCreateRequest itemCreateRequest, Category category, DefaultOption defaultOption,
+                                EnumSet<AllergyType> allergies, Nutrition nutrition) {
         return Item.builder()
                 .itemName(itemCreateRequest.itemName)
                 .price(itemCreateRequest.price)

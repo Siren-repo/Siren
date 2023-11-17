@@ -1,14 +1,17 @@
 package com.devlop.siren.domain.store.dto.request;
 
 import com.devlop.siren.domain.store.domain.Store;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
+import java.time.LocalDateTime;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -37,7 +40,7 @@ public class StoreRegisterRequest {
     private LocalDateTime openTime;
     private LocalDateTime closeTime;
 
-    public static Store from(StoreRegisterRequest registerDto, Double lat, Double lon){
+    public static Store from(StoreRegisterRequest registerDto, Double lat, Double lon) {
         return Store.builder()
                 .storeName(registerDto.storeName)
                 .storePhone(registerDto.storePhone)

@@ -4,14 +4,13 @@ import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.utils.KoreanNickname;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import java.util.EnumSet;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.EnumSet;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -45,7 +44,7 @@ public class UserRegisterRequest {
     }
 
     public static User fromDto(UserRegisterRequest request, String encodedPassword,
-                               UserRole role, EnumSet<AllergyType> allergies){
+                               UserRole role, EnumSet<AllergyType> allergies) {
         return User.builder()
                 .email(request.getEmail())
                 .password(encodedPassword)

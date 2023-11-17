@@ -1,5 +1,10 @@
 package com.devlop.siren.item.service;
 
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
@@ -17,6 +22,8 @@ import com.devlop.siren.domain.item.service.ItemServiceImpl;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
+import java.util.EnumSet;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,14 +31,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.EnumSet;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -63,11 +62,13 @@ class ItemServiceImplTest {
         validObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
                 , "아메리카노"
                 , 5000, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두",
+                new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         inValidObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "dd")
                 , "아메리카노"
                 , -5, "아메리카노입니다", null, false, true,
-                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+                new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")), "우유, 대두",
+                new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
 
     }
 
@@ -92,10 +93,10 @@ class ItemServiceImplTest {
         // When
         when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any()))
                 .thenReturn(Optional.ofNullable(item.getCategory()));
-        when(allergyConverter.convertToEntityAttribute(validObject.getAllergy())).thenReturn(EnumSet.of(AllergyType.MILK, AllergyType.SOYBEAN));
+        when(allergyConverter.convertToEntityAttribute(validObject.getAllergy())).thenReturn(
+                EnumSet.of(AllergyType.MILK, AllergyType.SOYBEAN));
         when(itemRepository.findByIdWithOption(itemId)).thenReturn(Optional.of(item));
         when(itemRepository.save(any(Item.class))).thenReturn(item);
-
 
         // Then
         assertThat(itemService.create(validObject).getItemId()).isEqualTo(itemId);

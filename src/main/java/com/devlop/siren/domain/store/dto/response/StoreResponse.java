@@ -1,10 +1,9 @@
 package com.devlop.siren.domain.store.dto.response;
 
 import com.devlop.siren.domain.store.domain.Store;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -18,7 +17,7 @@ public class StoreResponse {
     private LocalDateTime closeTime;
 
 
-    public static StoreResponse from(Store store){
+    public static StoreResponse from(Store store) {
         return StoreResponse.builder()
                 .storeName(store.getStoreName())
                 .storePhone(store.getStorePhone())

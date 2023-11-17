@@ -12,6 +12,7 @@ import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.UserInformation;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +56,8 @@ public class StockService {
     public Page<StockResponse> findAllByStore(Long storeId, UserDetailsDto user, Pageable pageable) {
         UserInformation.validStaffOrAdmin(user);
         Store store = findByStoreId(storeId);
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("stockId").descending());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by("stockId").descending());
         return Optional.of(stockRepository.findAllByStore(store, pageRequest)
                         .map(StockResponse::from))
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_STOCKS_IN_STORE));

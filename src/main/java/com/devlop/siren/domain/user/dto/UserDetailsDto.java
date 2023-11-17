@@ -2,6 +2,8 @@ package com.devlop.siren.domain.user.dto;
 
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
+import java.util.Collection;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,10 +11,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +30,7 @@ public class UserDetailsDto implements UserDetails {
         this.isDeleted = isDeleted;
     }
 
-    public static UserDetailsDto fromEntity(User user){
+    public static UserDetailsDto fromEntity(User user) {
         return UserDetailsDto.builder()
                 .id(user.getId())
                 .password(user.getPassword())

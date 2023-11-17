@@ -3,9 +3,8 @@ package com.devlop.siren.domain.item.entity.option;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.Getter;
-
 import java.util.Arrays;
+import lombok.Getter;
 
 @Getter
 public enum SizeType {

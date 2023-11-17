@@ -4,13 +4,24 @@ import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import java.util.EnumSet;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.EnumSet;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -62,7 +73,9 @@ public class Item {
     }
 
     @Builder
-    public Item(Long itemId, String itemName, Integer price, String description, String image, Boolean isBest, Boolean isNew, EnumSet<AllergyType> allergies, Category category, DefaultOption defaultOption, Nutrition nutrition) {
+    public Item(Long itemId, String itemName, Integer price, String description, String image, Boolean isBest,
+                Boolean isNew, EnumSet<AllergyType> allergies, Category category, DefaultOption defaultOption,
+                Nutrition nutrition) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.price = price;

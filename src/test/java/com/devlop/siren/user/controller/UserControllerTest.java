@@ -1,5 +1,15 @@
 package com.devlop.siren.user.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.devlop.siren.domain.user.controller.UserController;
 import com.devlop.siren.domain.user.dto.UserTokenDto;
 import com.devlop.siren.domain.user.dto.request.UserLoginRequest;
@@ -8,6 +18,8 @@ import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +30,6 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -58,6 +58,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("유저 회원가입 시 필수값 검증에서 예외가 발생하여 회원가입에 실패한다")
     @WithMockUser
@@ -168,6 +169,7 @@ public class UserControllerTest {
                 .andDo(print())
                 .andReturn();
     }
+
     @Test
     @DisplayName("토큰이 만료되어 토큰을 재발행한다")
     @WithMockUser

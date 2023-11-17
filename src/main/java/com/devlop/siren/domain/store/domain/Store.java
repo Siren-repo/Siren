@@ -2,13 +2,21 @@ package com.devlop.siren.domain.store.domain;
 
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
-import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -22,9 +30,9 @@ public class Store {
     private String storeName;
     @Column(name = "store_phone")
     private String storePhone;
-    @Column(name = "city",columnDefinition = "NVARCHAR(255) NOT NULL" )
+    @Column(name = "city", columnDefinition = "NVARCHAR(255) NOT NULL")
     private String city;
-    @Column(name = "street",columnDefinition = "NVARCHAR(255) NOT NULL" )
+    @Column(name = "street", columnDefinition = "NVARCHAR(255) NOT NULL")
     private String street;
 
 
@@ -34,9 +42,9 @@ public class Store {
     private LocalDateTime openTime;
     @Column(name = "close_time")
     private LocalDateTime closeTime;
-    @Column(name = "latitude",columnDefinition = "NVARCHAR(255) NOT NULL" )
+    @Column(name = "latitude", columnDefinition = "NVARCHAR(255) NOT NULL")
     private Double latitude;
-    @Column(name = "longitude", columnDefinition = "NVARCHAR(255) NOT NULL" )
+    @Column(name = "longitude", columnDefinition = "NVARCHAR(255) NOT NULL")
     private Double longitude;
     @OneToMany(mappedBy = "store")
     private List<Order> orders = new ArrayList<Order>();
@@ -56,7 +64,7 @@ public class Store {
         this.longitude = longitude;
     }
 
-    public void update(StoreUpdateRequest storeUpdateRequest){
+    public void update(StoreUpdateRequest storeUpdateRequest) {
         this.storeName = Objects.requireNonNullElse(storeUpdateRequest.getStoreName(), this.storeName);
         this.storePhone = Objects.requireNonNullElse(storeUpdateRequest.getStorePhone(), this.storePhone);
         this.city = Objects.requireNonNullElse(storeUpdateRequest.getCity(), this.city);

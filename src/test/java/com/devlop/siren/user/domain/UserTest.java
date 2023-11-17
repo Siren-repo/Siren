@@ -1,18 +1,20 @@
 package com.devlop.siren.user.domain;
 
-import com.devlop.siren.fixture.UserFixture;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
-import org.junit.jupiter.api.Test;
-
-import javax.validation.*;
+import com.devlop.siren.fixture.UserFixture;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import org.junit.jupiter.api.Test;
 
 public class UserTest {
     @Test
-    void changeUserRole(){
+    void changeUserRole() {
         User entity = UserFixture.get("test@test.com", "password", "닉네임");
 
         entity.changeRole(UserRole.STAFF);
@@ -21,7 +23,7 @@ public class UserTest {
     }
 
     @Test
-    void validatePasswordLength(){
+    void validatePasswordLength() {
         //given
         User entity = UserFixture.get("test@test.com", "wrong", "닉네임");
 
@@ -37,7 +39,7 @@ public class UserTest {
     }
 
     @Test
-    void validateNickName(){
+    void validateNickName() {
         //given
         User entity = UserFixture.get("test@test.com", "password", "harper");
 

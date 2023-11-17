@@ -2,6 +2,7 @@ package com.devlop.siren.global.exception;
 
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 @Slf4j
@@ -59,7 +56,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> applicationHandler(RuntimeException e){
+    public ResponseEntity<?> applicationHandler(RuntimeException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error(ResponseCode.ErrorCode.INTERNAL_SERVER_ERROR));

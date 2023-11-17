@@ -2,12 +2,11 @@ package com.devlop.siren.domain.item.repository;
 
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.item.entity.Item;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select i from Item i join fetch i.defaultOption do where i.itemId = :itemId")

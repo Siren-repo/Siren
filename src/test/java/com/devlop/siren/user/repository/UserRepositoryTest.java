@@ -1,9 +1,10 @@
 package com.devlop.siren.user.repository;
 
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.fixture.UserFixture;
-import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.repository.UserRepository;
+import com.devlop.siren.fixture.UserFixture;
+import java.util.EnumSet;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.EnumSet;
 
 
 @DataJpaTest
@@ -24,12 +23,12 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         userRepository.deleteAllInBatch();
     }
 
     @Test
-    void saveUser(){
+    void saveUser() {
         //given
         EnumSet<AllergyType> allergies = EnumSet.of(AllergyType.PEANUT, AllergyType.MILK);
         String requestEmail = "test@test.com";
@@ -44,7 +43,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findByEmail(){
+    void findByEmail() {
         //given
         String requestEmail = "test@test.com";
         User entity = UserFixture.get(requestEmail, "password", "닉네임");

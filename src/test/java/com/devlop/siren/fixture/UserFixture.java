@@ -4,11 +4,10 @@ import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
-
 import java.util.EnumSet;
 
 public class UserFixture {
-    public static User get(String email, String password, String nickName){
+    public static User get(String email, String password, String nickName) {
         return User.builder()
                 .email(email)
                 .password(password)
@@ -18,7 +17,8 @@ public class UserFixture {
                 .allergies(EnumSet.of(AllergyType.PEANUT, AllergyType.MILK))
                 .build();
     }
-    public static UserRegisterRequest get(String email, String password){
+
+    public static UserRegisterRequest get(String email, String password) {
         return UserRegisterRequest.builder()
                 .email(email)
                 .password(password)

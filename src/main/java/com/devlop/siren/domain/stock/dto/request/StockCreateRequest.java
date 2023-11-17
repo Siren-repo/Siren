@@ -3,13 +3,12 @@ package com.devlop.siren.domain.stock.dto.request;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.stock.entity.Stock;
 import com.devlop.siren.domain.store.domain.Store;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder

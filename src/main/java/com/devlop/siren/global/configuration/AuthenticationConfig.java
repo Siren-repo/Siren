@@ -5,7 +5,6 @@ import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.global.configuration.filter.JwtTokenFilter;
 import com.devlop.siren.global.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +20,7 @@ public class AuthenticationConfig {
     private final RedisService redisService;
 
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable()
                 .authorizeRequests((authorizeRequests) ->
@@ -33,7 +32,8 @@ public class AuthenticationConfig {
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(new JwtTokenFilter(userService, redisService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(userService, redisService),
+                        UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 );

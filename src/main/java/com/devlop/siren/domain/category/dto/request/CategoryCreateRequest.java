@@ -2,12 +2,11 @@ package com.devlop.siren.domain.category.dto.request;
 
 
 import com.devlop.siren.domain.category.entity.CategoryType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor

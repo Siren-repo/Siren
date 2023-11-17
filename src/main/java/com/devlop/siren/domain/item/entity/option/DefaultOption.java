@@ -1,10 +1,21 @@
 package com.devlop.siren.domain.item.entity.option;
 
 import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table(name = "default_options")
 @Entity
@@ -39,7 +50,8 @@ public class DefaultOption {
     private SizeType size;
 
     @Builder
-    public DefaultOption(Integer espressoShotCount, Integer vanillaSyrupCount, Integer caramelSyrupCount, Integer hazelnutSyrupCount, SizeType size) {
+    public DefaultOption(Integer espressoShotCount, Integer vanillaSyrupCount, Integer caramelSyrupCount,
+                         Integer hazelnutSyrupCount, SizeType size) {
         this.espressoShotCount = espressoShotCount;
         this.vanillaSyrupCount = vanillaSyrupCount;
         this.caramelSyrupCount = caramelSyrupCount;

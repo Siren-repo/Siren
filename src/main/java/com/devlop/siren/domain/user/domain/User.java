@@ -1,24 +1,33 @@
 package com.devlop.siren.domain.user.domain;
 //
+
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.user.utils.KoreanNickname;
 import com.devlop.siren.global.common.BaseEntity;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -71,10 +80,11 @@ public class User extends BaseEntity {
         this.isDeleted = false;
     }
 
-    public void delete(){
+    public void delete() {
         this.isDeleted = true;
     }
-    public void changeRole(UserRole role){
+
+    public void changeRole(UserRole role) {
         this.role = role;
     }
 }

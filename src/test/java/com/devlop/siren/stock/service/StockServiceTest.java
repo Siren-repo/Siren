@@ -1,5 +1,10 @@
 package com.devlop.siren.stock.service;
 
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
@@ -7,7 +12,7 @@ import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
 import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.item.entity.SizeType;
+import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
@@ -21,6 +26,8 @@ import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,14 +36,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StockServiceTest {
@@ -224,7 +223,8 @@ class StockServiceTest {
     void inValidAuthorityToUpdateStock() {
         // Given
         // When
-        Throwable throwable = catchThrowable(() -> stockService.updateStock(STORE_ID, ITEM_ID, validStockDto.getStock(), customer));
+        Throwable throwable = catchThrowable(
+                () -> stockService.updateStock(STORE_ID, ITEM_ID, validStockDto.getStock(), customer));
         // Then
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
@@ -272,7 +272,7 @@ class StockServiceTest {
 
     @Test
     @DisplayName("재고 감소에 성공한다")
-    void consumed(){
+    void consumed() {
         Stock stock = new Stock(item, store, 3);
         when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
         stockService.consumed(STORE_ID, ITEM_ID);
@@ -281,7 +281,7 @@ class StockServiceTest {
 
     @Test
     @DisplayName("재고 증가에 성공한다")
-    void revert(){
+    void revert() {
         Stock stock = new Stock(item, store, 3);
         when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
         stockService.revert(STORE_ID, ITEM_ID);

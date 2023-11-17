@@ -8,19 +8,18 @@ import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import com.devlop.siren.global.util.JwtTokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.List;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +47,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             final String header = request.getHeader(AUTHORIZATION_HEADER);
-            if(header == null || !header.startsWith("Bearer ")){
+            if (header == null || !header.startsWith("Bearer ")) {
                 log.error("Authorization Header does not start with Bearer {}", request.getRequestURI());
                 throw new GlobalException(ResponseCode.ErrorCode.INVALID_TOKEN);
             }
@@ -74,7 +73,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             log.info("Success token verification");
 
         } catch (RuntimeException e) {
-            if(e instanceof GlobalException) {
+            if (e instanceof GlobalException) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String json = objectMapper.writeValueAsString(ApiResponse.error(((GlobalException) e).getErrorCode()));
                 response.getWriter().write(json);

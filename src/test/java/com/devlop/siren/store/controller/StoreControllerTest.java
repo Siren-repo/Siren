@@ -1,6 +1,13 @@
 package com.devlop.siren.store.controller;
 
 
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.devlop.siren.domain.store.controller.StoreController;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.dto.request.StoreRegisterRequest;
@@ -8,6 +15,9 @@ import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,16 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @WebMvcTest(StoreController.class)
 public class StoreControllerTest {
 
@@ -43,8 +44,9 @@ public class StoreControllerTest {
 
     @Mock
     private Store mockStore1;
+
     @BeforeEach
-    public void init(){
+    public void init() {
         objectMapper = new ObjectMapper();
         //테스트시 LocalDateTime 에러 발생하여 모듈 추가
         objectMapper.registerModule(new JavaTimeModule());
@@ -53,8 +55,8 @@ public class StoreControllerTest {
                 .storeId(1L)
                 .storeName("Store Name 1")
                 .storePhone("Store Phone 1")
-                .city("Store City 1" )
-                .street("Store Street 1" )
+                .city("Store City 1")
+                .street("Store Street 1")
                 .zipCode(12345)
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
@@ -69,7 +71,7 @@ public class StoreControllerTest {
     void 매장_등록_성공() throws Exception {
         StoreRegisterRequest storeRegisterRequest = StoreRegisterRequest.builder()
                 .storeName("ATWOSOME PLACE2")
-                .storePhone("010101010" )
+                .storePhone("010101010")
                 .city("Seoul")
                 .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
                 .zipCode(54321)
@@ -84,13 +86,14 @@ public class StoreControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("매장 의 오픈 시간과 닫는 시간은 null 일 수있다 성공.")
     @WithMockUser
     void 매장_등록_매장시간_성공() throws Exception {
         StoreRegisterRequest storeRegisterRequest = StoreRegisterRequest.builder()
                 .storeName("test")
-                .storePhone("010101010" )
+                .storePhone("010101010")
                 .city("Seoul")
                 .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
                 .zipCode(54321)
@@ -103,13 +106,14 @@ public class StoreControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @WithMockUser
     @DisplayName("매장 의 이름을 등록하지 않았을 경우 실패.")
     void 매장_등록_실패() throws Exception {
         StoreRegisterRequest storeRegisterRequest = StoreRegisterRequest.builder()
                 .storeName("")
-                .storePhone("010101010" )
+                .storePhone("010101010")
                 .city("Seoul")
                 .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
                 .zipCode(54321)
@@ -131,7 +135,7 @@ public class StoreControllerTest {
     void 매장_등록_우편번호_실패() throws Exception {
         StoreRegisterRequest storeRegisterRequest = StoreRegisterRequest.builder()
                 .storeName("test")
-                .storePhone("010101010" )
+                .storePhone("010101010")
                 .city("Seoul")
                 .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
                 .zipCode(543211234)
@@ -146,6 +150,7 @@ public class StoreControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
+
     @ParameterizedTest
     @WithMockUser
     @ValueSource(longs = {1L, 2L})
@@ -162,11 +167,12 @@ public class StoreControllerTest {
     @WithMockUser
     @ValueSource(longs = {1L, 2L})
     void detailsStore(Long storeId) throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/stores/details/{storeId}",storeId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/stores/details/{storeId}", storeId)
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("모든 매장 정보 조회")
     @WithMockUser
@@ -175,10 +181,11 @@ public class StoreControllerTest {
         when(storeService.getAllStores()).thenReturn(mockStores);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/stores/all")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("주변 매장 조회")
     @WithMockUser
@@ -193,10 +200,11 @@ public class StoreControllerTest {
                         .param("latitude", String.valueOf(latitude))
                         .param("longitude", String.valueOf(longitude))
                         .param("radiusKm", String.valueOf(radiusKm))
-        )
+                )
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("매장 정보 업데이트")
     @WithMockUser

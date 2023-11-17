@@ -11,21 +11,20 @@ import com.devlop.siren.domain.item.dto.response.ItemDetailResponse;
 import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 import com.devlop.siren.domain.item.entity.AllergyType;
-import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.entity.Nutrition;
+import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.repository.DefaultOptionRepository;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.repository.NutritionRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
+import java.util.EnumSet;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.EnumSet;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +40,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemResponse create(ItemCreateRequest request) {
-        Category itemCategory = categoryRepository.findByCategoryTypeAndCategoryName(request.getCategoryRequest().getCategoryType(),
+        Category itemCategory = categoryRepository.findByCategoryTypeAndCategoryName(
+                        request.getCategoryRequest().getCategoryType(),
                         request.getCategoryRequest().getCategoryName())
                 .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY));
 

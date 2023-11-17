@@ -1,21 +1,20 @@
 package com.devlop.siren.store.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class StoreGetNearByStoreTest {
     @InjectMocks
@@ -41,8 +40,8 @@ public class StoreGetNearByStoreTest {
                 .storeId(1L)
                 .storeName("Store Name 1")
                 .storePhone("Store Phone 1")
-                .city("Store City 1" )
-                .street("Store Street 1" )
+                .city("Store City 1")
+                .street("Store Street 1")
                 .zipCode(12345)
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
@@ -55,12 +54,12 @@ public class StoreGetNearByStoreTest {
                 .storeId(2L)
                 .storeName("Store Name 2")
                 .storePhone("Store Phone 2")
-                .city("Store City 2" )
-                .street("Store Street 2" )
+                .city("Store City 2")
+                .street("Store Street 2")
                 .zipCode(23455)
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
-                .latitude(37.48428+0.0009)
+                .latitude(37.48428 + 0.0009)
                 .longitude(126.9015)
                 .build();
 
@@ -70,8 +69,8 @@ public class StoreGetNearByStoreTest {
                 .storeId(3L)
                 .storeName("Store Name 3")
                 .storePhone("Store Phone 3")
-                .city("Store City 3" )
-                .street("Store Street 3" )
+                .city("Store City 3")
+                .street("Store Street 3")
                 .zipCode(34567)
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
@@ -84,8 +83,8 @@ public class StoreGetNearByStoreTest {
                 .storeId(4L)
                 .storeName("Store Name def")
                 .storePhone("Store Phone def")
-                .city("Store City def" )
-                .street("Store Street def" )
+                .city("Store City def")
+                .street("Store Street def")
                 .zipCode(87654)
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
@@ -126,6 +125,7 @@ public class StoreGetNearByStoreTest {
         assertEquals("Store Street 2", nearbyStore2.getStreet());
         assertEquals(Integer.valueOf(23455), nearbyStore2.getZipCode());
     }
+
     @Test
     @DisplayName("주변 1KM 에 저장한 총 2개 나와야 함")
     public void 주변_매장_1KM() {

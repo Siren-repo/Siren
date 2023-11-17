@@ -1,10 +1,8 @@
 package com.devlop.siren.domain.user.dto;
 
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Objects;
 
 @Getter
 public class UserTokenDto {
@@ -17,7 +15,7 @@ public class UserTokenDto {
         this.refreshToken = Objects.requireNonNull(refreshToken);
     }
 
-    public void setAccessToken(String accessToken){
+    public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 }

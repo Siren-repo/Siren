@@ -1,9 +1,18 @@
 package com.devlop.siren.domain.item.entity;
 
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
@@ -56,7 +65,8 @@ public class Nutrition {
     private String saturatedFat;
 
     @Builder
-    public Nutrition(String calorie, String carbohydrate, String sugars, String salt, String protein, String province, String cholesterol, String transFat, String caffeine, String saturatedFat) {
+    public Nutrition(String calorie, String carbohydrate, String sugars, String salt, String protein, String province,
+                     String cholesterol, String transFat, String caffeine, String saturatedFat) {
         this.calorie = calorie;
         this.carbohydrate = carbohydrate;
         this.sugars = sugars;
