@@ -79,6 +79,8 @@ class StockServiceTest {
                 new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
                         , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
                         , OptionTypeGroup.MilkType.ORIGINAL
+                        , OptionTypeGroup.FoamType.MILK
+                        , OptionTypeGroup.DrizzleType.CHOCOLATE
                         , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
         store = Store.builder()
                 .storeId(STORE_ID)

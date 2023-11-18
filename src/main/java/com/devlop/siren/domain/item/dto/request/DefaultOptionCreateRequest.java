@@ -19,8 +19,11 @@ public class DefaultOptionCreateRequest {
     private OptionDetails.EspressoDetail espresso;
     private Set<OptionDetails.SyrupDetail> syrup;
     private OptionTypeGroup.MilkType milk;
+    private OptionTypeGroup.FoamType foam;
+    private OptionTypeGroup.DrizzleType drizzle;
     @NotNull(message = "음료의 크기가 입력되지 않았습니다.")
     private SizeType size;
+
 
 
     public static DefaultOption toEntity(DefaultOptionCreateRequest defaultOptionCreateRequest) {
@@ -29,6 +32,8 @@ public class DefaultOptionCreateRequest {
                 .syrup(defaultOptionCreateRequest.syrup)
                 .milk(defaultOptionCreateRequest.milk)
                 .size(defaultOptionCreateRequest.size)
+                .foam(defaultOptionCreateRequest.foam)
+                .drizzle(defaultOptionCreateRequest.drizzle)
                 .build();
     }
 

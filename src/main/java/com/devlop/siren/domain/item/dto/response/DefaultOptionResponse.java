@@ -16,6 +16,8 @@ public class DefaultOptionResponse {
     private OptionDetails.EspressoDetail espresso;
     private Set<OptionDetails.SyrupDetail> syrup;
     private OptionTypeGroup.MilkType milk;
+    private OptionTypeGroup.FoamType foam;
+    private OptionTypeGroup.DrizzleType drizzle;
     private SizeType size;
 
     public static DefaultOptionResponse from(DefaultOption defaultOption) {
@@ -23,6 +25,8 @@ public class DefaultOptionResponse {
                 defaultOption.getEspresso(),
                 defaultOption.getSyrup(),
                 defaultOption.getMilk(),
+                defaultOption.getFoam(),
+                defaultOption.getDrizzle(),
                 defaultOption.getSize());
     }
 }

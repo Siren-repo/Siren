@@ -35,16 +35,27 @@ public class DefaultOption {
     @Enumerated(EnumType.STRING)
     private OptionTypeGroup.MilkType milk;
 
+    @Column(name = "foam")
+    @Enumerated(EnumType.STRING)
+    private OptionTypeGroup.FoamType foam;
+
+    @Column(name = "drizzle")
+    @Enumerated(EnumType.STRING)
+    private OptionTypeGroup.DrizzleType drizzle;
+
     @Column(name = "size")
     @NotNull
     @Enumerated(EnumType.STRING)
     private SizeType size;
 
     @Builder
-    public DefaultOption(OptionDetails.EspressoDetail espresso, Set<OptionDetails.SyrupDetail> syrup, OptionTypeGroup.MilkType milk, SizeType size) {
+    public DefaultOption(OptionDetails.EspressoDetail espresso, Set<OptionDetails.SyrupDetail> syrup
+            , OptionTypeGroup.MilkType milk, OptionTypeGroup.FoamType foam, OptionTypeGroup.DrizzleType drizzle, SizeType size) {
         this.espresso = espresso;
         this.syrup = syrup;
         this.milk = milk;
+        this.foam = foam;
+        this.drizzle = drizzle;
         this.size = size;
     }
 
@@ -53,6 +64,8 @@ public class DefaultOption {
         setSyrup(defaultOptionCreateRequest.getSyrup());
         setMilk(defaultOptionCreateRequest.getMilk());
         setSize(defaultOptionCreateRequest.getSize());
+        setDrizzle(defaultOptionCreateRequest.getDrizzle());
+        setFoam(defaultOptionCreateRequest.getFoam());
     }
 
     private void setEspresso(OptionDetails.EspressoDetail espresso) {
@@ -69,5 +82,13 @@ public class DefaultOption {
 
     private void setSize(SizeType size) {
         this.size = size;
+    }
+
+    public void setFoam(OptionTypeGroup.FoamType foam) {
+        this.foam = foam;
+    }
+
+    public void setDrizzle(OptionTypeGroup.DrizzleType drizzle) {
+        this.drizzle = drizzle;
     }
 }
