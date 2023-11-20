@@ -45,7 +45,9 @@ public class CategoryService {
 
     public Page<CategoryResponse> findAllByType(CategoryType categoryType, Pageable pageable) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("categoryId").descending());
-        return Optional.of(categoryRepository.findByCategoryTypeOrderByCategoryId(categoryType, pageRequest).map(CategoryResponse::from))
+        Page<Category> categories = Optional.of(categoryRepository.findByCategoryTypeOrderByCategoryId(categoryType, pageRequest))
                 .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY));
+        return categories.map(CategoryResponse::from);
+
     }
 }

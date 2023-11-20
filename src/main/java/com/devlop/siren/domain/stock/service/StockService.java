@@ -58,9 +58,9 @@ public class StockService {
         UserInformation.validStaffOrAdmin(user);
         Store store = findByStoreId(storeId);
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("stockId").descending());
-        return Optional.of(stockRepository.findAllByStore(store, pageRequest)
-                        .map(StockResponse::from))
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_STOCKS_IN_STORE));
+        Page<Stock> stocks = Optional.of(stockRepository.findAllByStore(store, pageRequest)).orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_STOCKS_IN_STORE));
+        return stocks.map(StockResponse::from);
+
     }
 
     public StockResponse findByStoreAndItem(Long storeId, Long itemId, UserDetailsDto user) {
