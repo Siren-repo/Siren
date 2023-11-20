@@ -18,13 +18,21 @@ import com.devlop.siren.domain.item.repository.DefaultOptionRepository;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.repository.NutritionRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
+import com.devlop.siren.global.util.UserInformation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +48,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemResponse create(ItemCreateRequest request) {
+    public ItemResponse create(ItemCreateRequest request, UserDetailsDto user) {
+        UserInformation.validAdmin(user);
         Category itemCategory = categoryRepository.findByCategoryTypeAndCategoryName(request.getCategoryRequest().getCategoryType(),
                         request.getCategoryRequest().getCategoryName())
                 .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY));
@@ -50,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
         return createBeverage(request, itemCategory);
     }
 
-    // Food에 들어가는 디폴트 옵션과 영양정보 옵션이 Beverage와 달라 우선은 null처리
+
     private ItemResponse createFood(ItemCreateRequest request, Category itemCategory) {
         EnumSet<AllergyType> allergies = allergyConverter.convertToEntityAttribute(request.getAllergy());
         Item item = ItemCreateRequest.toEntity(request, itemCategory, null, allergies, null);
@@ -71,12 +80,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public CategoryItemsResponse findAllByCategory(String categoryType, String categoryName) {
-        return new CategoryItemsResponse(categoryName,
-                itemRepository.findAllByItemTypeAndCategoryName(CategoryType.of(categoryType), categoryName)
-                        .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY))
-                        .stream().map(item -> ItemResponse.from(item))
-                        .collect(Collectors.toUnmodifiableList()));
+    public CategoryItemsResponse findAllByCategory(String categoryType, String categoryName, Pageable pageable) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("itemId").descending());
+        Page<Item> items = Optional.ofNullable(itemRepository.findAllByItemTypeAndCategoryName(CategoryType.of(categoryType), categoryName, pageRequest))
+                .orElseThrow(() -> { throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY);});
+        return new CategoryItemsResponse(categoryName, items.map(ItemResponse::from));
+
     }
 
     @Override
@@ -99,14 +108,20 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public Long deleteItemById(Long itemId) {
-        itemRepository.deleteById(itemId);
+    public Long deleteItemById(Long itemId, UserDetailsDto user) {
+        UserInformation.validAdmin(user);
+        try {
+            itemRepository.deleteById(itemId);
+        }catch (Exception e){
+            throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM);
+        }
         return itemId;
     }
 
     @Override
     @Transactional
-    public Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest) {
+    public Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest, UserDetailsDto user) {
+        UserInformation.validAdmin(user);
         Item item = itemRepository.findByIdWithOption(itemId).orElseThrow(() -> {
             throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM);
         });

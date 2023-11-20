@@ -11,6 +11,9 @@ import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.util.UserInformation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +31,16 @@ public class ItemController {
 
     @PostMapping
     public ApiResponse<ItemResponse> createItem(@RequestBody @Valid ItemCreateRequest itemCreateRequest, @AuthenticationPrincipal UserDetailsDto user) {
-        UserInformation.validAdmin(user);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, itemService.create(itemCreateRequest));
+        return ApiResponse.ok(ResponseCode.Normal.CREATE, itemService.create(itemCreateRequest, user));
     }
 
     @GetMapping
     public ApiResponse<CategoryItemsResponse> findAllByCategory(
             @RequestParam("categoryType") @NotBlank String categoryType,
-            @RequestParam("categoryName") @NotBlank String categoryName) {
+            @RequestParam("categoryName") @NotBlank String categoryName,
+            @PageableDefault(size = 5, sort = "itemId", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, itemService.findAllByCategory(categoryType, categoryName));
+        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, itemService.findAllByCategory(categoryType, categoryName, pageable));
     }
 
     @GetMapping(value = "/{itemId}")
@@ -52,15 +55,13 @@ public class ItemController {
 
     @DeleteMapping(value = "/{itemId}")
     public ApiResponse<?> deleteItem(@PathVariable @Min(1L) Long itemId, @AuthenticationPrincipal UserDetailsDto user) {
-        UserInformation.validAdmin(user);
-        Long id = itemService.deleteItemById(itemId);
+        Long id = itemService.deleteItemById(itemId, user);
         return ApiResponse.ok(ResponseCode.Normal.DELETE, String.format("ItemId = %d", id));
     }
 
     @PutMapping(value = "/{itemId}")
     public ApiResponse<?> updateItem(@PathVariable @Min(1L) Long itemId, @RequestBody @Valid ItemCreateRequest itemCreateRequest, @AuthenticationPrincipal UserDetailsDto user) {
-        UserInformation.validAdmin(user);
-        Long id = itemService.updateItemById(itemId, itemCreateRequest);
+        Long id = itemService.updateItemById(itemId, itemCreateRequest, user);
         return ApiResponse.ok(ResponseCode.Normal.UPDATE, String.format("ItemId = %d", id));
     }
 
