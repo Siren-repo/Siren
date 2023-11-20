@@ -20,6 +20,7 @@ import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
@@ -73,15 +74,7 @@ class StockServiceTest {
         validStockDto = new StockCreateRequest(STORE_ID, ITEM_ID, 1);
         inValidItemInStockDto = new StockCreateRequest(STORE_ID, 0L, -1);
         inValidStoreInStockDto = new StockCreateRequest(0L, ITEM_ID, -1);
-        validItemDto = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
-                , "아메리카노"
-                , 5000, "아메리카노입니다", false, true,
-                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
-                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
-                        , OptionTypeGroup.MilkType.ORIGINAL
-                        , OptionTypeGroup.FoamType.MILK
-                        , OptionTypeGroup.DrizzleType.CHOCOLATE
-                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+        validItemDto = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
         store = Store.builder()
                 .storeId(STORE_ID)
                 .storeName("First Store Name")
@@ -92,18 +85,11 @@ class StockServiceTest {
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
                 .build();
-        item = Item.builder()
-                .itemId(ITEM_ID)
-                .itemName(validItemDto.getItemName())
-                .price(validItemDto.getPrice())
-                .category(Category.builder()
-                        .categoryName(validItemDto.getCategoryRequest().getCategoryName())
-                        .categoryType(validItemDto.getCategoryRequest().getCategoryType()).build())
-                .defaultOption(DefaultOptionCreateRequest.toEntity(validItemDto.getDefaultOptionRequest()))
-                .description(validItemDto.getDescription())
-                .isNew(validItemDto.getIsNew())
-                .isBest(validItemDto.getIsBest())
-                .allergies(allergyConverter.convertToEntityAttribute(validItemDto.getAllergy())).build();
+        item = ItemCreateRequest.toEntity(validItemDto
+                , CategoryCreateRequest.toEntity(validItemDto.getCategoryRequest())
+                , DefaultOptionCreateRequest.toEntity(validItemDto.getDefaultOptionRequest())
+                , allergyConverter.convertToEntityAttribute(validItemDto.getAllergy())
+                , NutritionCreateRequest.toEntity(validItemDto.getNutritionCreateRequest()));
     }
 
 
@@ -115,7 +101,7 @@ class StockServiceTest {
         when(itemRepository.findById(ITEM_ID)).thenReturn(Optional.ofNullable(item));
         when(stockRepository.save(any(Stock.class))).thenReturn(stock);
 
-        assertThat(stockService.create(validStockDto, staff).getItemId()).isEqualTo(validStockDto.getItemId());
+        assertThat(stockService.create(validStockDto, staff).getStock()).isEqualTo(validStockDto.getStock());
     }
 
     @Test

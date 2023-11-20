@@ -19,7 +19,7 @@ public class ItemFixture {
     public static ItemCreateRequest get(CategoryCreateRequest categoryCreateRequest, Integer price){
         return new ItemCreateRequest(categoryCreateRequest
                 , "아메리카노"
-                , price, "아메리카노입니다", false, true,
+                , price, "아메리카노입니다", false, true, "이미지 없음",
                 new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
                         , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
                         , OptionTypeGroup.MilkType.ORIGINAL

@@ -20,6 +20,8 @@ public class ItemDetailResponse {
 
     private Boolean isBest;
 
+    private String image;
+
     private String allergy;
 
     private DefaultOptionResponse defaultOptionResponse;
@@ -32,6 +34,7 @@ public class ItemDetailResponse {
                 .price(item.getPrice())
                 .isNew(item.getIsNew())
                 .isBest(item.getIsBest())
+                .image(item.getImage())
                 .allergy(allergy)
                 .defaultOptionResponse(DefaultOptionResponse.from(item.getDefaultOption())).build();
     }

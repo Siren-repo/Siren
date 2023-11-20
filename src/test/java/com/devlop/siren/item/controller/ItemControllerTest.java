@@ -11,6 +11,7 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
 import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.service.ItemService;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.global.util.UserInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterAll;
@@ -54,24 +55,8 @@ class ItemControllerTest {
 
     @BeforeAll
     private static void setUp() {
-        validObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
-                , "아메리카노"
-                , 5000, "아메리카노입니다", false, true,
-                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
-                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
-                        , OptionTypeGroup.MilkType.ORIGINAL
-                        , OptionTypeGroup.FoamType.MILK
-                        , OptionTypeGroup.DrizzleType.CHOCOLATE
-                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
-        inValidObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
-                , "아메리카노"
-                , -5, "아메리카노입니다", false, true,
-                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
-                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
-                        , OptionTypeGroup.MilkType.ORIGINAL
-                        , OptionTypeGroup.FoamType.MILK
-                        , OptionTypeGroup.DrizzleType.CHOCOLATE
-                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+        validObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
+        inValidObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "dd"), -5);
         userInformationMock = mockStatic(UserInformation.class);
     }
 

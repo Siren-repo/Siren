@@ -17,6 +17,7 @@ public class ItemResponse {
     private Boolean isNew;
 
     private Boolean isBest;
+    private String image;
 
     private String categoryName;
 
@@ -27,6 +28,7 @@ public class ItemResponse {
                 .price(item.getPrice())
                 .isNew(item.getIsNew())
                 .isBest(item.getIsBest())
+                .image(item.getImage())
                 .categoryName(item.getCategory().getCategoryName()).build();
     }
 

@@ -36,6 +36,9 @@ public class Item {
     @Column(name = "is_new", columnDefinition = "TINYINT(1)")
     private Boolean isNew;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "allergy")
     @Convert(converter = AllergyConverter.class)
     private EnumSet<AllergyType> allergies;
@@ -59,9 +62,10 @@ public class Item {
     }
 
     @Builder
-    public Item(Long itemId, String itemName, Integer price, String description, Boolean isBest, Boolean isNew, EnumSet<AllergyType> allergies, Category category, DefaultOption defaultOption, Nutrition nutrition) {
+    public Item(Long itemId, String itemName, Integer price, String image, String description, Boolean isBest, Boolean isNew, EnumSet<AllergyType> allergies, Category category, DefaultOption defaultOption, Nutrition nutrition) {
         this.itemId = itemId;
         this.itemName = itemName;
+        this.image = image;
         this.price = price;
         this.description = description;
         this.isBest = isBest;
@@ -75,6 +79,7 @@ public class Item {
     public void update(ItemCreateRequest itemCreateRequest, EnumSet<AllergyType> allergies) {
         setItemName(itemCreateRequest.getItemName());
         setPrice(itemCreateRequest.getPrice());
+        setImage(itemCreateRequest.getImage());
         setDescription(itemCreateRequest.getDescription());
         setBest(itemCreateRequest.getIsBest());
         setNew(itemCreateRequest.getIsNew());
@@ -103,5 +108,9 @@ public class Item {
 
     private void setAllergies(EnumSet<AllergyType> allergies) {
         this.allergies = allergies == null ? this.allergies : allergies;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

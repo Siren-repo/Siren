@@ -39,6 +39,8 @@ public class ItemCreateRequest {
 
     private Boolean isNew;
 
+    private String image;
+
     private DefaultOptionCreateRequest defaultOptionRequest;
 
     private String allergy;
@@ -53,6 +55,7 @@ public class ItemCreateRequest {
                 .description(itemCreateRequest.description)
                 .isBest(itemCreateRequest.isBest)
                 .isNew(itemCreateRequest.isNew)
+                .image(itemCreateRequest.image)
                 .allergies(allergies)
                 .category(category)
                 .defaultOption(defaultOption)
