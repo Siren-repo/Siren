@@ -17,15 +17,20 @@ import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.repository.NutritionRepository;
 import com.devlop.siren.domain.item.service.ItemServiceImpl;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.user.domain.UserRole;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -57,31 +62,18 @@ class ItemServiceImplTest {
     @Mock
     private AllergyConverter allergyConverter;
 
-    private static ItemCreateRequest validObject;
-    private static ItemCreateRequest inValidObject;
+    private ItemCreateRequest validObject;
+    private ItemCreateRequest inValidObject;
+    private UserDetailsDto staff;
+    private UserDetailsDto customer;
 
 
-    @BeforeAll
-    private static void setUp() {
-        validObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소")
-                , "아메리카노"
-                , 5000, "아메리카노입니다", false, true,
-                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
-                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
-                        , OptionTypeGroup.MilkType.ORIGINAL
-                        , OptionTypeGroup.FoamType.MILK
-                        , OptionTypeGroup.DrizzleType.CHOCOLATE
-                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
-        inValidObject = new ItemCreateRequest(new CategoryCreateRequest(CategoryType.of("음료"), "dd")
-                , "아메리카노"
-                , -5, "아메리카노입니다", false, true,
-                new DefaultOptionCreateRequest(new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2)
-                        , Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2))
-                        , OptionTypeGroup.MilkType.ORIGINAL
-                        , OptionTypeGroup.FoamType.MILK
-                        , OptionTypeGroup.DrizzleType.CHOCOLATE
-                        , SizeType.TALL), "우유, 대두", new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
-
+    @BeforeEach
+    private void setUp() {
+        validObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
+        inValidObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "dd"), -5);
+        staff = new UserDetailsDto(1L, "test@test.com", "12345678", UserRole.ADMIN, false);
+        customer = new UserDetailsDto(2L, "test1@test.com", "12345678", UserRole.CUSTOMER, false);
     }
 
     @Test
@@ -89,18 +81,12 @@ class ItemServiceImplTest {
     public void create() {
         // Given
         Long itemId = 1L;
-        Item item = Item.builder()
-                .itemId(itemId)
-                .itemName(validObject.getItemName())
-                .price(validObject.getPrice())
-                .category(Category.builder()
-                        .categoryName(validObject.getCategoryRequest().getCategoryName())
-                        .categoryType(validObject.getCategoryRequest().getCategoryType()).build())
-                .defaultOption(DefaultOptionCreateRequest.toEntity(validObject.getDefaultOptionRequest()))
-                .description(validObject.getDescription())
-                .isNew(validObject.getIsNew())
-                .isBest(validObject.getIsBest())
-                .allergies(allergyConverter.convertToEntityAttribute(validObject.getAllergy())).build();
+        Item item = ItemCreateRequest.toEntity(validObject
+                , CategoryCreateRequest.toEntity(validObject.getCategoryRequest())
+                , DefaultOptionCreateRequest.toEntity(validObject.getDefaultOptionRequest())
+                , allergyConverter.convertToEntityAttribute(validObject.getAllergy())
+                , NutritionCreateRequest.toEntity(validObject.getNutritionCreateRequest()));
+
         // When
         when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any()))
                 .thenReturn(Optional.ofNullable(item.getCategory()));
@@ -110,8 +96,8 @@ class ItemServiceImplTest {
 
 
         // Then
-        assertThat(itemService.create(validObject).getItemId()).isEqualTo(itemId);
-        assertThat(itemService.findItemDetailById(itemId).getItemId()).isEqualTo(itemId);
+        assertThat(itemService.create(validObject, staff).getItemName()).isEqualTo(item.getItemName());
+        assertThat(itemService.findItemDetailById(itemId).getItemName()).isEqualTo(item.getItemName());
     }
 
     @Test
@@ -119,11 +105,23 @@ class ItemServiceImplTest {
     public void inValidCreate() {
         // Given
         // When
-        Throwable throwable = catchThrowable(() -> itemService.create(inValidObject));
+        Throwable throwable = catchThrowable(() -> itemService.create(inValidObject, staff));
         // Then
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
                 .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY.getMESSAGE());
+    }
+
+    @Test
+    @DisplayName("권한이 없는 경우 아이템 생성을 실패한다")
+    public void failCreate() {
+        // Given
+        // When
+        Throwable throwable = catchThrowable(() -> itemService.create(validObject, customer));
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
     }
 
 
@@ -134,7 +132,8 @@ class ItemServiceImplTest {
         // When
         Throwable throwable = catchThrowable(() -> itemService.findAllByCategory(
                 inValidObject.getCategoryRequest().getCategoryType().getName()
-                , inValidObject.getCategoryRequest().getCategoryName()));
+                , inValidObject.getCategoryRequest().getCategoryName()
+                , PageRequest.of(1, 1)));
         // Then
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
@@ -161,12 +160,42 @@ class ItemServiceImplTest {
         Long itemId = 1L;
 
         // When
-        Throwable throwable = catchThrowable(() -> itemService.updateItemById(itemId, validObject));
+        Throwable throwable = catchThrowable(() -> itemService.updateItemById(itemId, validObject, staff));
 
         // Then
         assertThat(throwable)
                 .isInstanceOf(GlobalException.class)
                 .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
+    }
+
+    @Test
+    @DisplayName("권한이 없는 경우 아이템 수정에 실패한다")
+    public void failUpdateItemById() {
+        // Given
+        Long itemId = 1L;
+
+        // When
+        Throwable throwable = catchThrowable(() -> itemService.updateItemById(itemId, validObject, customer));
+
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
+    }
+
+    @Test
+    @DisplayName("권한이 없는 경우 아이템 삭제에 실패한다")
+    public void failDeleteItemById() {
+        // Given
+        Long itemId = 1L;
+
+        // When
+        Throwable throwable = catchThrowable(() -> itemService.deleteItemById(itemId, customer));
+
+        // Then
+        assertThat(throwable)
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ResponseCode.ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
     }
 
 
