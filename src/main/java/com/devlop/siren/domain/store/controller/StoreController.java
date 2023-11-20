@@ -28,49 +28,49 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/stores")
 public class StoreController {
-    private final StoreService storeService;
+  private final StoreService storeService;
 
-    @PostMapping("/register")
-    public ApiResponse<Void> registerStore(@AuthenticationPrincipal UserDetailsDto user,
-                                           @RequestBody @Valid StoreRegisterRequest storeRegisterRequest) {
+  @PostMapping("/register")
+  public ApiResponse<Void> registerStore(
+      @AuthenticationPrincipal UserDetailsDto user,
+      @RequestBody @Valid StoreRegisterRequest storeRegisterRequest) {
 
-        storeService.registerStore(storeRegisterRequest, user);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
-    }
+    storeService.registerStore(storeRegisterRequest, user);
+    return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
+  }
 
-    @GetMapping("/details/{storeId}")
-    public ApiResponse<StoreResponse> detailsStore(@PathVariable("storeId") Long storeId) {
-        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, storeService.detailsStore(storeId));
-    }
+  @GetMapping("/details/{storeId}")
+  public ApiResponse<StoreResponse> detailsStore(@PathVariable("storeId") Long storeId) {
+    return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, storeService.detailsStore(storeId));
+  }
 
-    @GetMapping("/all")
-    public ApiResponse<List<Store>> getAllStore() {
-        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, storeService.getAllStores());
-    }
+  @GetMapping("/all")
+  public ApiResponse<List<Store>> getAllStore() {
+    return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, storeService.getAllStores());
+  }
 
-    @GetMapping("/nearby")
-    public ApiResponse<List<Store>> findNearbyStores(
-            @RequestParam Double latitude,
-            @RequestParam Double longitude,
-            @RequestParam Double radiusKm
-    ) {
-        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE,
-                storeService.getNearbyStores(latitude, longitude, radiusKm));
-    }
+  @GetMapping("/nearby")
+  public ApiResponse<List<Store>> findNearbyStores(
+      @RequestParam Double latitude,
+      @RequestParam Double longitude,
+      @RequestParam Double radiusKm) {
+    return ApiResponse.ok(
+        ResponseCode.Normal.RETRIEVE, storeService.getNearbyStores(latitude, longitude, radiusKm));
+  }
 
-    @PutMapping("/update/{storeId}")
-    public ApiResponse<?> updateStore(@PathVariable("storeId") Long storeId,
-                                      @RequestBody StoreUpdateRequest storeUpdateRequest,
-                                      @AuthenticationPrincipal UserDetailsDto user) {
-        storeService.updateStore(storeId, storeUpdateRequest, user);
-        return ApiResponse.ok(ResponseCode.Normal.UPDATE, String.format("updateId > %d", storeId));
-    }
+  @PutMapping("/update/{storeId}")
+  public ApiResponse<?> updateStore(
+      @PathVariable("storeId") Long storeId,
+      @RequestBody StoreUpdateRequest storeUpdateRequest,
+      @AuthenticationPrincipal UserDetailsDto user) {
+    storeService.updateStore(storeId, storeUpdateRequest, user);
+    return ApiResponse.ok(ResponseCode.Normal.UPDATE, String.format("updateId > %d", storeId));
+  }
 
-    @DeleteMapping("/delete/{storeId}")
-    public ApiResponse<?> deleteStore(@PathVariable("storeId") Long storeId,
-                                      @AuthenticationPrincipal UserDetailsDto user) {
-        Long deleteId = storeService.deleteStore(storeId, user);
-        return ApiResponse.ok(ResponseCode.Normal.DELETE, String.format("삭제 된 ID > %d", deleteId));
-    }
-
+  @DeleteMapping("/delete/{storeId}")
+  public ApiResponse<?> deleteStore(
+      @PathVariable("storeId") Long storeId, @AuthenticationPrincipal UserDetailsDto user) {
+    Long deleteId = storeService.deleteStore(storeId, user);
+    return ApiResponse.ok(ResponseCode.Normal.DELETE, String.format("삭제 된 ID > %d", deleteId));
+  }
 }

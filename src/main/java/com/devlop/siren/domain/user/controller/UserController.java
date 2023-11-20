@@ -23,35 +23,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private final UserService userService;
-    private final JwtTokenUtils utils;
+  private final UserService userService;
+  private final JwtTokenUtils utils;
 
-    @PostMapping
-    public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request) {
-        userService.register(request);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
-    }
+  @PostMapping
+  public ApiResponse<Void> register(@Valid @RequestBody UserRegisterRequest request) {
+    userService.register(request);
+    return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
+  }
 
-    @PostMapping("/sessions")
-    public ApiResponse<UserTokenDto> login(@Valid @RequestBody UserLoginRequest request, HttpServletResponse response) {
-        UserTokenDto tokenDto = userService.login(request, response);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, tokenDto);
-    }
+  @PostMapping("/sessions")
+  public ApiResponse<UserTokenDto> login(
+      @Valid @RequestBody UserLoginRequest request, HttpServletResponse response) {
+    UserTokenDto tokenDto = userService.login(request, response);
+    return ApiResponse.ok(ResponseCode.Normal.CREATE, tokenDto);
+  }
 
-    @PatchMapping("/sessions")
-    public ApiResponse<Void> logout(HttpServletRequest request) {
-        UserTokenDto token = utils.resolveToken(request);
-        userService.logout(token);
-        return ApiResponse.ok(ResponseCode.Normal.UPDATE, null);
-    }
+  @PatchMapping("/sessions")
+  public ApiResponse<Void> logout(HttpServletRequest request) {
+    UserTokenDto token = utils.resolveToken(request);
+    userService.logout(token);
+    return ApiResponse.ok(ResponseCode.Normal.UPDATE, null);
+  }
 
-    @PatchMapping("/sessions/renew")
-    public ApiResponse<UserTokenDto> reissue(HttpServletRequest request, HttpServletResponse response) {
-        UserTokenDto token = utils.resolveToken(request);
-        String newAccessToken = userService.reissueAccessToken(token.getRefreshToken(), response);
-        token.setAccessToken(newAccessToken);
-        return ApiResponse.ok(ResponseCode.Normal.UPDATE, token);
-    }
-
-
+  @PatchMapping("/sessions/renew")
+  public ApiResponse<UserTokenDto> reissue(
+      HttpServletRequest request, HttpServletResponse response) {
+    UserTokenDto token = utils.resolveToken(request);
+    String newAccessToken = userService.reissueAccessToken(token.getRefreshToken(), response);
+    token.setAccessToken(newAccessToken);
+    return ApiResponse.ok(ResponseCode.Normal.UPDATE, token);
+  }
 }

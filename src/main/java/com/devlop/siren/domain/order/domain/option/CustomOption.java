@@ -16,22 +16,20 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 public abstract class CustomOption {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "custom_option_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "custom_option_id")
+  private Long id;
 
-    @Column(name = "take_out", nullable = false)
-    protected Boolean takeout;
+  @Column(name = "take_out", nullable = false)
+  protected Boolean takeout;
 
-    @Column(name = "temperature", nullable = false)
-    @Enumerated(EnumType.STRING)
-    protected Temperature temperature;
+  @Column(name = "temperature", nullable = false)
+  @Enumerated(EnumType.STRING)
+  protected Temperature temperature;
 
-    @Column(name = "additional_amount")
-    protected int amount = 0;
+  @Column(name = "additional_amount")
+  protected int amount = 0;
 
-    public abstract int getAdditionalAmount();
+  public abstract int getAdditionalAmount();
 }
-
-

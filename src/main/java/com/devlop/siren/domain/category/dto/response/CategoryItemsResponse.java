@@ -9,8 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CategoryItemsResponse {
 
-    private String categoryName;
+  private String categoryName;
 
-    private List<ItemResponse> items;
-
+  private List<ItemResponse> items;
 }

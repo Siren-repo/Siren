@@ -9,15 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GeocodingApi {
-    private final GeoApiContext context;
+  private final GeoApiContext context;
 
-    public GeocodingApi(@Value("${google.geocoding.key}") String geoKey) {
-        context = new GeoApiContext.Builder()
-                .apiKey(geoKey)
-                .build();
-    }
+  public GeocodingApi(@Value("${google.geocoding.key}") String geoKey) {
+    context = new GeoApiContext.Builder().apiKey(geoKey).build();
+  }
 
-    public GeocodingResult[] geocodeAddress(String address) throws IOException, InterruptedException, ApiException {
-        return com.google.maps.GeocodingApi.geocode(context, address).await();
-    }
+  public GeocodingResult[] geocodeAddress(String address)
+      throws IOException, InterruptedException, ApiException {
+    return com.google.maps.GeocodingApi.geocode(context, address).await();
+  }
 }

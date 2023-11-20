@@ -1,6 +1,5 @@
 package com.devlop.siren.domain.category.controller;
 
-
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.dto.response.CategoriesResponse;
 import com.devlop.siren.domain.category.dto.response.CategoryResponse;
@@ -22,28 +21,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Validated
 public class CategoryController {
 
-    private final CategoryService categoryService;
+  private final CategoryService categoryService;
 
-    @PostMapping
-    public ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest categoryCreateRequest,
-                                                        @AuthenticationPrincipal UserDetailsDto user) {
-        UserInformation.validAdmin(user);
-        CategoryResponse categoryResponse = categoryService.register(categoryCreateRequest);
-        return ApiResponse.ok(ResponseCode.Normal.CREATE, categoryResponse);
-    }
+  @PostMapping
+  public ApiResponse<CategoryResponse> createCategory(
+      @RequestBody @Valid CategoryCreateRequest categoryCreateRequest,
+      @AuthenticationPrincipal UserDetailsDto user) {
+    UserInformation.validAdmin(user);
+    CategoryResponse categoryResponse = categoryService.register(categoryCreateRequest);
+    return ApiResponse.ok(ResponseCode.Normal.CREATE, categoryResponse);
+  }
 
-    @GetMapping
-    public ApiResponse<CategoriesResponse> findCategoriesByCategoryType(
-            @NotBlank @RequestParam("categoryType") String categoryType) {
-        CategoriesResponse categories = categoryService.findAllByType(CategoryType.of(categoryType));
-        return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, categories);
-    }
-
+  @GetMapping
+  public ApiResponse<CategoriesResponse> findCategoriesByCategoryType(
+      @NotBlank @RequestParam("categoryType") String categoryType) {
+    CategoriesResponse categories = categoryService.findAllByType(CategoryType.of(categoryType));
+    return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, categories);
+  }
 }
