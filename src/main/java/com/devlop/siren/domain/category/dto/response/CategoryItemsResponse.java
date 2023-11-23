@@ -5,14 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 @Getter
 @AllArgsConstructor
 public class CategoryItemsResponse {
 
-    private String categoryName;
+  private String categoryName;
 
-    private Page<ItemResponse> items;
-
+  private Page<ItemResponse> items;
 }
