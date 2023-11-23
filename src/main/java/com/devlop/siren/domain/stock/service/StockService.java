@@ -2,6 +2,7 @@ package com.devlop.siren.domain.stock.service;
 
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.repository.ItemRepository;
+import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
 import com.devlop.siren.domain.stock.dto.response.StockResponse;
 import com.devlop.siren.domain.stock.entity.Stock;
@@ -84,14 +85,14 @@ public class StockService {
     }
 
     @Transactional
-    public void consumed(Long storeId, Long itemId) {
-        Stock stock = findStoreAndItem(storeId, itemId);
-        stock.consumed();
+    public void consumed(Long storeId, OrderItem orderItem) {
+        Stock stock = findStoreAndItem(storeId, orderItem.getItem().getItemId());
+        stock.consumed(orderItem.getQuantity());
     }
 
     @Transactional
-    public void revert(Long storeId, Long itemId) {
-        Stock stock = findStoreAndItem(storeId, itemId);
-        stock.revert();
+    public void revert(Long storeId, OrderItem orderItem) {
+        Stock stock = findStoreAndItem(storeId, orderItem.getItem().getItemId());
+        stock.revert(orderItem.getQuantity());
     }
 }

@@ -12,6 +12,7 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
 import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
 import com.devlop.siren.domain.stock.entity.Stock;
 import com.devlop.siren.domain.stock.repository.StockRepository;
@@ -37,6 +38,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,11 +87,13 @@ class StockServiceTest {
                 .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
                 .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
                 .build();
-        item = ItemCreateRequest.toEntity(validItemDto
-                , CategoryCreateRequest.toEntity(validItemDto.getCategoryRequest())
-                , DefaultOptionCreateRequest.toEntity(validItemDto.getDefaultOptionRequest())
-                , allergyConverter.convertToEntityAttribute(validItemDto.getAllergy())
-                , NutritionCreateRequest.toEntity(validItemDto.getNutritionCreateRequest()));
+        item = Item.builder()
+                .itemId(ITEM_ID)
+                .category(CategoryCreateRequest.toEntity(validItemDto.getCategoryRequest()))
+                .defaultOption(DefaultOptionCreateRequest.toEntity(validItemDto.getDefaultOptionRequest()))
+                .allergies(allergyConverter.convertToEntityAttribute(validItemDto.getAllergy()))
+                .nutrition(NutritionCreateRequest.toEntity(validItemDto.getNutritionCreateRequest()))
+                .build();
     }
 
 
@@ -267,16 +271,28 @@ class StockServiceTest {
     void consumed() {
         Stock stock = new Stock(item, store, 3);
         when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-        stockService.consumed(STORE_ID, ITEM_ID);
-        assertThat(stock.getStock()).isEqualTo(2);
+        stockService.consumed(STORE_ID, OrderItem.create(item, null, 3));
+        assertThat(stock.getStock()).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("재고 감소에 실패한다")
+    void failConsumed() {
+        Stock stock = new Stock(item, store, 3);
+        when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+        assertThatThrownBy(() -> stockService.consumed(STORE_ID, OrderItem.create(item, null, 4)))
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.ORDER_QUANTITY_IN_STOCK.getMESSAGE());
+    }
+
+
 
     @Test
     @DisplayName("재고 증가에 성공한다")
     void revert() {
         Stock stock = new Stock(item, store, 3);
         when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-        stockService.revert(STORE_ID, ITEM_ID);
-        assertThat(stock.getStock()).isEqualTo(4);
+        stockService.revert(STORE_ID, OrderItem.create(item, null, 3));
+        assertThat(stock.getStock()).isEqualTo(6);
     }
 }

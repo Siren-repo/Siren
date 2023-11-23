@@ -2,6 +2,8 @@ package com.devlop.siren.domain.stock.entity;
 
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.store.domain.Store;
+import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.exception.GlobalException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,11 +44,14 @@ public class Stock {
         this.stock = stock;
     }
 
-    public void consumed() {
-        this.stock--;
+    public void consumed(int quantity) {
+        if(stock < quantity){
+            throw new GlobalException(ResponseCode.ErrorCode.ORDER_QUANTITY_IN_STOCK);
+        }
+        this.stock -= quantity;
     }
 
-    public void revert() {
-        this.stock++;
+    public void revert(int quantity) {
+        this.stock += quantity;
     }
 }
