@@ -7,21 +7,21 @@ import lombok.Getter;
 @Getter
 @Builder
 public class StockResponse {
-    private Long stockId;
-    private Long itemId;
-    private String itemName;
-    private Long storeId;
-    private String storeName;
-    private Integer stock;
+  private Long stockId;
+  private Long itemId;
+  private String itemName;
+  private Long storeId;
+  private String storeName;
+  private Integer stock;
 
-    public static StockResponse from(Stock stock) {
-        return StockResponse.builder()
-                .stockId(stock.getStockId())
-                .itemId(stock.getItem().getItemId())
-                .itemName(stock.getItem().getItemName())
-                .storeId(stock.getStore().getStoreId())
-                .storeName(stock.getStore().getStoreName())
-                .stock(stock.getStock())
-                .build();
-    }
+  public static StockResponse from(Stock stock) {
+    return StockResponse.builder()
+        .stockId(stock.getStockId())
+        .itemId(stock.getItem().getItemId())
+        .itemName(stock.getItem().getItemName())
+        .storeId(stock.getStore().getStoreId())
+        .storeName(stock.getStore().getStoreName())
+        .stock(stock.getStock())
+        .build();
+  }
 }
