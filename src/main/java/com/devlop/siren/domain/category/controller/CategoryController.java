@@ -1,25 +1,22 @@
 package com.devlop.siren.domain.category.controller;
 
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
-import com.devlop.siren.domain.category.dto.response.CategoriesResponse;
 import com.devlop.siren.domain.category.dto.response.CategoryResponse;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.service.CategoryService;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
-import com.devlop.siren.global.util.UserInformation;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -33,15 +30,17 @@ public class CategoryController {
   public ApiResponse<CategoryResponse> createCategory(
       @RequestBody @Valid CategoryCreateRequest categoryCreateRequest,
       @AuthenticationPrincipal UserDetailsDto user) {
-    UserInformation.validAdmin(user);
-    CategoryResponse categoryResponse = categoryService.register(categoryCreateRequest);
-    return ApiResponse.ok(ResponseCode.Normal.CREATE, categoryResponse);
+    return ApiResponse.ok(
+        ResponseCode.Normal.CREATE, categoryService.register(categoryCreateRequest, user));
   }
 
   @GetMapping
-  public ApiResponse<CategoriesResponse> findCategoriesByCategoryType(
-      @NotBlank @RequestParam("categoryType") String categoryType) {
-    CategoriesResponse categories = categoryService.findAllByType(CategoryType.of(categoryType));
-    return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, categories);
+  public ApiResponse<Page<CategoryResponse>> findCategoriesByCategoryType(
+      @NotBlank @RequestParam("categoryType") String categoryType,
+      @PageableDefault(sort = "categoryId", direction = Sort.Direction.DESC)
+          Pageable pageable) {
+    return ApiResponse.ok(
+        ResponseCode.Normal.RETRIEVE,
+        categoryService.findAllByType(CategoryType.of(categoryType), pageable));
   }
 }

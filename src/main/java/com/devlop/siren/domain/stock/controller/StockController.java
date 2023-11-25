@@ -47,7 +47,7 @@ public class StockController {
   public ApiResponse<Page<StockResponse>> findAllByStore(
       @PathVariable @Min(1L) Long storeId,
       @AuthenticationPrincipal UserDetailsDto user,
-      @PageableDefault(size = 5, sort = "stockId", direction = Sort.Direction.DESC)
+      @PageableDefault(sort = "stockId", direction = Sort.Direction.DESC)
           Pageable pageable) {
     return ApiResponse.ok(
         ResponseCode.Normal.RETRIEVE, stockService.findAllByStore(storeId, user, pageable));

@@ -1,20 +1,20 @@
 package com.devlop.siren.stock.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
-import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
 import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
+import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
 import com.devlop.siren.domain.stock.entity.Stock;
 import com.devlop.siren.domain.stock.repository.StockRepository;
@@ -23,6 +23,7 @@ import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
@@ -63,18 +64,7 @@ class StockServiceTest {
     validStockDto = new StockCreateRequest(STORE_ID, ITEM_ID, 1);
     inValidItemInStockDto = new StockCreateRequest(STORE_ID, 0L, -1);
     inValidStoreInStockDto = new StockCreateRequest(0L, ITEM_ID, -1);
-    validItemDto =
-        new ItemCreateRequest(
-            new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"),
-            "아메리카노",
-            5000,
-            "아메리카노입니다",
-            null,
-            false,
-            true,
-            new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")),
-            "우유, 대두",
-            new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+    validItemDto = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
     store =
         Store.builder()
             .storeId(STORE_ID)
@@ -89,20 +79,11 @@ class StockServiceTest {
     item =
         Item.builder()
             .itemId(ITEM_ID)
-            .itemName(validItemDto.getItemName())
-            .price(validItemDto.getPrice())
-            .image(null)
-            .category(
-                Category.builder()
-                    .categoryName(validItemDto.getCategoryRequest().getCategoryName())
-                    .categoryType(validItemDto.getCategoryRequest().getCategoryType())
-                    .build())
+            .category(CategoryCreateRequest.toEntity(validItemDto.getCategoryRequest()))
             .defaultOption(
                 DefaultOptionCreateRequest.toEntity(validItemDto.getDefaultOptionRequest()))
-            .description(validItemDto.getDescription())
-            .isNew(validItemDto.getIsNew())
-            .isBest(validItemDto.getIsBest())
             .allergies(allergyConverter.convertToEntityAttribute(validItemDto.getAllergy()))
+            .nutrition(NutritionCreateRequest.toEntity(validItemDto.getNutritionCreateRequest()))
             .build();
   }
 
@@ -114,8 +95,8 @@ class StockServiceTest {
     when(itemRepository.findById(ITEM_ID)).thenReturn(Optional.ofNullable(item));
     when(stockRepository.save(any(Stock.class))).thenReturn(stock);
 
-    assertThat(stockService.create(validStockDto, staff).getItemId())
-        .isEqualTo(validStockDto.getItemId());
+    assertThat(stockService.create(validStockDto, staff).getStock())
+        .isEqualTo(validStockDto.getStock());
   }
 
   @Test
@@ -292,8 +273,18 @@ class StockServiceTest {
   void consumed() {
     Stock stock = new Stock(item, store, 3);
     when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    stockService.consumed(STORE_ID, ITEM_ID);
-    assertThat(stock.getStock()).isEqualTo(2);
+    stockService.consumed(STORE_ID, OrderItem.create(item, null, 3));
+    assertThat(stock.getStock()).isEqualTo(0);
+  }
+
+  @Test
+  @DisplayName("재고 감소에 실패한다")
+  void failConsumed() {
+    Stock stock = new Stock(item, store, 3);
+    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+    assertThatThrownBy(() -> stockService.consumed(STORE_ID, OrderItem.create(item, null, 4)))
+        .isInstanceOf(GlobalException.class)
+        .hasMessageContaining(ErrorCode.ORDER_QUANTITY_IN_STOCK.getMESSAGE());
   }
 
   @Test
@@ -301,7 +292,7 @@ class StockServiceTest {
   void revert() {
     Stock stock = new Stock(item, store, 3);
     when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    stockService.revert(STORE_ID, ITEM_ID);
-    assertThat(stock.getStock()).isEqualTo(4);
+    stockService.revert(STORE_ID, OrderItem.create(item, null, 3));
+    assertThat(stock.getStock()).isEqualTo(6);
   }
 }

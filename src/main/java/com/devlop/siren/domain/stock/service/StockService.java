@@ -2,6 +2,7 @@ package com.devlop.siren.domain.stock.service;
 
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.repository.ItemRepository;
+import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
 import com.devlop.siren.domain.stock.dto.response.StockResponse;
 import com.devlop.siren.domain.stock.entity.Stock;
@@ -62,8 +63,10 @@ public class StockService {
     PageRequest pageRequest =
         PageRequest.of(
             pageable.getPageNumber(), pageable.getPageSize(), Sort.by("stockId").descending());
-    return Optional.of(stockRepository.findAllByStore(store, pageRequest).map(StockResponse::from))
-        .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_STOCKS_IN_STORE));
+    Page<Stock> stocks =
+        Optional.of(stockRepository.findAllByStore(store, pageRequest))
+            .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_STOCKS_IN_STORE));
+    return stocks.map(StockResponse::from);
   }
 
   public StockResponse findByStoreAndItem(Long storeId, Long itemId, UserDetailsDto user) {
@@ -88,14 +91,14 @@ public class StockService {
   }
 
   @Transactional
-  public void consumed(Long storeId, Long itemId) {
-    Stock stock = findStoreAndItem(storeId, itemId);
-    stock.consumed();
+  public void consumed(Long storeId, OrderItem orderItem) {
+    Stock stock = findStoreAndItem(storeId, orderItem.getItem().getItemId());
+    stock.consumed(orderItem.getQuantity());
   }
 
   @Transactional
-  public void revert(Long storeId, Long itemId) {
-    Stock stock = findStoreAndItem(storeId, itemId);
-    stock.revert();
+  public void revert(Long storeId, OrderItem orderItem) {
+    Stock stock = findStoreAndItem(storeId, orderItem.getItem().getItemId());
+    stock.revert(orderItem.getQuantity());
   }
 }

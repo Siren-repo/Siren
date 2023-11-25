@@ -1,5 +1,7 @@
 package com.devlop.siren.domain.item.entity.option;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class OptionTypeGroup {
 
   public enum Temperature {
@@ -17,7 +19,12 @@ public class OptionTypeGroup {
 
   public enum EspressoType {
     ORIGINAL,
-    DECAFFEINE
+    DECAFFEINE;
+
+    @JsonCreator
+    public EspressoType fromString(String value) {
+      return EspressoType.valueOf(value.toUpperCase());
+    }
   }
 
   public enum MilkType {
@@ -25,7 +32,12 @@ public class OptionTypeGroup {
     LOW_FAT,
     FAT_FREE,
     SOY,
-    OAT
+    OAT;
+
+    @JsonCreator
+    public MilkType fromString(String value) {
+      return MilkType.valueOf(value.toUpperCase());
+    }
   }
 
   public enum FoamType {
@@ -39,6 +51,11 @@ public class OptionTypeGroup {
     CARAMEL,
     HAZELNUT,
     CLASSIC;
+
+    @JsonCreator
+    public SyrupType fromString(String value) {
+      return SyrupType.valueOf(value.toUpperCase());
+    }
   }
 
   public enum DrizzleType {

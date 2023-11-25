@@ -5,19 +5,7 @@ import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import java.util.EnumSet;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,14 +29,14 @@ public class Item {
   @Column(name = "description", columnDefinition = "TEXT NOT NULL")
   private String description;
 
-  @Column(name = "image")
-  private String image;
-
   @Column(name = "is_best", columnDefinition = "TINYINT(1)")
   private Boolean isBest;
 
   @Column(name = "is_new", columnDefinition = "TINYINT(1)")
   private Boolean isNew;
+
+  @Column(name = "image")
+  private String image;
 
   @Column(name = "allergy")
   @Convert(converter = AllergyConverter.class)
@@ -77,8 +65,8 @@ public class Item {
       Long itemId,
       String itemName,
       Integer price,
-      String description,
       String image,
+      String description,
       Boolean isBest,
       Boolean isNew,
       EnumSet<AllergyType> allergies,
@@ -87,9 +75,9 @@ public class Item {
       Nutrition nutrition) {
     this.itemId = itemId;
     this.itemName = itemName;
+    this.image = image;
     this.price = price;
     this.description = description;
-    this.image = image;
     this.isBest = isBest;
     this.isNew = isNew;
     this.allergies = allergies;
@@ -101,8 +89,8 @@ public class Item {
   public void update(ItemCreateRequest itemCreateRequest, EnumSet<AllergyType> allergies) {
     setItemName(itemCreateRequest.getItemName());
     setPrice(itemCreateRequest.getPrice());
-    setDescription(itemCreateRequest.getDescription());
     setImage(itemCreateRequest.getImage());
+    setDescription(itemCreateRequest.getDescription());
     setBest(itemCreateRequest.getIsBest());
     setNew(itemCreateRequest.getIsNew());
     setAllergies(allergies);
@@ -120,10 +108,6 @@ public class Item {
     this.description = description;
   }
 
-  private void setImage(String image) {
-    this.image = image == null ? this.image : image;
-  }
-
   private void setBest(Boolean best) {
     this.isBest = best == null ? this.isBest : best;
   }
@@ -134,5 +118,9 @@ public class Item {
 
   private void setAllergies(EnumSet<AllergyType> allergies) {
     this.allergies = allergies == null ? this.allergies : allergies;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 }

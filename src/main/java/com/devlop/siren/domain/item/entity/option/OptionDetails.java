@@ -1,11 +1,6 @@
 package com.devlop.siren.domain.item.entity.option;
 
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.Amount;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.DrizzleType;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.EspressoType;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.FoamType;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.SyrupType;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.*;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,7 +11,7 @@ public class OptionDetails {
   @Embeddable
   @Getter
   @NoArgsConstructor
-  public class SyrupDetail {
+  public static class SyrupDetail {
     @Enumerated(EnumType.STRING)
     private SyrupType syrupType;
 
