@@ -37,8 +37,7 @@ public class CategoryController {
   @GetMapping
   public ApiResponse<Page<CategoryResponse>> findCategoriesByCategoryType(
       @NotBlank @RequestParam("categoryType") String categoryType,
-      @PageableDefault(sort = "categoryId", direction = Sort.Direction.DESC)
-          Pageable pageable) {
+      @PageableDefault(sort = "categoryId", direction = Sort.Direction.DESC) Pageable pageable) {
     return ApiResponse.ok(
         ResponseCode.Normal.RETRIEVE,
         categoryService.findAllByType(CategoryType.of(categoryType), pageable));

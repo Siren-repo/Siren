@@ -38,8 +38,7 @@ public class ItemController {
   public ApiResponse<CategoryItemsResponse> findAllByCategory(
       @RequestParam("categoryType") @NotBlank String categoryType,
       @RequestParam("categoryName") @NotBlank String categoryName,
-      @PageableDefault(sort = "itemId", direction = Sort.Direction.DESC)
-          Pageable pageable) {
+      @PageableDefault(sort = "itemId", direction = Sort.Direction.DESC) Pageable pageable) {
 
     return ApiResponse.ok(
         ResponseCode.Normal.RETRIEVE,
