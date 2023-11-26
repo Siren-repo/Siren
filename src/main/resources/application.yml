@@ -29,7 +29,7 @@ server:
   servlet:
     encoding:
       charset: UTF-8
-      force : true
+      force: true
 ---
 
 spring:
@@ -47,10 +47,9 @@ spring:
   jpa:
     database: MYSQL
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
 ---
 
 spring:
@@ -76,8 +75,8 @@ spring:
     activate:
       on-profile: test
   redis:
-      host: localhost
-      port: 16379
+    host: localhost
+    port: 16379
   datasource:
     driver-class-name: org.h2.Driver
     hikari.jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL
