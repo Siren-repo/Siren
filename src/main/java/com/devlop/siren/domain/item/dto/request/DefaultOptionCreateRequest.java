@@ -11,24 +11,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DefaultOptionCreateRequest {
 
-    private Integer espressoShotCount;
+  private Integer espressoShotCount;
 
-    private Integer vanillaSyrupCount;
+  private Integer vanillaSyrupCount;
 
-    private Integer caramelSyrupCount;
+  private Integer caramelSyrupCount;
 
-    private Integer hazelnutSyrupCount;
+  private Integer hazelnutSyrupCount;
 
-    private SizeType size;
+  private SizeType size;
 
-
-    public static DefaultOption toEntity(DefaultOptionCreateRequest defaultOptionCreateRequest) {
-        return DefaultOption.builder()
-                .espressoShotCount(defaultOptionCreateRequest.espressoShotCount)
-                .vanillaSyrupCount(defaultOptionCreateRequest.vanillaSyrupCount)
-                .caramelSyrupCount(defaultOptionCreateRequest.caramelSyrupCount)
-                .size(defaultOptionCreateRequest.size)
-                .hazelnutSyrupCount(defaultOptionCreateRequest.hazelnutSyrupCount).build();
-    }
-
+  public static DefaultOption toEntity(DefaultOptionCreateRequest defaultOptionCreateRequest) {
+    return DefaultOption.builder()
+        .espressoShotCount(defaultOptionCreateRequest.espressoShotCount)
+        .vanillaSyrupCount(defaultOptionCreateRequest.vanillaSyrupCount)
+        .caramelSyrupCount(defaultOptionCreateRequest.caramelSyrupCount)
+        .size(defaultOptionCreateRequest.size)
+        .hazelnutSyrupCount(defaultOptionCreateRequest.hazelnutSyrupCount)
+        .build();
+  }
 }

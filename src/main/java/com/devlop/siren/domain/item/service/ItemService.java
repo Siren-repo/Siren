@@ -5,19 +5,21 @@ import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.response.ItemDetailResponse;
 import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
+import com.devlop.siren.domain.item.entity.Item;
 
 public interface ItemService {
 
-    ItemResponse create(ItemCreateRequest request);
+  ItemResponse create(ItemCreateRequest request);
 
-    CategoryItemsResponse findAllByCategory(String categoryType, String categoryName);
+  Item findItem(Long itemId);
 
-    ItemDetailResponse findItemDetailById(Long itemId);
+  CategoryItemsResponse findAllByCategory(String categoryType, String categoryName);
 
-    NutritionDetailResponse findNutritionDetailById(Long itemId);
+  ItemDetailResponse findItemDetailById(Long itemId);
 
+  NutritionDetailResponse findNutritionDetailById(Long itemId);
 
-    Long deleteItemById(Long itemId);
+  Long deleteItemById(Long itemId);
 
-    Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest);
+  Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest);
 }
