@@ -3,7 +3,6 @@ package com.devlop.siren.fixture;
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.domain.user.dto.request.UserRegisterRequest;
 import java.util.EnumSet;
 
@@ -26,16 +25,6 @@ public class UserFixture {
         .nickName("닉네임")
         .phone("010-0000-0000")
         .allergies("PEANUT, MILK")
-        .build();
-  }
-
-  public static UserDetailsDto get(UserRole role) {
-    return UserDetailsDto.builder()
-        .id(1L)
-        .email("test@test.com")
-        .password("password")
-        .userRole(role)
-        .isDeleted(false)
         .build();
   }
 }

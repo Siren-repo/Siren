@@ -11,12 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.item.controller.ItemController;
-import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
-import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
-import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.service.ItemService;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.global.util.UserInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterAll;
@@ -47,30 +45,8 @@ class ItemControllerTest {
 
   @BeforeAll
   private static void setUp() {
-    validObject =
-        new ItemCreateRequest(
-            new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"),
-            "아메리카노",
-            5000,
-            "아메리카노입니다",
-            null,
-            false,
-            true,
-            new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")),
-            "우유, 대두",
-            new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
-    inValidObject =
-        new ItemCreateRequest(
-            new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"),
-            "아메리카노",
-            -5,
-            "아메리카노입니다",
-            null,
-            false,
-            true,
-            new DefaultOptionCreateRequest(2, 0, 0, 0, SizeType.of("Tall")),
-            "우유, 대두",
-            new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0));
+    validObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
+    inValidObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "dd"), -5);
     userInformationMock = mockStatic(UserInformation.class);
   }
 

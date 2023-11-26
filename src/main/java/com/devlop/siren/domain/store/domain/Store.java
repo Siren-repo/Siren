@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javax.persistence.*;
 import lombok.*;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter

@@ -14,6 +14,7 @@ import com.devlop.siren.global.util.JwtTokenUtils;
 import java.time.Duration;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
   private final UserRepository userRepository;
   private final BCryptPasswordEncoder encoder;
@@ -37,6 +39,14 @@ public class UserService {
 
   @Value("${jwt.refresh-token.expired-time-ms}")
   private Long refreshExpiredTimeMs;
+
+  public UserDetailsDto loadMemberByEmail(String email) {
+    User registeredUser =
+        userRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
+    return UserDetailsDto.fromEntity(registeredUser);
+  }
 
   @Transactional
   public void register(UserRegisterRequest request) {
@@ -94,23 +104,10 @@ public class UserService {
     return newAccessToken;
   }
 
-  public User findUser(String email) {
-    return userRepository
-        .findByEmail(email)
-        .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
-  }
-
-  public UserDetailsDto loadMemberByEmail(String email) {
-    User registeredUser =
-        userRepository
-            .findByEmail(email)
-            .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
-    return UserDetailsDto.fromEntity(registeredUser);
-  }
-
   private void checkPassword(String request, String password) {
-    if (!encoder.matches(request, password))
+    if (!encoder.matches(request, password)) {
       throw new GlobalException(ResponseCode.ErrorCode.INVALID_PASSWORD);
+    }
   }
 
   private UserTokenDto generateToken(String requestEmail) {
@@ -126,12 +123,14 @@ public class UserService {
   }
 
   private void checkRefreshTokenInRedis(String email) {
-    if (!redisService.existRefreshToken(email))
+    if (!redisService.existRefreshToken(email)) {
       throw new GlobalException(ResponseCode.ErrorCode.EXPIRED_REFRESH_TOKEN);
+    }
   }
 
   private void checkSavedRefreshTokenInRedis(String email) {
-    if (redisService.existRefreshToken(email))
+    if (redisService.existRefreshToken(email)) {
       throw new GlobalException(ResponseCode.ErrorCode.ALREADY_LOGGED_IN);
+    }
   }
 }

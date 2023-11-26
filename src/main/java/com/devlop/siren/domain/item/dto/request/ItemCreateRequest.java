@@ -33,18 +33,16 @@ public class ItemCreateRequest {
   @NotBlank(message = "상품 설명이 입력되지않았습니다.")
   private String description;
 
-  private String image;
-
   private Boolean isBest;
 
   private Boolean isNew;
 
-  @NotNull(message = "아이템 default 옵션이 입력되지않았습니다.")
+  private String image;
+
   private DefaultOptionCreateRequest defaultOptionRequest;
 
   private String allergy;
 
-  @NotNull(message = "아이템 영양정보 옵션이 입력되지 않았습니다.")
   private NutritionCreateRequest nutritionCreateRequest;
 
   public static Item toEntity(
@@ -57,9 +55,9 @@ public class ItemCreateRequest {
         .itemName(itemCreateRequest.itemName)
         .price(itemCreateRequest.price)
         .description(itemCreateRequest.description)
-        .image(itemCreateRequest.image)
         .isBest(itemCreateRequest.isBest)
         .isNew(itemCreateRequest.isNew)
+        .image(itemCreateRequest.image)
         .allergies(allergies)
         .category(category)
         .defaultOption(defaultOption)

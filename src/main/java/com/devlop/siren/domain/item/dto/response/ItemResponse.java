@@ -14,11 +14,11 @@ public class ItemResponse {
 
   private Integer price;
 
-  private String image;
-
   private Boolean isNew;
 
   private Boolean isBest;
+
+  private String image;
 
   private String categoryName;
 
@@ -27,9 +27,9 @@ public class ItemResponse {
         .itemId(item.getItemId())
         .itemName(item.getItemName())
         .price(item.getPrice())
-        .image(item.getImage())
         .isNew(item.getIsNew())
         .isBest(item.getIsBest())
+        .image(item.getImage())
         .categoryName(item.getCategory().getCategoryName())
         .build();
   }

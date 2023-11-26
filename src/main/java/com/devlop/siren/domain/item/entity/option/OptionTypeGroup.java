@@ -29,7 +29,8 @@ public class OptionTypeGroup {
 
   public enum EspressoType {
     ORIGINAL,
-    DECAFFEINE
+    DECAFFEINE;
+
     @JsonCreator
     public EspressoType fromString(String value) {
       return EspressoType.valueOf(value.toUpperCase());

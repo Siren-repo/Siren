@@ -13,12 +13,6 @@ public class UserInformation {
     return true;
   }
 
-  public static void validStaff(UserDetailsDto user) {
-    if (!user.getUserRole().equals(UserRole.STAFF)) {
-      throw new GlobalException(ResponseCode.ErrorCode.NOT_AUTHORITY_USER);
-    }
-  }
-
   public static boolean validStaffOrAdmin(UserDetailsDto user) {
     if (!(user.getUserRole().equals(UserRole.STAFF) || user.getUserRole().equals(UserRole.ADMIN))) {
       throw new GlobalException(ResponseCode.ErrorCode.NOT_AUTHORITY_USER);
