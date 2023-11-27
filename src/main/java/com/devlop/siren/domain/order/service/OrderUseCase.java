@@ -7,7 +7,7 @@ import com.devlop.siren.domain.order.domain.option.BeverageOption;
 import com.devlop.siren.domain.order.domain.option.CustomOption;
 import com.devlop.siren.domain.order.domain.option.FoodOption;
 import com.devlop.siren.domain.order.dto.request.OrderCreateRequest;
-import com.devlop.siren.domain.order.dto.response.OrderCreateResponse;
+import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.user.domain.User;
@@ -26,7 +26,7 @@ public class OrderUseCase {
   private final ItemServiceImpl itemService;
   private final UserService userService;
 
-  public OrderCreateResponse create(OrderCreateRequest request, UserDetailsDto userDto) {
+  public OrderDetailResponse create(OrderCreateRequest request, UserDetailsDto userDto) {
     Store store = storeService.findStore(request.getStoreId());
     User user = userService.findUser(userDto.getEmail());
     List<OrderItem> orderItems = getOrderItems(request);
