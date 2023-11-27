@@ -1,6 +1,7 @@
 package com.devlop.siren.domain.order.dto.response;
 
 import com.devlop.siren.domain.order.domain.Order;
+import com.devlop.siren.domain.order.domain.OrderStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -9,8 +10,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class OrderCreateResponse {
+public class OrderDetailResponse {
   private Long orderId;
+  private OrderStatus orderState;
   private String storeName;
   private String storeAddress;
   private List<OrderItemResponse> items;
@@ -18,14 +20,16 @@ public class OrderCreateResponse {
   private int totalAmount;
 
   @Builder
-  public OrderCreateResponse(
+  public OrderDetailResponse(
       Long orderId,
+      OrderStatus orderStatus,
       String storeName,
       String storeAddress,
       List<OrderItemResponse> items,
       int totalQuantity,
       int totalAmount) {
     this.orderId = orderId;
+    this.orderState = orderStatus;
     this.storeName = storeName;
     this.storeAddress = storeAddress;
     this.items = items;
@@ -33,7 +37,7 @@ public class OrderCreateResponse {
     this.totalAmount = totalAmount;
   }
 
-  public static OrderCreateResponse of(Order order) {
+  public static OrderDetailResponse of(Order order) {
     List<OrderItemResponse> itemResponses =
         order.getOrderItems().stream()
             .map(
@@ -45,8 +49,9 @@ public class OrderCreateResponse {
                         item.getCustomOption()))
             .collect(Collectors.toList());
 
-    return OrderCreateResponse.builder()
+    return OrderDetailResponse.builder()
         .orderId(order.getId())
+        .orderStatus(order.getStatus())
         .storeName(order.getStore().getStoreName())
         .storeAddress(order.getStore().getFullAddress())
         .items(itemResponses)
