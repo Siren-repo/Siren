@@ -9,11 +9,16 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.EspressoType;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.SyrupType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
+import com.devlop.siren.domain.order.domain.Order;
+import com.devlop.siren.domain.order.domain.OrderItem;
+import com.devlop.siren.domain.order.domain.option.BeverageOption;
 import com.devlop.siren.domain.order.dto.request.CustomOptionRequest;
 import com.devlop.siren.domain.order.dto.request.OrderCreateRequest;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
 import com.devlop.siren.domain.store.domain.Store;
+import com.devlop.siren.domain.user.domain.User;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +27,11 @@ public class OrderFixture {
     return new OrderCreateRequest(storeId, list);
   }
 
-  public static List<OrderItemRequest> getOrderItem(Item item) {
+  public static Order getOrder(User user, Store store, List<OrderItem> items) {
+    return Order.of(user, store, items);
+  }
+
+  public static List<OrderItemRequest> getOrderItemRequest(Item item) {
     return List.of(
         OrderItemRequest.builder()
             .itemId(item.getItemId())
@@ -39,8 +48,25 @@ public class OrderFixture {
             .build());
   }
 
+  public static List<OrderItem> getOrderItem(Item item) {
+    return List.of(
+        OrderItem.create(
+            item,
+            BeverageOption.builder()
+                .isTakeout(true)
+                .isWarmed(false)
+                .cupSize(SizeType.TALL)
+                .milk(MilkType.LOW_FAT)
+                .espresso(new EspressoDetail(EspressoType.ORIGINAL, 1))
+                .drizzle(new HashSet<>())
+                .syrup(Set.of(new SyrupDetail(SyrupType.VANILLA, 2)))
+                .build(),
+            3));
+  }
+
   public static Store get(LocalTime open, LocalTime close) {
     return Store.builder()
+        .storeId(1L)
         .city("Seoul")
         .storeId(1L)
         .storeName("강남대로신사")
