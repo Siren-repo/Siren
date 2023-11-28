@@ -37,8 +37,12 @@ spring:
     activate:
       on-profile: local
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
+    first:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+    second:
+      host: ${CART_REDIS_HOST}
+      port: ${CART_REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DATASOURCE_IP}:${DATASOURCE_PORT}/${DATASOURCE_DATABASE}?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -57,8 +61,12 @@ spring:
     activate:
       on-profile: prod
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
+    first:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+    second:
+      host: ${CART_REDIS_HOST}
+      port: ${CART_REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
