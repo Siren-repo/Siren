@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
-import javax.persistence.*;
 import java.util.Objects;
+import javax.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -83,6 +83,14 @@ public class Store {
     this.zipCode = Objects.requireNonNullElse(storeUpdateRequest.getZipCode(), this.zipCode);
     this.openTime = Objects.requireNonNullElse(storeUpdateRequest.getOpenTime(), this.openTime);
     this.closeTime = Objects.requireNonNullElse(storeUpdateRequest.getCloseTime(), this.closeTime);
+  }
+
+  public void setOpenTime(LocalTime time){
+    this.openTime = time;
+  }
+
+  public void setCloseTime(LocalTime time){
+    this.closeTime = time;
   }
 
   public String getFullAddress() {
