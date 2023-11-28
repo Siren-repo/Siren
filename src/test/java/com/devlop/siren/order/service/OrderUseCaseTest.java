@@ -84,13 +84,14 @@ public class OrderUseCaseTest {
             EnumSet.of(AllergyType.PEANUT, AllergyType.MILK),
             NutritionCreateRequest.toEntity(nutrition));
 
-    List<OrderItemRequest> items = OrderFixture.getOrderItem(item);
+    List<OrderItemRequest> items = OrderFixture.getOrderItemRequest(item);
     OrderCreateRequest request = OrderFixture.get(store.getStoreId(), items);
 
     when(storeService.findStore(anyLong())).thenReturn(store);
     when(userService.findUser(anyString())).thenReturn(mock(User.class));
     when(itemService.findItem(item.getItemId())).thenReturn(item);
-    when(orderService.create(any(), any(), any())).thenReturn(mock(OrderDetailResponse.class));
+    when(orderService.create(any(), any(), any(), any()))
+        .thenReturn(mock(OrderDetailResponse.class));
 
     OrderDetailResponse response = orderUseCase.create(request, userDto);
     assertThat(response.getOrderId()).isEqualTo(0L);
