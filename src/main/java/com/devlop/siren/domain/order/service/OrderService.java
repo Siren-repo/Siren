@@ -2,7 +2,6 @@ package com.devlop.siren.domain.order.service;
 
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.order.domain.OrderItem;
-import com.devlop.siren.domain.order.domain.option.CustomOption;
 import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.order.repository.CustomOptionRepository;
 import com.devlop.siren.domain.order.repository.OrderItemRepository;
@@ -16,6 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -24,20 +24,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
-  private final StockRepository stockRepository;
   private final CustomOptionRepository customOptionRepository;
+  private final StockRepository stockRepository;
 
   @Transactional
-  public void saveCustomOption(CustomOption option) {
-    customOptionRepository.save(option);
-  }
-
-  @Transactional
-  public OrderDetailResponse create(User user, Store store, List<OrderItem> orderItems) {
-    isStoreOperating(store, LocalTime.now());
+  public OrderDetailResponse create(
+      User user, Store store, List<OrderItem> orderItems, LocalTime orderTime) {
+    isStoreOperating(store, orderTime);
     Order newOrder = Order.of(user, store, orderItems);
     orderItems.forEach(
         orderItem -> {
+          customOptionRepository.save(orderItem.getCustomOption());
           consumeStock(
               orderItem.getQuantity(), store.getStoreId(), orderItem.getItem().getItemId());
           orderItem.setOrder(newOrder);
@@ -46,6 +43,7 @@ public class OrderService {
     return OrderDetailResponse.of(orderRepository.save(newOrder));
   }
 
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void consumeStock(Integer quantity, Long storeId, Long itemId) {
     stockRepository
         .findByStoreAndItem(storeId, itemId)
