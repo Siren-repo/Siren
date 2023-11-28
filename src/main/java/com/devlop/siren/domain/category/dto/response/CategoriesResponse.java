@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CategoriesResponse {
-    private List<CategoryResponse> categories;
+  private List<CategoryResponse> categories;
 }

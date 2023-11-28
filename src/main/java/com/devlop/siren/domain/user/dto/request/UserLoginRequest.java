@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserLoginRequest {
 
-    @NotBlank(message = "이메일은 필수로 입력해야합니다")
-    private String email;
+  @NotBlank(message = "이메일은 필수로 입력해야합니다")
+  private String email;
 
-    @NotBlank(message = "비밀번호는 필수로 입력해야합니다")
-    @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다")
-    private String password;
+  @NotBlank(message = "비밀번호는 필수로 입력해야합니다")
+  @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다")
+  private String password;
 
-    public UserLoginRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+  public UserLoginRequest(String email, String password) {
+    this.email = email;
+    this.password = password;
+  }
 }

@@ -18,34 +18,39 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-    private final CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
-    @Transactional
-    public CategoryResponse register(CategoryCreateRequest request) {
+  @Transactional
+  public CategoryResponse register(CategoryCreateRequest request) {
 
-        validateDuplicateCategory(request.getCategoryType(), request.getCategoryName());
+    validateDuplicateCategory(request.getCategoryType(), request.getCategoryName());
 
-        Category category = Category.builder()
-                .categoryName(request.getCategoryName())
-                .categoryType(request.getCategoryType()).build();
-        return CategoryResponse.from(categoryRepository.save(category));
-    }
+    Category category =
+        Category.builder()
+            .categoryName(request.getCategoryName())
+            .categoryType(request.getCategoryType())
+            .build();
+    return CategoryResponse.from(categoryRepository.save(category));
+  }
 
-    protected void validateDuplicateCategory(CategoryType categoryType, String categoryName) {
-        categoryRepository.findByCategoryTypeAndCategoryName(categoryType, categoryName)
-                .ifPresent(o -> {
-                    throw new GlobalException(ResponseCode.ErrorCode.DUPLICATE_CATEGORY);
-                });
-    }
+  protected void validateDuplicateCategory(CategoryType categoryType, String categoryName) {
+    categoryRepository
+        .findByCategoryTypeAndCategoryName(categoryType, categoryName)
+        .ifPresent(
+            o -> {
+              throw new GlobalException(ResponseCode.ErrorCode.DUPLICATE_CATEGORY);
+            });
+  }
 
+  public CategoriesResponse findAllByType(CategoryType categoryType) {
+    List<CategoryResponse> categoryResponses =
+        categoryRepository
+            .findByCategoryTypeOrderByCategoryId(categoryType)
+            .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY))
+            .stream()
+            .map(category -> CategoryResponse.from(category))
+            .collect(Collectors.toUnmodifiableList());
 
-    public CategoriesResponse findAllByType(CategoryType categoryType) {
-        List<CategoryResponse> categoryResponses = categoryRepository.findByCategoryTypeOrderByCategoryId(categoryType)
-                .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY))
-                .stream()
-                .map(category -> CategoryResponse.from(category))
-                .collect(Collectors.toUnmodifiableList());
-
-        return new CategoriesResponse(categoryResponses);
-    }
+    return new CategoriesResponse(categoryResponses);
+  }
 }

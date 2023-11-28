@@ -23,45 +23,51 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
 
-    @Mock
-    private CategoryRepository categoryRepository;
+  @Mock private CategoryRepository categoryRepository;
 
-    @InjectMocks
-    private CategoryService categoryService;
+  @InjectMocks private CategoryService categoryService;
 
-    static private CategoryCreateRequest validObject;
+  private static CategoryCreateRequest validObject;
 
-    @BeforeAll
-    private static void setUp() {
-        validObject = new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소");
-    }
+  @BeforeAll
+  private static void setUp() {
+    validObject = new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소");
+  }
 
-    @Test
-    @DisplayName("카테고리를 생성할 수 있다")
-    public void register() {
-        //given
-        Long categoryId = 1L;
-        Category category = Category.builder().categoryId(categoryId).categoryType(validObject.getCategoryType())
-                .categoryName(validObject.getCategoryName()).build();
-        //when
-        when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any())).thenReturn(Optional.empty());
-        when(categoryRepository.save(any(Category.class))).thenReturn(category);
-        //then
-        assertThat(categoryService.register(validObject).getCategoryId()).isEqualTo(categoryId);
-    }
+  @Test
+  @DisplayName("카테고리를 생성할 수 있다")
+  public void register() {
+    // given
+    Long categoryId = 1L;
+    Category category =
+        Category.builder()
+            .categoryId(categoryId)
+            .categoryType(validObject.getCategoryType())
+            .categoryName(validObject.getCategoryName())
+            .build();
+    // when
+    when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any()))
+        .thenReturn(Optional.empty());
+    when(categoryRepository.save(any(Category.class))).thenReturn(category);
+    // then
+    assertThat(categoryService.register(validObject).getCategoryId()).isEqualTo(categoryId);
+  }
 
-    @Test
-    @DisplayName("이미 생성된 카테고리를 중복생성할 수 없다")
-    public void inValidRegister() {
-        //given
-        Long categoryId = 1L;
-        Category category = Category.builder().categoryId(categoryId).categoryType(validObject.getCategoryType())
-                .categoryName(validObject.getCategoryName()).build();
-        //when
-        when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any())).thenReturn(
-                Optional.ofNullable(category));
-        //then
-        assertThrows(GlobalException.class, () -> categoryService.register(validObject));
-    }
-
+  @Test
+  @DisplayName("이미 생성된 카테고리를 중복생성할 수 없다")
+  public void inValidRegister() {
+    // given
+    Long categoryId = 1L;
+    Category category =
+        Category.builder()
+            .categoryId(categoryId)
+            .categoryType(validObject.getCategoryType())
+            .categoryName(validObject.getCategoryName())
+            .build();
+    // when
+    when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any()))
+        .thenReturn(Optional.ofNullable(category));
+    // then
+    assertThrows(GlobalException.class, () -> categoryService.register(validObject));
+  }
 }
