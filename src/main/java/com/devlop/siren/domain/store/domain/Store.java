@@ -85,11 +85,11 @@ public class Store {
     this.closeTime = Objects.requireNonNullElse(storeUpdateRequest.getCloseTime(), this.closeTime);
   }
 
-  public void setOpenTime(LocalTime time){
+  public void setOpenTime(LocalTime time) {
     this.openTime = time;
   }
 
-  public void setCloseTime(LocalTime time){
+  public void setCloseTime(LocalTime time) {
     this.closeTime = time;
   }
 
