@@ -13,6 +13,7 @@ import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.domain.user.service.UserService;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class OrderUseCase {
     User user = userService.findUser(userDto.getEmail());
     List<OrderItem> orderItems = getOrderItems(request);
 
-    return orderService.create(user, store, orderItems);
+    return orderService.create(user, store, orderItems, LocalTime.now());
   }
 
   private List<OrderItem> getOrderItems(OrderCreateRequest request) {
@@ -56,7 +57,6 @@ public class OrderUseCase {
                           orderItemRequest.getWarm());
                   break;
               }
-              orderService.saveCustomOption(customOption);
               return OrderItem.create(item, customOption, orderItemRequest.getQuantity());
             })
         .collect(Collectors.toList());
