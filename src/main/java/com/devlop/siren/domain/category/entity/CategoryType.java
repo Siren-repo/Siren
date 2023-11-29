@@ -27,9 +27,4 @@ public enum CategoryType {
         .findFirst()
         .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.INVALID_CATEGORY_TYPE));
   }
-
-  @Override
-  public String toString() {
-    return "CategoryType{" + "name='" + name + '\'' + '}';
-  }
 }
