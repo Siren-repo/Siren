@@ -15,7 +15,6 @@ import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -43,14 +42,13 @@ public class OrderService {
     return OrderDetailResponse.of(orderRepository.save(newOrder));
   }
 
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void consumeStock(Integer quantity, Long storeId, Long itemId) {
+  private void consumeStock(Integer quantity, Long storeId, Long itemId) {
     stockRepository
         .findByStoreAndItem(storeId, itemId)
         .ifPresent(stock -> stock.consumed(quantity));
   }
 
-  public void isStoreOperating(Store store, LocalTime now) {
+  private void isStoreOperating(Store store, LocalTime now) {
     if (now.isBefore(store.getOpenTime()) || now.isAfter(store.getCloseTime())) {
       throw new GlobalException(ResponseCode.ErrorCode.NOT_OPERATING_TIME);
     }
