@@ -10,7 +10,7 @@ public class OrderItemRequest {
   private Long itemId;
   private Boolean takeout;
   private Boolean warm;
-  private int quantity;
+  private Integer quantity;
   private CustomOptionRequest customOption;
 
   @Builder
