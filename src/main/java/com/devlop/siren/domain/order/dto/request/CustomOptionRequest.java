@@ -7,7 +7,7 @@ import com.devlop.siren.domain.item.entity.option.OptionDetails.PotionDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.SyrupDetail;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CustomOptionRequest {
   private SizeType cupSize;
-  private Optional<EspressoDetail> espresso;
-  private Optional<MilkType> milk;
-  private Optional<FoamDetail> foam;
-  private Optional<Set<SyrupDetail>> syrups;
-  private Optional<Set<DrizzleDetail>> drizzles;
-  private Optional<Set<PotionDetail>> potions;
+  private EspressoDetail espresso;
+  private MilkType milk;
+  private FoamDetail foam;
+  private Set<SyrupDetail> syrups;
+  private Set<DrizzleDetail> drizzles;
+  private Set<PotionDetail> potions;
 
   @Builder
   public CustomOptionRequest(
@@ -34,11 +34,11 @@ public class CustomOptionRequest {
       Set<DrizzleDetail> drizzles,
       Set<PotionDetail> potions) {
     this.cupSize = cupSize;
-    this.espresso = Optional.ofNullable(espresso);
-    this.milk = Optional.ofNullable(milk);
-    this.foam = Optional.ofNullable(foam);
-    this.syrups = Optional.ofNullable(syrups);
-    this.drizzles = Optional.ofNullable(drizzles);
-    this.potions = Optional.ofNullable(potions);
+    this.espresso = Objects.requireNonNullElse(espresso, null);
+    this.milk = Objects.requireNonNullElse(milk, null);
+    this.foam = Objects.requireNonNullElse(foam, null);
+    this.syrups = Objects.requireNonNullElse(syrups, null);
+    this.drizzles = Objects.requireNonNullElse(drizzles, null);
+    this.potions = Objects.requireNonNullElse(potions, null);
   }
 }
