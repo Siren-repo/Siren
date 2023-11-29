@@ -8,6 +8,7 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.order.dto.request.CustomOptionRequest;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -48,12 +49,12 @@ public class BeverageOption extends CustomOption {
   @ElementCollection
   @CollectionTable(name = "syrup_details", joinColumns = @JoinColumn(name = "custom_option_id"))
   @Column(name = "syrup_type")
-  private Set<SyrupDetail> syrup = new HashSet<SyrupDetail>();
+  private Set<SyrupDetail> syrup;
 
   @ElementCollection
   @CollectionTable(name = "drizzle_details", joinColumns = @JoinColumn(name = "custom_option_id"))
   @Column(name = "drizzle_type")
-  private Set<DrizzleDetail> drizzle = new HashSet<DrizzleDetail>();
+  private Set<DrizzleDetail> drizzle;
 
   @Builder
   public BeverageOption(
@@ -81,11 +82,11 @@ public class BeverageOption extends CustomOption {
         .isTakeout(takeout)
         .isWarmed(warm)
         .cupSize(request.getCupSize())
-        .espresso(request.getEspresso().orElse(null))
-        .milk(request.getMilk().orElse(null))
-        .foam(request.getFoam().orElse(null))
-        .syrup(request.getSyrups().orElse(new HashSet<SyrupDetail>()))
-        .drizzle(request.getDrizzles().orElse(new HashSet<DrizzleDetail>()))
+        .espresso(request.getEspresso())
+        .milk(request.getMilk())
+        .foam(request.getFoam())
+        .syrup(Objects.requireNonNullElse(request.getSyrups(), new HashSet<>()))
+        .drizzle(Objects.requireNonNullElse(request.getDrizzles(), new HashSet<>()))
         .build();
   }
 

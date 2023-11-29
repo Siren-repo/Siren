@@ -5,6 +5,7 @@ import com.devlop.siren.domain.item.entity.option.OptionDetails.PotionDetail;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.Temperature;
 import com.devlop.siren.domain.order.dto.request.CustomOptionRequest;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -24,11 +25,11 @@ public class FoodOption extends CustomOption {
   @ElementCollection
   @CollectionTable(name = "potion_details", joinColumns = @JoinColumn(name = "custom_option_id"))
   @Column(name = "potion_type")
-  private Set<PotionDetail> potion = new HashSet<PotionDetail>();
+  private Set<PotionDetail> potion;
 
   @Builder
-  public FoodOption(Item item, Boolean isWarmed, Boolean isTakekout, Set<PotionDetail> potions) {
-    takeout = isTakekout;
+  public FoodOption(Item item, Boolean isWarmed, Boolean isTakeout, Set<PotionDetail> potions) {
+    takeout = isTakeout;
 
     String categoryName = item.getCategory().getCategoryName();
     if (categoriesRequiringWarming.contains(categoryName)) {
@@ -49,8 +50,8 @@ public class FoodOption extends CustomOption {
   public static FoodOption fromDto(CustomOptionRequest request, Boolean takeout, Boolean warm) {
     return FoodOption.builder()
         .isWarmed(warm)
-        .isTakekout(takeout)
-        .potions(request.getPotions().orElse(new HashSet<>()))
+        .isTakeout(takeout)
+        .potions(Objects.requireNonNullElse(request.getPotions(), new HashSet<>()))
         .build();
   }
 
