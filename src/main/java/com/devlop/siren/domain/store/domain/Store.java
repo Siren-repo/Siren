@@ -2,7 +2,6 @@ package com.devlop.siren.domain.store.domain;
 
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,6 @@ public class Store {
   private Double longitude;
 
   @OneToMany(mappedBy = "store")
-  @JsonManagedReference
   private List<Order> orders = new ArrayList<Order>();
 
   @Builder

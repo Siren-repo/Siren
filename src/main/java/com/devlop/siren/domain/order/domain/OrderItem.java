@@ -2,7 +2,6 @@ package com.devlop.siren.domain.order.domain;
 
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.order.domain.option.CustomOption;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,7 +20,6 @@ public class OrderItem {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
-  @JsonBackReference
   private Order order;
 
   @ManyToOne(fetch = FetchType.LAZY)

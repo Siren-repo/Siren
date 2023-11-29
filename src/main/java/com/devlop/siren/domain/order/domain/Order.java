@@ -3,8 +3,6 @@ package com.devlop.siren.domain.order.domain;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.global.common.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -36,16 +34,13 @@ public class Order extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
-  @JsonBackReference
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "store_id")
-  @JsonBackReference
   private Store store;
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference
   private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
   @Enumerated(EnumType.STRING)
