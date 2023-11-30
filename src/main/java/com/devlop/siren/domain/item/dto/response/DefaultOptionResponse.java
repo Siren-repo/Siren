@@ -7,22 +7,22 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class DefaultOptionResponse {
-    private Integer espressoShotCount;
+  private Integer espressoShotCount;
 
-    private Integer vanillaSyrupCount;
+  private Integer vanillaSyrupCount;
 
-    private Integer caramelSyrupCount;
+  private Integer caramelSyrupCount;
 
-    private Integer hazelnutSyrupCount;
+  private Integer hazelnutSyrupCount;
 
-    private String size;
+  private String size;
 
-    public static DefaultOptionResponse from(DefaultOption defaultOption) {
-        return new DefaultOptionResponse(
-                defaultOption.getEspressoShotCount(),
-                defaultOption.getVanillaSyrupCount(),
-                defaultOption.getCaramelSyrupCount(),
-                defaultOption.getHazelnutSyrupCount(),
-                defaultOption.getSize().getEnglishName());
-    }
+  public static DefaultOptionResponse from(DefaultOption defaultOption) {
+    return new DefaultOptionResponse(
+        defaultOption.getEspressoShotCount(),
+        defaultOption.getVanillaSyrupCount(),
+        defaultOption.getCaramelSyrupCount(),
+        defaultOption.getHazelnutSyrupCount(),
+        defaultOption.getSize().getEnglishName());
+  }
 }

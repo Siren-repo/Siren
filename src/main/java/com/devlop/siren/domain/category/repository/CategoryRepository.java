@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    Optional<Category> findByCategoryTypeAndCategoryName(@Param("categoryType") CategoryType categoryType,
-                                                         @Param("categoryName") String categoryName);
+  Optional<Category> findByCategoryTypeAndCategoryName(
+      @Param("categoryType") CategoryType categoryType, @Param("categoryName") String categoryName);
 
-    Optional<List<Category>> findByCategoryTypeOrderByCategoryId(@Param("categoryType") CategoryType categoryType);
-
+  Optional<List<Category>> findByCategoryTypeOrderByCategoryId(
+      @Param("categoryType") CategoryType categoryType);
 }

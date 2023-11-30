@@ -9,14 +9,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CategoryResponse {
 
-    private Long categoryId;
+  private Long categoryId;
 
-    private String categoryName;
+  private String categoryName;
 
-    private CategoryType categoryType;
+  private CategoryType categoryType;
 
-    public static CategoryResponse from(Category category) {
-        return new CategoryResponse(category.getCategoryId(), category.getCategoryName(), category.getCategoryType());
-    }
-
+  public static CategoryResponse from(Category category) {
+    return new CategoryResponse(
+        category.getCategoryId(), category.getCategoryName(), category.getCategoryType());
+  }
 }

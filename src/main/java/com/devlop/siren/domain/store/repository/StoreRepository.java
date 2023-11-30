@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    Optional<Store> findByStoreId(Long storeId);
+  Optional<Store> findByStoreId(Long storeId);
 
-    Long deleteByStoreId(Long storeId);
+  Long deleteByStoreId(Long storeId);
 }
