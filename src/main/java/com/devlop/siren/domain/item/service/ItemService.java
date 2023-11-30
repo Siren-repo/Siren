@@ -8,16 +8,15 @@ import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 
 public interface ItemService {
 
-    ItemResponse create(ItemCreateRequest request);
+  ItemResponse create(ItemCreateRequest request);
 
-    CategoryItemsResponse findAllByCategory(String categoryType, String categoryName);
+  CategoryItemsResponse findAllByCategory(String categoryType, String categoryName);
 
-    ItemDetailResponse findItemDetailById(Long itemId);
+  ItemDetailResponse findItemDetailById(Long itemId);
 
-    NutritionDetailResponse findNutritionDetailById(Long itemId);
+  NutritionDetailResponse findNutritionDetailById(Long itemId);
 
+  Long deleteItemById(Long itemId);
 
-    Long deleteItemById(Long itemId);
-
-    Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest);
+  Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest);
 }

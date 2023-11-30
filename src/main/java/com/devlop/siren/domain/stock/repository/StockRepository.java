@@ -11,9 +11,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-    @Query("select s from Stock s join fetch s.store st join fetch s.item i where st.storeId = :storeId and i.itemId = :itemId ")
-    Optional<Stock> findByStoreAndItem(@Param("storeId") Long storeId,
-                                       @Param("itemId") Long itemId);
+  @Query(
+      "select s from Stock s join fetch s.store st join fetch s.item i where st.storeId = :storeId"
+          + " and i.itemId = :itemId ")
+  Optional<Stock> findByStoreAndItem(@Param("storeId") Long storeId, @Param("itemId") Long itemId);
 
-    Page<Stock> findAllByStore(Store store, Pageable pageable);
+  Page<Stock> findAllByStore(Store store, Pageable pageable);
 }
