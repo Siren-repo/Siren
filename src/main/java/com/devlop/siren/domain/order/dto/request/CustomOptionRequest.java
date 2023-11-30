@@ -7,7 +7,6 @@ import com.devlop.siren.domain.item.entity.option.OptionDetails.PotionDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.SyrupDetail;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
-import java.util.Objects;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,11 +33,11 @@ public class CustomOptionRequest {
       Set<DrizzleDetail> drizzles,
       Set<PotionDetail> potions) {
     this.cupSize = cupSize;
-    this.espresso = Objects.requireNonNullElse(espresso, null);
-    this.milk = Objects.requireNonNullElse(milk, null);
-    this.foam = Objects.requireNonNullElse(foam, null);
-    this.syrups = Objects.requireNonNullElse(syrups, null);
-    this.drizzles = Objects.requireNonNullElse(drizzles, null);
-    this.potions = Objects.requireNonNullElse(potions, null);
+    this.espresso = espresso;
+    this.milk = milk;
+    this.foam = foam;
+    this.syrups = syrups;
+    this.drizzles = drizzles;
+    this.potions = potions;
   }
 }
