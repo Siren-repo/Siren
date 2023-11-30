@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartDto {
-    private String user;
+    private String cartIdentifier;
     private List<ItemDto> itemDtoList;
 }
