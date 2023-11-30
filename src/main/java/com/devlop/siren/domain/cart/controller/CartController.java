@@ -11,6 +11,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
@@ -21,7 +25,7 @@ public class CartController {
   // 장바구니에 추가
   @PostMapping
   public ApiResponse<CartDto> add(
-      @RequestBody ItemDto itemDto, @AuthenticationPrincipal UserDetailsDto user) {
+          @Valid @RequestBody ItemDto itemDto, @AuthenticationPrincipal UserDetailsDto user) {
     return ApiResponse.ok(ResponseCode.Normal.CREATE, cartService.add(itemDto, user));
   }
 
@@ -41,14 +45,14 @@ public class CartController {
   // 장바구니 안의 특정 요소 삭제
   @DeleteMapping("/{itemId}")
   public ApiResponse<CartDto> remove(
-      @PathVariable Long itemId, @AuthenticationPrincipal UserDetailsDto user) {
+          @Min(1L) @PathVariable Long itemId, @AuthenticationPrincipal UserDetailsDto user) {
     return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.remove(itemId, user));
   }
 
   // 장바구니 안에서 특정 요소 수정
   @PutMapping
   public ApiResponse<CartDto> update(
-      @RequestBody ItemDto itemDto, @AuthenticationPrincipal UserDetailsDto user) {
+      @Valid @RequestBody ItemDto itemDto, @AuthenticationPrincipal UserDetailsDto user) {
     return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.update(itemDto, user));
   }
 }
