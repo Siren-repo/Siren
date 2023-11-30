@@ -38,7 +38,8 @@ public class ResponseCode {
         NOT_FOUND_STOCKS_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 재고가 존재하지 않습니다."),
         NOT_FOUND_STOCK_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 해당하는 아이템 재고가 존재하지 않습니다."),
 
-        NOT_FOUND_ITEM_IN_CART(HttpStatus.NOT_FOUND, "장바구니에서 해당하는 아이템을 찾을 수 없습니다")
+        NOT_FOUND_ITEM_IN_CART(HttpStatus.NOT_FOUND, "장바구니에서 해당하는 아이템을 찾을 수 없습니다"),
+        CAUSE_ALLERGY_IN_CART(HttpStatus.NOT_FOUND, "사용자의 알러지를 유발할 수 있는 아이템입니다.")
         ;
 
 

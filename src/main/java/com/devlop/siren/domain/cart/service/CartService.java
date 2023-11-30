@@ -4,14 +4,12 @@ import com.devlop.siren.domain.cart.dto.CartDto;
 import com.devlop.siren.domain.cart.dto.ItemDto;
 import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.repository.ItemRepository;
+import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ListOperations;
@@ -21,8 +19,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-  private static final String CART_KEY = "cart";
+  private static final String CART_KEY = "Cart - UserId:";
   private final ItemRepository itemRepository;
+  private final UserRepository userRepository;
   private final RedisTemplate<String, ItemDto> cartRedisTemplate;
   private ListOperations<String, ItemDto> listOperations;
 
@@ -38,6 +37,7 @@ public class CartService {
   public CartDto add(ItemDto itemDto, UserDetailsDto user) {
     String key = cartKeyGenerate(user.getId());
     Item item = findItemById(itemDto.getItemId());
+    matchAllergies(item, userRepository.findByEmail(user.getEmail()).get());
     ItemDto founded = getItemDtoByKeyAndValue(key, item);
     if (founded != null) {
       // 상품이 이미 장바구니에 존재하면 수량 증가
@@ -65,18 +65,18 @@ public class CartService {
     String key = cartKeyGenerate(user.getId());
     Item item = findItemById(itemId);
     ItemDto founded = getItemDtoByKeyAndValue(key, item);
-    if(founded == null){
+    if (founded == null) {
       throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM_IN_CART);
     }
     listOperations.remove(key, 1, founded);
     return new CartDto(key, listOperations.range(key, 0, listOperations.size(key) - 1));
   }
 
-  public CartDto update(ItemDto itemDto, UserDetailsDto user){
+  public CartDto update(ItemDto itemDto, UserDetailsDto user) {
     String key = cartKeyGenerate(user.getId());
     Item item = findItemById(itemDto.getItemId());
     ItemDto founded = getItemDtoByKeyAndValue(key, item);
-    if(founded == null){
+    if (founded == null) {
       throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM_IN_CART);
     }
     int index = findIndex(key, founded);
@@ -85,20 +85,18 @@ public class CartService {
     return new CartDto(key, listOperations.range(key, 0, listOperations.size(key) - 1));
   }
 
-
-  private int findIndex(String key, ItemDto itemDto){
+  private int findIndex(String key, ItemDto itemDto) {
     return listOperations.range(key, 0, listOperations.size(key) - 1).indexOf(itemDto);
   }
 
   private Item findItemById(Long itemId) {
     return itemRepository
-            .findById(itemId)
-            .orElseThrow(
-                () -> {
-                  throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM);
-                });
+        .findById(itemId)
+        .orElseThrow(
+            () -> {
+              throw new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM);
+            });
   }
-
 
   private ItemDto getItemDtoByKeyAndValue(String key, Item item) {
     List<ItemDto> itemDtoList = listOperations.range(key, 0, listOperations.size(key) - 1);
@@ -110,5 +108,14 @@ public class CartService {
     }
     // 일치하는 값이 없는 경우 null 반환
     return null;
+  }
+
+  private void matchAllergies(Item item, User user) {
+    boolean match =
+        user.getAllergies().stream()
+            .anyMatch(allergyType -> item.getAllergies().contains(allergyType));
+    if (match) {
+      throw new GlobalException(ResponseCode.ErrorCode.CAUSE_ALLERGY_IN_CART);
+    }
   }
 }
