@@ -7,7 +7,12 @@ public class OptionTypeGroup {
   public enum Temperature {
     HOT,
     COLD,
-    NONE
+    NONE;
+
+    @JsonCreator
+    public Temperature fromString(String value) {
+      return Temperature.valueOf(value.toUpperCase());
+    }
   }
 
   public enum Amount {
@@ -15,6 +20,11 @@ public class OptionTypeGroup {
     NORMAL,
     MUCH,
     NONE;
+
+    @JsonCreator
+    public Amount fromString(String value) {
+      return Amount.valueOf(value.toUpperCase());
+    }
   }
 
   public enum EspressoType {
@@ -43,7 +53,12 @@ public class OptionTypeGroup {
   public enum FoamType {
     MILK,
     ESPRESSO,
-    MATCHA
+    MATCHA;
+
+    @JsonCreator
+    public FoamType fromString(String value) {
+      return FoamType.valueOf(value.toUpperCase());
+    }
   }
 
   public enum SyrupType {
@@ -61,5 +76,10 @@ public class OptionTypeGroup {
   public enum DrizzleType {
     CHOCOLATE,
     CARAMEL;
+
+    @JsonCreator
+    public DrizzleType fromString(String value) {
+      return DrizzleType.valueOf(value.toUpperCase());
+    }
   }
 }

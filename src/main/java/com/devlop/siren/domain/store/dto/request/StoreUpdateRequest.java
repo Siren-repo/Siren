@@ -1,17 +1,19 @@
 package com.devlop.siren.domain.store.dto.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class StoreUpdateRequest {
   private String storeName;
   private String storePhone;
   private String city;
   private String street;
   private Integer zipCode;
-  private LocalDateTime openTime;
-  private LocalDateTime closeTime;
+  private LocalTime openTime;
+  private LocalTime closeTime;
 
   public StoreUpdateRequest(
       String storeName,
@@ -19,8 +21,8 @@ public class StoreUpdateRequest {
       String city,
       String street,
       Integer zipCode,
-      LocalDateTime openTime,
-      LocalDateTime closeTime) {
+      LocalTime openTime,
+      LocalTime closeTime) {
     this.storeName = storeName;
     this.storePhone = storePhone;
     this.city = city;

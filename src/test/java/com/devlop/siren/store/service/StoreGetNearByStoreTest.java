@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +38,8 @@ public class StoreGetNearByStoreTest {
             .city("Store City 1")
             .street("Store Street 1")
             .zipCode(12345)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .latitude(37.48428)
             .longitude(126.9015)
             .build();
@@ -53,8 +53,8 @@ public class StoreGetNearByStoreTest {
             .city("Store City 2")
             .street("Store Street 2")
             .zipCode(23455)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .latitude(37.48428 + 0.0009)
             .longitude(126.9015)
             .build();
@@ -69,8 +69,8 @@ public class StoreGetNearByStoreTest {
             .city("Store City 3")
             .street("Store Street 3")
             .zipCode(34567)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .latitude(37.47428)
             .longitude(126.9015)
             .build();
@@ -84,8 +84,8 @@ public class StoreGetNearByStoreTest {
             .city("Store City def")
             .street("Store Street def")
             .zipCode(87654)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .latitude(37.46884)
             .longitude(126.8973)
             .build();

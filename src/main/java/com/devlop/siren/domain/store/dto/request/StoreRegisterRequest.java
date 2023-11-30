@@ -1,16 +1,12 @@
 package com.devlop.siren.domain.store.dto.request;
 
 import com.devlop.siren.domain.store.domain.Store;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
@@ -38,8 +34,8 @@ public class StoreRegisterRequest {
   @Max(value = 99999, message = "우편번호는 5글자를 넘을 수 없습니다.")
   private Integer zipCode;
 
-  private LocalDateTime openTime;
-  private LocalDateTime closeTime;
+  private LocalTime openTime;
+  private LocalTime closeTime;
 
   public static Store from(StoreRegisterRequest registerDto, Double lat, Double lon) {
     return Store.builder()

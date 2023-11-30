@@ -2,21 +2,12 @@ package com.devlop.siren.domain.store.domain;
 
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -43,10 +34,10 @@ public class Store {
   private Integer zipCode;
 
   @Column(name = "open_time")
-  private LocalDateTime openTime;
+  private LocalTime openTime;
 
   @Column(name = "close_time")
-  private LocalDateTime closeTime;
+  private LocalTime closeTime;
 
   @Column(name = "latitude", columnDefinition = "NVARCHAR(255) NOT NULL")
   private Double latitude;
@@ -65,8 +56,8 @@ public class Store {
       String city,
       String street,
       Integer zipCode,
-      LocalDateTime openTime,
-      LocalDateTime closeTime,
+      LocalTime openTime,
+      LocalTime closeTime,
       Double latitude,
       Double longitude) {
     this.storeId = storeId;
@@ -90,5 +81,17 @@ public class Store {
     this.zipCode = Objects.requireNonNullElse(storeUpdateRequest.getZipCode(), this.zipCode);
     this.openTime = Objects.requireNonNullElse(storeUpdateRequest.getOpenTime(), this.openTime);
     this.closeTime = Objects.requireNonNullElse(storeUpdateRequest.getCloseTime(), this.closeTime);
+  }
+
+  public void setOpenTime(LocalTime time) {
+    this.openTime = time;
+  }
+
+  public void setCloseTime(LocalTime time) {
+    this.closeTime = time;
+  }
+
+  public String getFullAddress() {
+    return String.format("%s %s", city, street);
   }
 }

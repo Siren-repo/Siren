@@ -12,9 +12,14 @@ import com.devlop.siren.domain.item.dto.request.DefaultOptionCreateRequest;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
 import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
 import com.devlop.siren.domain.item.entity.Item;
+import com.devlop.siren.domain.item.entity.option.OptionDetails.EspressoDetail;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.EspressoType;
+import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.order.domain.OrderItem;
+import com.devlop.siren.domain.order.domain.option.BeverageOption;
+import com.devlop.siren.domain.order.domain.option.CustomOption;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
 import com.devlop.siren.domain.stock.entity.Stock;
 import com.devlop.siren.domain.stock.repository.StockRepository;
@@ -27,7 +32,8 @@ import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,6 +63,8 @@ class StockServiceTest {
   private UserDetailsDto staff;
   private UserDetailsDto customer;
 
+  private CustomOption customOption;
+
   @BeforeEach
   private void setUp() {
     customer = new UserDetailsDto(2L, "test@test", "test", UserRole.CUSTOMER, false);
@@ -73,17 +81,27 @@ class StockServiceTest {
             .city("Seoul")
             .street("대전 서구 둔산중로32번길 29 1층 103호")
             .zipCode(54321)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .openTime(LocalTime.of(18, 0))
+            .closeTime(LocalTime.of(9, 0))
             .build();
     item =
         Item.builder()
             .itemId(ITEM_ID)
             .category(CategoryCreateRequest.toEntity(validItemDto.getCategoryRequest()))
+            .price(5500)
             .defaultOption(
                 DefaultOptionCreateRequest.toEntity(validItemDto.getDefaultOptionRequest()))
             .allergies(allergyConverter.convertToEntityAttribute(validItemDto.getAllergy()))
             .nutrition(NutritionCreateRequest.toEntity(validItemDto.getNutritionCreateRequest()))
+            .build();
+    customOption =
+        BeverageOption.builder()
+            .isTakeout(true)
+            .isWarmed(false)
+            .espresso(new EspressoDetail(EspressoType.ORIGINAL, 2))
+            .cupSize(SizeType.TALL)
+            .syrup(new HashSet<>())
+            .drizzle(new HashSet<>())
             .build();
   }
 
@@ -273,7 +291,7 @@ class StockServiceTest {
   void consumed() {
     Stock stock = new Stock(item, store, 3);
     when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    stockService.consumed(STORE_ID, OrderItem.create(item, null, 3));
+    stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 3));
     assertThat(stock.getStock()).isEqualTo(0);
   }
 
@@ -282,7 +300,8 @@ class StockServiceTest {
   void failConsumed() {
     Stock stock = new Stock(item, store, 3);
     when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    assertThatThrownBy(() -> stockService.consumed(STORE_ID, OrderItem.create(item, null, 4)))
+    assertThatThrownBy(
+            () -> stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 4)))
         .isInstanceOf(GlobalException.class)
         .hasMessageContaining(ErrorCode.ORDER_QUANTITY_IN_STOCK.getMESSAGE());
   }
@@ -292,7 +311,7 @@ class StockServiceTest {
   void revert() {
     Stock stock = new Stock(item, store, 3);
     when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    stockService.revert(STORE_ID, OrderItem.create(item, null, 3));
+    stockService.revert(STORE_ID, OrderItem.create(item, customOption, 3));
     assertThat(stock.getStock()).isEqualTo(6);
   }
 }

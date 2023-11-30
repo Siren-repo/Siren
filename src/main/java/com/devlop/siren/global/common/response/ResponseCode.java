@@ -36,7 +36,11 @@ public class ResponseCode {
 
     ORDER_QUANTITY_IN_STOCK(HttpStatus.NOT_FOUND, "주문 수량 만큼의 재고가 존재하지 않습니다."),
     NOT_FOUND_STOCKS_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 재고가 존재하지 않습니다."),
-    NOT_FOUND_STOCK_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 해당하는 아이템 재고가 존재하지 않습니다.");
+    NOT_FOUND_STOCK_IN_STORE(HttpStatus.NOT_FOUND, "해당 매장에 해당하는 아이템 재고가 존재하지 않습니다."),
+
+    NOT_OPERATING_TIME(HttpStatus.FORBIDDEN, "해당 매장의 영업시간이 아닙니다"),
+    NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다"),
+    ALREADY_ORDERED(HttpStatus.CONFLICT, "이미 진행중인 주문이라 취소할 수 없습니다");
 
     private final HttpStatus status;
     private final String MESSAGE;

@@ -1,6 +1,7 @@
 package com.devlop.siren.domain.order.domain.option;
 
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.Temperature;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -16,6 +17,11 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 public abstract class CustomOption {
+  static Set<String> categoriesWithDefaultOptions =
+      Set.of("Cake", "Salad", "IceCream", "Fruit", "Yogurt", "Snack");
+  static Set<String> categoriesWithPotionOption = Set.of("Bread");
+  static Set<String> categoriesRequiringWarming = Set.of("Sandwich", "Bread", "Soup");
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "custom_option_id")
@@ -31,5 +37,21 @@ public abstract class CustomOption {
   @Column(name = "additional_amount")
   protected int amount = 0;
 
-  public abstract int getAdditionalAmount();
+  public Boolean getTakeout() {
+    return takeout;
+  }
+
+  public void setTakeout(Boolean takeout) {
+    this.takeout = takeout;
+  }
+
+  public Temperature getTemperature() {
+    return temperature;
+  }
+
+  public void setTemperature(Boolean warm) {
+    this.temperature = warm ? Temperature.HOT : Temperature.COLD;
+  }
+
+  public abstract Integer getAdditionalAmount();
 }

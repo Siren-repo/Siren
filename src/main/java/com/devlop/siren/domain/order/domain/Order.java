@@ -5,7 +5,6 @@ import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.global.common.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -40,35 +39,29 @@ public class Order extends BaseEntity {
   @JoinColumn(name = "store_id")
   private Store store;
 
-  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "order", orphanRemoval = true)
   private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
   @Enumerated(EnumType.STRING)
-  private OrderState status;
+  private OrderStatus status;
 
-  private Integer totalAmount = 0;
+  private Integer totalOrderAmount = 0;
+
+  private Integer totalQuantity = 0;
 
   public static Order of(User user, Store store, List<OrderItem> items) {
     Order newOrder = new Order();
     newOrder.setUser(user);
     newOrder.setStore(store);
-    newOrder.setStatus(OrderState.INIT);
+    newOrder.setStatus(OrderStatus.INIT);
     newOrder.setOrderItem(items);
-    newOrder.setTotalAmount(getTotalAmount(items));
+    newOrder.setTotalOrderAmount(items);
+    newOrder.setTotalQuantity(items);
     return newOrder;
   }
 
-  private static int getTotalAmount(List<OrderItem> items) {
-    return items.stream()
-        .mapToInt(
-            item ->
-                item.getItem().getPrice() * item.getQuantity()
-                    + item.getCustomOption().getAdditionalAmount())
-        .sum();
-  }
-
   public void cancel() {
-    status = OrderState.CANCELLED;
+    status = OrderStatus.CANCELLED;
   }
 
   private void setUser(User user) {
@@ -81,21 +74,19 @@ public class Order extends BaseEntity {
     store.getOrders().add(this);
   }
 
-  private void setTotalAmount(Integer amount) {
-    this.totalAmount = amount;
+  private void setTotalOrderAmount(List<OrderItem> items) {
+    totalOrderAmount = items.stream().mapToInt(orderItem -> orderItem.getAmount()).sum();
+  }
+
+  private void setTotalQuantity(List<OrderItem> items) {
+    totalQuantity = items.stream().mapToInt(item -> item.getQuantity()).sum();
   }
 
   private void setOrderItem(List<OrderItem> items) {
-    items.stream()
-        .map(
-            orderItem -> {
-              orderItems.add(orderItem);
-              orderItem.setOrder(this);
-              return orderItem;
-            });
+    orderItems = items;
   }
 
-  private void setStatus(OrderState status) {
+  private void setStatus(OrderStatus status) {
     this.status = status;
   }
 }

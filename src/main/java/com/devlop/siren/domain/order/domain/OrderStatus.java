@@ -1,6 +1,6 @@
 package com.devlop.siren.domain.order.domain;
 
-public enum OrderState {
+public enum OrderStatus {
   INIT, // 주문 생성
   READY, // 제조 대기
   PREPARING, // 제조 중

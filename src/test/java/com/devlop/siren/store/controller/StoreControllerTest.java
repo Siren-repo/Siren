@@ -14,7 +14,7 @@ import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,8 +54,8 @@ public class StoreControllerTest {
             .city("Store City 1")
             .street("Store Street 1")
             .zipCode(12345)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .latitude(37.48428)
             .longitude(126.9015)
             .build();
@@ -72,8 +72,8 @@ public class StoreControllerTest {
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
             .zipCode(54321)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .build();
 
     mockMvc
@@ -120,8 +120,8 @@ public class StoreControllerTest {
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
             .zipCode(54321)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .build();
 
     mockMvc
@@ -145,8 +145,8 @@ public class StoreControllerTest {
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
             .zipCode(543211234)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .build();
 
     mockMvc
@@ -227,8 +227,8 @@ public class StoreControllerTest {
             "Updated City",
             "Updated Street",
             12345,
-            LocalDateTime.of(2023, 9, 25, 9, 0),
-            LocalDateTime.of(2023, 9, 25, 18, 0));
+            LocalTime.of(9, 0),
+            LocalTime.of(18, 0));
     mockMvc
         .perform(
             MockMvcRequestBuilders.put("/api/stores/update/{storeId}", storeId)

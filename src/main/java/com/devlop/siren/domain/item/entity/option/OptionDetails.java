@@ -1,6 +1,10 @@
 package com.devlop.siren.domain.item.entity.option;
 
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.*;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.Amount;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.DrizzleType;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.EspressoType;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.FoamType;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.SyrupType;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -50,22 +54,6 @@ public class OptionDetails {
     public EspressoDetail(EspressoType type, int cnt) {
       this.espressoType = type;
       this.cnt = cnt;
-    }
-  }
-
-  @Embeddable
-  @Getter
-  @NoArgsConstructor
-  public static class MilkDetail {
-    @Enumerated(EnumType.STRING)
-    private MilkType milkType;
-
-    @Enumerated(EnumType.STRING)
-    private Amount milkAmount;
-
-    public MilkDetail(MilkType type, Amount amount) {
-      this.milkType = type;
-      this.milkAmount = amount;
     }
   }
 

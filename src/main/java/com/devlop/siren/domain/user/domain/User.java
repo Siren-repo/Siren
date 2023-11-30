@@ -1,7 +1,5 @@
 package com.devlop.siren.domain.user.domain;
 
-//
-
 import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.order.domain.Order;

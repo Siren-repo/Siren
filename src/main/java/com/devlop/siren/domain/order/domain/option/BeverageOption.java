@@ -3,12 +3,12 @@ package com.devlop.siren.domain.order.domain.option;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.DrizzleDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.EspressoDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.FoamDetail;
-import com.devlop.siren.domain.item.entity.option.OptionDetails.MilkDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.SyrupDetail;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.Temperature;
 import com.devlop.siren.domain.item.entity.option.SizeType;
+import com.devlop.siren.domain.order.dto.request.CustomOptionRequest;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -40,7 +40,7 @@ public class BeverageOption extends CustomOption {
 
   @Column(name = "milk_type")
   @Enumerated(EnumType.STRING)
-  private MilkDetail milk;
+  private MilkType milk;
 
   @Column(name = "foam_type")
   @Enumerated(EnumType.STRING)
@@ -49,63 +49,79 @@ public class BeverageOption extends CustomOption {
   @ElementCollection
   @CollectionTable(name = "syrup_details", joinColumns = @JoinColumn(name = "custom_option_id"))
   @Column(name = "syrup_type")
-  private Set<SyrupDetail> syrup = new HashSet<SyrupDetail>();
+  private Set<SyrupDetail> syrup;
 
   @ElementCollection
   @CollectionTable(name = "drizzle_details", joinColumns = @JoinColumn(name = "custom_option_id"))
   @Column(name = "drizzle_type")
-  private Set<DrizzleDetail> drizzle = new HashSet<DrizzleDetail>();
+  private Set<DrizzleDetail> drizzle;
 
   @Builder
   public BeverageOption(
-      Boolean takeout,
-      Temperature temperature,
+      Boolean isTakeout,
+      Boolean isWarmed,
       SizeType cupSize,
       EspressoDetail espresso,
-      MilkDetail milk,
+      MilkType milk,
       FoamDetail foam,
       Set<SyrupDetail> syrup,
       Set<DrizzleDetail> drizzle) {
-    this.takeout = takeout;
-    this.temperature = temperature;
+    setTakeout(isTakeout);
+    setTemperature(isWarmed);
     this.cupSize = cupSize;
     this.espresso = espresso;
     this.milk = milk;
     this.foam = foam;
     this.syrup = syrup;
     this.drizzle = drizzle;
+    this.amount = getAdditionalAmount();
+  }
+
+  public static BeverageOption fromDto(CustomOptionRequest request, Boolean takeout, Boolean warm) {
+    return BeverageOption.builder()
+        .isTakeout(takeout)
+        .isWarmed(warm)
+        .cupSize(request.getCupSize())
+        .espresso(request.getEspresso())
+        .milk(request.getMilk())
+        .foam(request.getFoam())
+        .syrup(Objects.requireNonNullElse(request.getSyrups(), new HashSet<>()))
+        .drizzle(Objects.requireNonNullElse(request.getDrizzles(), new HashSet<>()))
+        .build();
   }
 
   @Override
-  public int getAdditionalAmount() {
-    if (!cupSize.equals(SizeType.TALL)) {
-      amount += PriceType.SIZE_UP.getPrice() * cupSize.ordinal();
+  public Integer getAdditionalAmount() {
+    int additionalAmount = 0;
+
+    if (!this.cupSize.equals(SizeType.TALL)) {
+      additionalAmount += PriceType.SIZE_UP.getPrice() * this.cupSize.ordinal();
     }
 
-    if (espresso != null) {
-      amount += PriceType.ADD_ESPRESSO_SHOT.getPrice() * espresso.getCnt();
+    if (this.espresso != null) {
+      additionalAmount += PriceType.ADD_ESPRESSO_SHOT.getPrice() * this.espresso.getCnt();
     }
 
-    if (milk != null && milk.getMilkType().equals(MilkType.OAT)) {
-      amount += PriceType.CHANGE_OAT_MILK.getPrice();
+    if (this.milk != null && this.milk.equals(MilkType.OAT)) {
+      additionalAmount += PriceType.CHANGE_OAT_MILK.getPrice();
     }
 
-    if (foam != null) {
-      amount += PriceType.ADD_FOAM.getPrice();
+    if (this.foam != null) {
+      additionalAmount += PriceType.ADD_FOAM.getPrice();
     }
 
-    if (syrup.size() > 0) {
-      amount +=
+    if (this.syrup.size() > 0) {
+      additionalAmount +=
           syrup.stream().mapToInt(syrup -> PriceType.ADD_SYRUP.getPrice() * syrup.getCnt()).sum();
     }
 
-    if (drizzle.size() > 0) {
-      amount +=
+    if (this.drizzle.size() > 0) {
+      additionalAmount +=
           drizzle.stream()
               .mapToInt(drizzle -> PriceType.ADD_DRIZZLE.getPrice() * drizzle.getCnt())
               .sum();
     }
 
-    return amount;
+    return additionalAmount;
   }
 }

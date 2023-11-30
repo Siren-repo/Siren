@@ -20,7 +20,7 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.Geometry;
 import com.google.maps.model.LatLng;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,8 +56,8 @@ class StoreServiceTest {
             "Seoul",
             "대전 서구 둔산중로32번길 29 1층 103호",
             54321,
-            LocalDateTime.of(2023, 9, 25, 18, 0),
-            LocalDateTime.of(2023, 9, 25, 9, 0));
+            LocalTime.of(9, 0),
+            LocalTime.of(18, 0));
 
     mockStore =
         Store.builder()
@@ -67,8 +67,8 @@ class StoreServiceTest {
             .city("Seoul")
             .street("대전 서구 둔산중로32번길 29 1층 103호")
             .zipCode(54321)
-            .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-            .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
             .build();
   }
 
@@ -122,8 +122,8 @@ class StoreServiceTest {
             "Updated City",
             "Updated Street",
             12345,
-            LocalDateTime.of(2023, 9, 25, 9, 0),
-            LocalDateTime.of(2023, 9, 25, 18, 0));
+            LocalTime.of(9, 0),
+            LocalTime.of(18, 0));
 
     when(storeRepository.findByStoreId(1L)).thenReturn(Optional.of(mockStore));
 
@@ -147,8 +147,8 @@ class StoreServiceTest {
             "Updated City",
             "Updated Street",
             12345,
-            LocalDateTime.of(2023, 9, 25, 9, 0),
-            LocalDateTime.of(2023, 9, 25, 18, 0));
+            LocalTime.of(18, 0),
+            LocalTime.of(9, 0));
 
     GlobalException exception =
         assertThrows(
@@ -169,8 +169,8 @@ class StoreServiceTest {
             "Updated City",
             "Updated Street",
             12345,
-            LocalDateTime.of(2023, 9, 25, 9, 0),
-            LocalDateTime.of(2023, 9, 25, 18, 0));
+            LocalTime.of(9, 0),
+            LocalTime.of(18, 0));
 
     GlobalException exception =
         assertThrows(

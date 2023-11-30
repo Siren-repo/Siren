@@ -82,6 +82,13 @@ public class ItemServiceImpl implements ItemService {
   }
 
   @Override
+  public Item findItem(Long itemId) {
+    return itemRepository
+        .findByIdWithOption(itemId)
+        .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ITEM));
+  }
+
+  @Override
   public CategoryItemsResponse findAllByCategory(
       String categoryType, String categoryName, Pageable pageable) {
     PageRequest pageRequest =

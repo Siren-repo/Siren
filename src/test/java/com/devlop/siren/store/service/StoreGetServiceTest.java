@@ -2,18 +2,15 @@ package com.devlop.siren.store.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.dto.response.StoreResponse;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.global.exception.GlobalException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,8 +41,8 @@ public class StoreGetServiceTest {
               .city("Store City " + i)
               .street("Store Street " + i)
               .zipCode(54321 + (int) i)
-              .openTime(LocalDateTime.of(2023, 9, 25, 18, 0))
-              .closeTime(LocalDateTime.of(2023, 9, 25, 9, 0))
+              .closeTime(LocalTime.of(18, 0))
+              .openTime(LocalTime.of(9, 0))
               .build();
 
       fakeStores.add(fakeStore);
@@ -76,8 +73,8 @@ public class StoreGetServiceTest {
     assertEquals(
         Integer.valueOf(54321 + 1),
         storeResponse1.getZipCode()); // Update with the expected zip code
-    assertEquals(LocalDateTime.of(2023, 9, 25, 18, 0), storeResponse1.getOpenTime());
-    assertEquals(LocalDateTime.of(2023, 9, 25, 9, 0), storeResponse1.getCloseTime());
+    assertEquals(LocalTime.of(9, 0), storeResponse1.getOpenTime());
+    assertEquals(LocalTime.of(18, 0), storeResponse1.getCloseTime());
 
     assertEquals("Store Name 2", storeResponse2.getStoreName());
 
@@ -103,8 +100,8 @@ public class StoreGetServiceTest {
     assertEquals("Store City 1", store1.getCity());
     assertEquals(
         Integer.valueOf(54321 + 1), store1.getZipCode()); // Update with the expected zip code
-    assertEquals(LocalDateTime.of(2023, 9, 25, 18, 0), store1.getOpenTime());
-    assertEquals(LocalDateTime.of(2023, 9, 25, 9, 0), store1.getCloseTime());
+    assertEquals(LocalTime.of(9, 0), store1.getOpenTime());
+    assertEquals(LocalTime.of(18, 0), store1.getCloseTime());
 
     Store store2 = allStores.get(1);
     assertEquals("Store Name 2", store2.getStoreName());
@@ -113,8 +110,8 @@ public class StoreGetServiceTest {
     assertEquals("Store City 2", store2.getCity());
     assertEquals(
         Integer.valueOf(54321 + 2), store2.getZipCode()); // Update with the expected zip code
-    assertEquals(LocalDateTime.of(2023, 9, 25, 18, 0), store2.getOpenTime());
-    assertEquals(LocalDateTime.of(2023, 9, 25, 9, 0), store2.getCloseTime());
+    assertEquals(LocalTime.of(9, 0), store2.getOpenTime());
+    assertEquals(LocalTime.of(18, 0), store2.getCloseTime());
   }
 
   @Test

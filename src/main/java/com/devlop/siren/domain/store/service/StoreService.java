@@ -37,9 +37,6 @@ public class StoreService {
         double latitude = latLong[0].geometry.location.lat;
         double longitude = latLong[0].geometry.location.lng;
 
-        log.info("위도: " + latitude);
-        log.info("경도: " + longitude);
-
         Store store = StoreRegisterRequest.from(storeRegisterRequest, latitude, longitude);
         storeRepository.save(store);
       } else {
@@ -121,5 +118,11 @@ public class StoreService {
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return EARTH_RADIUS_KM * c;
+  }
+
+  public Store findStore(Long id) {
+    return storeRepository
+        .findByStoreId(id)
+        .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_STORE));
   }
 }

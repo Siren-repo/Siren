@@ -40,6 +40,12 @@ public class UserService {
   @Value("${jwt.refresh-token.expired-time-ms}")
   private Long refreshExpiredTimeMs;
 
+  public User findUser(String email) {
+    return userRepository
+        .findByEmail(email)
+        .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_MEMBER));
+  }
+
   public UserDetailsDto loadMemberByEmail(String email) {
     User registeredUser =
         userRepository
