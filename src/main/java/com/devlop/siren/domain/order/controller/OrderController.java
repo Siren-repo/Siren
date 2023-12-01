@@ -9,6 +9,7 @@ import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.Normal;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +36,7 @@ public class OrderController {
 
   @PutMapping("/{orderId}")
   public ApiResponse<OrderDetailResponse> cancel(
-      @PathVariable Long orderId, @AuthenticationPrincipal UserDetailsDto requestUser) {
+      @PathVariable @NotNull Long orderId, @AuthenticationPrincipal UserDetailsDto requestUser) {
     return ApiResponse.ok(Normal.UPDATE, orderService.cancel(orderId, requestUser));
   }
 }
