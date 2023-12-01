@@ -55,8 +55,6 @@ public class OrderService {
     if (!OrderStatus.INIT.equals(order.getStatus())) {
       throw new GlobalException(ResponseCode.ErrorCode.ALREADY_ORDERED);
     }
-
-    Long storeId = order.getStore().getStoreId();
     order.getOrderItems().stream()
         .forEach(
             orderItem ->
