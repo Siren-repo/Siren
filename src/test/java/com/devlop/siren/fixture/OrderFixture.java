@@ -48,6 +48,23 @@ public class OrderFixture {
             .build());
   }
 
+  public static List<OrderItemRequest> invalidOrderItemRequest() {
+    return List.of(
+        OrderItemRequest.builder()
+            .itemId(null) // 아이템 없음
+            .takeout(false)
+            .warm(true)
+            .customOption(
+                CustomOptionRequest.builder()
+                    .cupSize(SizeType.TALL)
+                    .milk(MilkType.LOW_FAT)
+                    .espresso(new EspressoDetail(EspressoType.ORIGINAL, 1))
+                    .syrups(Set.of(new SyrupDetail(SyrupType.VANILLA, 2)))
+                    .build())
+            .quantity(2)
+            .build());
+  }
+
   public static List<OrderItem> getOrderItem(Item item) {
     return List.of(
         OrderItem.create(
