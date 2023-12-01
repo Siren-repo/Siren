@@ -2,6 +2,7 @@ package com.devlop.siren.domain.order.service;
 
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.order.domain.OrderItem;
+import com.devlop.siren.domain.order.domain.OrderStatus;
 import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.order.repository.CustomOptionRepository;
 import com.devlop.siren.domain.order.repository.OrderItemRepository;
@@ -9,6 +10,7 @@ import com.devlop.siren.domain.order.repository.OrderRepository;
 import com.devlop.siren.domain.stock.repository.StockRepository;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.user.domain.User;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import java.time.LocalTime;
@@ -42,15 +44,44 @@ public class OrderService {
     return OrderDetailResponse.of(orderRepository.save(newOrder));
   }
 
-  private void consumeStock(Integer quantity, Long storeId, Long itemId) {
-    stockRepository
-        .findByStoreAndItem(storeId, itemId)
-        .ifPresent(stock -> stock.consumed(quantity));
+  @Transactional
+  public OrderDetailResponse cancel(Long orderId, UserDetailsDto userDto) {
+
+    Order order =
+        orderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new GlobalException(ResponseCode.ErrorCode.NOT_FOUND_ORDER));
+
+    if (!OrderStatus.INIT.equals(order.getStatus())) {
+      throw new GlobalException(ResponseCode.ErrorCode.ALREADY_ORDERED);
+    }
+
+    Long storeId = order.getStore().getStoreId();
+    order.getOrderItems().stream()
+        .forEach(
+            orderItem ->
+                revertStock(
+                    orderItem.getQuantity(),
+                    order.getStore().getStoreId(),
+                    orderItem.getItem().getItemId()));
+
+    order.cancel();
+    return OrderDetailResponse.of(order);
   }
 
   private void isStoreOperating(Store store, LocalTime now) {
     if (now.isBefore(store.getOpenTime()) || now.isAfter(store.getCloseTime())) {
       throw new GlobalException(ResponseCode.ErrorCode.NOT_OPERATING_TIME);
     }
+  }
+
+  private void consumeStock(Integer quantity, Long storeId, Long itemId) {
+    stockRepository
+        .findByStoreAndItem(storeId, itemId)
+        .ifPresent(stock -> stock.consumed(quantity));
+  }
+
+  private void revertStock(Integer quantity, Long storeId, Long itemId) {
+    stockRepository.findByStoreAndItem(storeId, itemId).ifPresent(stock -> stock.revert(quantity));
   }
 }
