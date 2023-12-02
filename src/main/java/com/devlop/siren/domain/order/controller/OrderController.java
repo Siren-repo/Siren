@@ -1,6 +1,7 @@
 package com.devlop.siren.domain.order.controller;
 
 import com.devlop.siren.domain.order.dto.request.OrderCreateRequest;
+import com.devlop.siren.domain.order.dto.request.OrderStatusRequest;
 import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.order.service.OrderService;
 import com.devlop.siren.domain.order.service.OrderUseCase;
@@ -38,5 +39,12 @@ public class OrderController {
   public ApiResponse<OrderDetailResponse> cancel(
       @PathVariable @NotNull Long orderId, @AuthenticationPrincipal UserDetailsDto requestUser) {
     return ApiResponse.ok(Normal.UPDATE, orderService.cancel(orderId, requestUser));
+  }
+
+  @PutMapping("/status")
+  public ApiResponse<OrderDetailResponse> updateStatus(
+      @RequestBody @Valid OrderStatusRequest request,
+      @AuthenticationPrincipal UserDetailsDto requestUser) {
+    return ApiResponse.ok(Normal.UPDATE, orderService.updateStatus(request, requestUser));
   }
 }

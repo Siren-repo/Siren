@@ -3,6 +3,7 @@ package com.devlop.siren.domain.order.service;
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.order.domain.OrderStatus;
+import com.devlop.siren.domain.order.dto.request.OrderStatusRequest;
 import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.order.repository.CustomOptionRepository;
 import com.devlop.siren.domain.order.repository.OrderItemRepository;
@@ -12,7 +13,9 @@ import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
+import com.devlop.siren.global.util.UserInformation;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +67,16 @@ public class OrderService {
                     orderItem.getItem().getItemId()));
 
     order.cancel();
+    return OrderDetailResponse.of(order);
+  }
+
+  public OrderDetailResponse updateStatus(OrderStatusRequest request, UserDetailsDto userDto) {
+    UserInformation.validStaffOrAdmin(userDto);
+    Order order =
+        orderRepository
+            .findById(request.getOrderId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_ORDER));
+    order.setStatus(request.getStatus());
     return OrderDetailResponse.of(order);
   }
 
