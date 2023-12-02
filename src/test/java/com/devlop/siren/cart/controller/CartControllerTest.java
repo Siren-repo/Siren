@@ -1,4 +1,4 @@
-package com.devlop.siren.domain.cart.controller;
+package com.devlop.siren.cart.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -6,9 +6,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.devlop.siren.domain.cart.dto.ItemDto;
+import com.devlop.siren.domain.cart.controller.CartController;
 import com.devlop.siren.domain.cart.service.CartService;
+import com.devlop.siren.domain.item.entity.option.OptionDetails;
+import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
+import com.devlop.siren.domain.item.entity.option.SizeType;
+import com.devlop.siren.domain.order.dto.request.CustomOptionRequest;
+import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +31,24 @@ class CartControllerTest {
   @MockBean CartService cartService;
 
   @Autowired private ObjectMapper objectMapper;
-  private final ItemDto validItemDto = new ItemDto(1L, 5L);
-  private final ItemDto invalidItemDto = new ItemDto(null, null);
+  private final OrderItemRequest validOrderItemRequest =
+      OrderItemRequest.builder()
+          .itemId(1L)
+          .warm(false)
+          .takeout(false)
+          .quantity(5)
+          .customOption(
+              CustomOptionRequest.builder()
+                  .cupSize(SizeType.TALL)
+                  .drizzles(
+                      Set.of(
+                          new OptionDetails.DrizzleDetail(OptionTypeGroup.DrizzleType.CARAMEL, 2)))
+                  .espresso(
+                      new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2))
+                  .milk(OptionTypeGroup.MilkType.ORIGINAL)
+                  .build())
+          .build();
+  private final OrderItemRequest invalidOrderItemRequest = OrderItemRequest.builder().build();
 
   @Test
   @DisplayName("valid 조건에 맞는 파라미터를 넘기면 장바구니 생성에 성공한다 - DTO 검증")
@@ -35,7 +57,7 @@ class CartControllerTest {
     mvc.perform(
             post("/api/cart")
                 .with(csrf())
-                .content(objectMapper.writeValueAsString(validItemDto))
+                .content(objectMapper.writeValueAsString(validOrderItemRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -49,7 +71,7 @@ class CartControllerTest {
     mvc.perform(
             post("/api/cart")
                 .with(csrf())
-                .content(objectMapper.writeValueAsString(invalidItemDto))
+                .content(objectMapper.writeValueAsString(invalidOrderItemRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest())
@@ -86,50 +108,55 @@ class CartControllerTest {
   @DisplayName("valid 조건에 맞는 파라미터를 넘기면 장바구니 안의 특정 아이템을 삭제에 성공한다. - DTO 검증")
   @WithMockUser
   void remove() throws Exception {
-    mvc.perform(delete("/api/cart/{itemId}"
-                    , validItemDto.getItemId())
-            .with(csrf())
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andDo(print());
+    mvc.perform(
+            put("/api/cart/remove")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(validOrderItemRequest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print());
   }
 
   @Test
   @DisplayName("invalid 조건에 맞는 파라미터를 넘기면 장바구니 안의 특정 아이템을 삭제에 실패한다. - DTO 검증")
   @WithMockUser
   void failRemove() throws Exception {
-    mvc.perform(delete("/api/cart/{itemId}"
-                    , 0L)
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andDo(print());
+    mvc.perform(
+            put("/api/cart/remove")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(invalidOrderItemRequest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andDo(print());
   }
 
   @Test
   @DisplayName("valid 조건에 맞는 파라미터를 넘기면 장바구니 안의 특정 아이템을 수정에 성공한다. - DTO 검증")
   @WithMockUser
   void update() throws Exception {
-    mvc.perform(put("/api/cart")
-                    .with(csrf())
-                    .content(objectMapper.writeValueAsString(validItemDto))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andDo(print());
+    mvc.perform(
+            put("/api/cart/update")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(validOrderItemRequest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print());
   }
+
   @Test
   @DisplayName("invalid 조건에 맞는 파라미터를 넘기면 장바구니 안의 특정 아이템을 수정에 실패한다. - DTO 검증")
   @WithMockUser
   void failUpdate() throws Exception {
-    mvc.perform(put("/api/cart")
-                    .with(csrf())
-                    .content(objectMapper.writeValueAsString(invalidItemDto))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andDo(print());
+    mvc.perform(
+            put("/api/cart/update")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(invalidOrderItemRequest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andDo(print());
   }
 }
