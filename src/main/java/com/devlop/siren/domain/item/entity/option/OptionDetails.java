@@ -8,6 +8,8 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.SyrupType;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,7 @@ public class OptionDetails {
   @Embeddable
   @Getter
   @NoArgsConstructor
+  @EqualsAndHashCode
   public static class SyrupDetail {
     @Enumerated(EnumType.STRING)
     private SyrupType syrupType;
@@ -30,6 +33,7 @@ public class OptionDetails {
   @Embeddable
   @Getter
   @NoArgsConstructor
+  @EqualsAndHashCode
   public static class DrizzleDetail {
     @Enumerated(EnumType.STRING)
     private DrizzleType drizzleType;
@@ -45,6 +49,7 @@ public class OptionDetails {
   @Embeddable
   @Getter
   @NoArgsConstructor
+  @EqualsAndHashCode
   public static class EspressoDetail {
     @Enumerated(EnumType.STRING)
     private EspressoType espressoType;
@@ -60,6 +65,7 @@ public class OptionDetails {
   @Embeddable
   @Getter
   @NoArgsConstructor
+  @EqualsAndHashCode
   public static class FoamDetail {
     @Enumerated(EnumType.STRING)
     private FoamType foamType;
@@ -76,6 +82,7 @@ public class OptionDetails {
   @Embeddable
   @Getter
   @NoArgsConstructor
+  @EqualsAndHashCode
   public static class PotionDetail {
     @Enumerated(EnumType.STRING)
     private PotionType potionType;
