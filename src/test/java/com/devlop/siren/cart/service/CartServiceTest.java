@@ -179,7 +179,7 @@ class CartServiceTest {
   @DisplayName("장바구니에 존재하지 않는 상품을 수정할 경우 예외가 발생한다.")
   void failUpdate() {
     assertThatThrownBy(() -> cartService.update(validOrderItemRequest, userDetailsDto))
-            .isInstanceOf(GlobalException.class)
-            .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
+        .isInstanceOf(GlobalException.class)
+        .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
   }
 }

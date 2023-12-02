@@ -8,7 +8,6 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.SyrupType;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -37,15 +37,13 @@ public class ItemCreateRequest {
 
   private Boolean isNew;
 
-  @NotNull
-  private String image;
+  @NotNull private String image;
 
   private DefaultOptionCreateRequest defaultOptionRequest;
 
   private String allergy;
 
-  @NotNull
-  private NutritionCreateRequest nutritionCreateRequest;
+  @NotNull private NutritionCreateRequest nutritionCreateRequest;
 
   public static Item toEntity(
       ItemCreateRequest itemCreateRequest,

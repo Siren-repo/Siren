@@ -1,9 +1,8 @@
 package com.devlop.siren.domain.order.dto.request;
 
-import lombok.*;
-
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
+import lombok.*;
 
 @Getter
 @Setter
@@ -11,12 +10,16 @@ import java.util.Objects;
 public class OrderItemRequest {
   @NotNull(message = "아이템 Id를 입력해야 합니다.")
   private Long itemId;
+
   @NotNull(message = "Take-Out 값을 입력해야 합니다.")
   private Boolean takeout;
+
   @NotNull(message = "Warm 값을 입력해야 합니다.")
   private Boolean warm;
+
   @NotNull(message = "수량을 입력해야 합니다.")
   private Integer quantity;
+
   private CustomOptionRequest customOption;
 
   @Builder
@@ -34,8 +37,12 @@ public class OrderItemRequest {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     OrderItemRequest that = (OrderItemRequest) o;
-    return Objects.equals(itemId, that.itemId) && Objects.equals(takeout, that.takeout) && Objects.equals(warm, that.warm) && Objects.equals(customOption, that.customOption);
+    return Objects.equals(itemId, that.itemId)
+        && Objects.equals(takeout, that.takeout)
+        && Objects.equals(warm, that.warm)
+        && Objects.equals(customOption, that.customOption);
   }
+
   // quantity는 동등성 검사에서 제외한다
 
   @Override

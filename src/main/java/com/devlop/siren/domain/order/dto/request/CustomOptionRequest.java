@@ -7,8 +7,6 @@ import com.devlop.siren.domain.item.entity.option.OptionDetails.PotionDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.SyrupDetail;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
-
-import java.util.Objects;
 import java.util.Set;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
