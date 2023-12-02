@@ -53,6 +53,6 @@ public class CartController {
   public ApiResponse<CartDto> update(
       @Valid @RequestBody OrderItemRequest orderItemRequest,
       @AuthenticationPrincipal UserDetailsDto user) {
-    return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.update(orderItemRequest, user));
+    return ApiResponse.ok(ResponseCode.Normal.UPDATE, cartService.update(orderItemRequest, user));
   }
 }
