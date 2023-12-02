@@ -1,19 +1,16 @@
 package com.devlop.siren.domain.cart.controller;
 
 import com.devlop.siren.domain.cart.dto.CartDto;
-import com.devlop.siren.domain.cart.dto.ItemDto;
 import com.devlop.siren.domain.cart.service.CartService;
+import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -25,8 +22,9 @@ public class CartController {
   // 장바구니에 추가
   @PostMapping
   public ApiResponse<CartDto> add(
-          @Valid @RequestBody ItemDto itemDto, @AuthenticationPrincipal UserDetailsDto user) {
-    return ApiResponse.ok(ResponseCode.Normal.CREATE, cartService.add(itemDto, user));
+      @Valid @RequestBody OrderItemRequest orderItemRequest,
+      @AuthenticationPrincipal UserDetailsDto user) {
+    return ApiResponse.ok(ResponseCode.Normal.CREATE, cartService.add(orderItemRequest, user));
   }
 
   // 장바구니에서 찾기
@@ -43,16 +41,18 @@ public class CartController {
   }
 
   // 장바구니 안의 특정 요소 삭제
-  @DeleteMapping("/{itemId}")
+  @PutMapping("/remove")
   public ApiResponse<CartDto> remove(
-          @Min(1L) @PathVariable Long itemId, @AuthenticationPrincipal UserDetailsDto user) {
-    return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.remove(itemId, user));
+      @Valid @RequestBody OrderItemRequest orderItemRequest,
+      @AuthenticationPrincipal UserDetailsDto user) {
+    return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.remove(orderItemRequest, user));
   }
 
   // 장바구니 안에서 특정 요소 수정
-  @PutMapping
+  @PutMapping("/update")
   public ApiResponse<CartDto> update(
-      @Valid @RequestBody ItemDto itemDto, @AuthenticationPrincipal UserDetailsDto user) {
-    return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.update(itemDto, user));
+      @Valid @RequestBody OrderItemRequest orderItemRequest,
+      @AuthenticationPrincipal UserDetailsDto user) {
+    return ApiResponse.ok(ResponseCode.Normal.DELETE, cartService.update(orderItemRequest, user));
   }
 }
