@@ -1,8 +1,10 @@
 package com.devlop.siren.domain.user.dto;
 
+import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.domain.user.domain.UserRole;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,16 +20,29 @@ public class UserDetailsDto implements UserDetails {
   private Long id;
   private String email;
   private String password;
+  private String nickName;
+  private String phone;
   private UserRole userRole;
+  private EnumSet<AllergyType> allergies;
   private boolean isDeleted;
 
   @Builder
   public UserDetailsDto(
-      Long id, String email, String password, UserRole userRole, boolean isDeleted) {
+      Long id,
+      String email,
+      String password,
+      String nickName,
+      String phone,
+      UserRole userRole,
+      EnumSet<AllergyType> allergies,
+      boolean isDeleted) {
     this.id = id;
     this.email = email;
     this.password = password;
+    this.nickName = nickName;
+    this.phone = phone;
     this.userRole = userRole;
+    this.allergies = allergies;
     this.isDeleted = isDeleted;
   }
 
@@ -36,6 +51,9 @@ public class UserDetailsDto implements UserDetails {
         .id(user.getId())
         .password(user.getPassword())
         .email(user.getEmail())
+        .nickName(user.getNickName())
+        .phone(user.getPhone())
+        .allergies(user.getAllergies())
         .userRole(user.getRole())
         .isDeleted(user.isDeleted())
         .build();
