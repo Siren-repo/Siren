@@ -37,16 +37,11 @@ public class OrderItemRequest {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     OrderItemRequest that = (OrderItemRequest) o;
-    return Objects.equals(itemId, that.itemId)
-        && Objects.equals(takeout, that.takeout)
-        && Objects.equals(warm, that.warm)
-        && Objects.equals(customOption, that.customOption);
+    return Objects.equals(itemId, that.itemId) && Objects.equals(takeout, that.takeout) && Objects.equals(warm, that.warm) && Objects.equals(customOption, that.customOption);
   }
-
-  // quantity는 동등성 검사에서 제외한다
 
   @Override
   public int hashCode() {
-    return Objects.hash(itemId, takeout, warm, quantity, customOption);
+    return Objects.hash(itemId, takeout, warm, customOption);
   }
 }
