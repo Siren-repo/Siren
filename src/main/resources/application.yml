@@ -37,10 +37,10 @@ spring:
     activate:
       on-profile: local
   redis:
-    first:
+    session:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
-    second:
+    cache:
       host: ${CART_REDIS_HOST}
       port: ${CART_REDIS_PORT}
   datasource:
@@ -61,10 +61,10 @@ spring:
     activate:
       on-profile: prod
   redis:
-    first:
+    session:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
-    second:
+    cache:
       host: ${CART_REDIS_HOST}
       port: ${CART_REDIS_PORT}
   datasource:

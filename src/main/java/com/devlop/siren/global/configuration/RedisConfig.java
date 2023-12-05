@@ -13,16 +13,16 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-  @Value("${spring.redis.first.host}")
+  @Value("${spring.redis.session.host}")
   private String host;
 
-  @Value("${spring.redis.first.port}")
+  @Value("${spring.redis.session.port}")
   private int port;
 
-  @Value("${spring.redis.second.host}")
+  @Value("${spring.redis.cache.host}")
   private String cart_host;
 
-  @Value("${spring.redis.second.port}")
+  @Value("${spring.redis.cache.port}")
   private int cart_port;
 
   @Bean(name = "redisConnectionFactory")
