@@ -7,6 +7,7 @@ import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.entity.Nutrition;
 import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import java.util.EnumSet;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -43,7 +44,8 @@ public class ItemCreateRequest {
 
   private String allergy;
 
-  @NotNull private NutritionCreateRequest nutritionCreateRequest;
+  @Valid
+  private NutritionCreateRequest nutritionCreateRequest;
 
   public static Item toEntity(
       ItemCreateRequest itemCreateRequest,
