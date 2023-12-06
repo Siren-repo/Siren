@@ -31,10 +31,10 @@ public class OrderFixture {
     return Order.of(user, store, items);
   }
 
-  public static List<OrderItemRequest> getOrderItemRequest(Item item) {
+  public static List<OrderItemRequest> getOrderItemRequest() {
     return List.of(
         OrderItemRequest.builder()
-            .itemId(item.getItemId())
+            .itemId(1L)
             .takeout(true)
             .warm(false)
             .customOption(
@@ -87,6 +87,11 @@ public class OrderFixture {
         .city("Seoul")
         .storeId(1L)
         .storeName("강남대로신사")
+        .street("서울특별시 서초구 강남대로 595")
+        .zipCode(12345)
+        .latitude(37.5148446)
+        .storePhone("1522-3232")
+        .longitude(127.0194574)
         .openTime(open)
         .closeTime(close)
         .build();
