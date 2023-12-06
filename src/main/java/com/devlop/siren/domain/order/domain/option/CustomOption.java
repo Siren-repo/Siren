@@ -27,7 +27,7 @@ public abstract class CustomOption {
   @Column(name = "custom_option_id")
   private Long id;
 
-  @Column(name = "take_out", nullable = false)
+  @Column(name = "take_out", nullable = false, columnDefinition = "TINYINT(1)")
   protected Boolean takeout;
 
   @Column(name = "temperature", nullable = false)
