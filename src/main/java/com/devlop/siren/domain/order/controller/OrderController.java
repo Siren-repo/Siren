@@ -31,11 +31,10 @@ public class OrderController {
   public ApiResponse<OrderDetailResponse> create(
       @Valid @RequestBody OrderCreateRequest request,
       @AuthenticationPrincipal UserDetailsDto requestUser) {
-
     return ApiResponse.ok(ResponseCode.Normal.CREATE, orderUseCase.create(request, requestUser));
   }
 
-  @PutMapping("/{orderId}")
+  @PutMapping("/{orderId}/cancel")
   public ApiResponse<OrderDetailResponse> cancel(
       @PathVariable @NotNull Long orderId, @AuthenticationPrincipal UserDetailsDto requestUser) {
     return ApiResponse.ok(Normal.UPDATE, orderService.cancel(orderId, requestUser));
