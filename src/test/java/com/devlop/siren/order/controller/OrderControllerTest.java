@@ -7,12 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.devlop.siren.domain.order.controller.OrderController;
+import com.devlop.siren.domain.order.domain.OrderStatus;
 import com.devlop.siren.domain.order.dto.request.OrderCreateRequest;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
+import com.devlop.siren.domain.order.dto.request.OrderStatusRequest;
 import com.devlop.siren.domain.order.service.OrderService;
 import com.devlop.siren.domain.order.service.OrderUseCase;
 import com.devlop.siren.domain.store.domain.Store;
-import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.fixture.OrderFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalTime;
@@ -30,13 +31,13 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(OrderController.class)
 public class OrderControllerTest {
 
-  @Autowired MockMvc mvc;
+  @Autowired private MockMvc mvc;
 
   @Autowired private ObjectMapper objectMapper;
 
-  @MockBean OrderService orderService;
+  @MockBean private OrderService orderService;
 
-  @MockBean OrderUseCase orderUseCase;
+  @MockBean private OrderUseCase orderUseCase;
 
   private List<OrderItemRequest> orderItemRequest;
   private Store store;
@@ -45,7 +46,7 @@ public class OrderControllerTest {
   @BeforeEach
   void init() {
     store = OrderFixture.get(LocalTime.of(9, 00), LocalTime.of(18, 00));
-    orderItemRequest = OrderFixture.getOrderItemRequest(ItemFixture.get());
+    orderItemRequest = OrderFixture.getOrderItemRequest();
     validOrderCreateRequest = OrderFixture.get(store.getStoreId(), orderItemRequest);
   }
 
@@ -83,8 +84,36 @@ public class OrderControllerTest {
   @WithMockUser
   void cancelOrder() throws Exception {
     Long orderId = 1L;
-    mvc.perform(put("/api/orders/{orderId}", orderId).with(csrf()))
+    mvc.perform(put("/api/orders/{orderId}/cancel", orderId).with(csrf()))
         .andExpect(status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @DisplayName("주문 상태 변경")
+  @WithMockUser
+  void updateOrderStatus() throws Exception {
+    OrderStatusRequest request = new OrderStatusRequest(1L, OrderStatus.READY);
+    mvc.perform(
+            put("/api/orders/status")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @DisplayName("주문 상태 변경 시 필수값 검증에서 실패한다")
+  @WithMockUser
+  void updateOrderStatusWithEmptyOrderId() throws Exception {
+    OrderStatusRequest request = new OrderStatusRequest(null, OrderStatus.READY);
+    mvc.perform(
+            put("/api/orders/status")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
         .andDo(print());
   }
 }
