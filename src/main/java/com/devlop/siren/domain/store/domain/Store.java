@@ -31,7 +31,7 @@ public class Store {
   private String street;
 
   @Column(name = "zip_code")
-  private Integer zipCode;
+  private String zipCode;
 
   @Column(name = "open_time")
   private LocalTime openTime;
@@ -55,7 +55,7 @@ public class Store {
       String storePhone,
       String city,
       String street,
-      Integer zipCode,
+      String zipCode,
       LocalTime openTime,
       LocalTime closeTime,
       Double latitude,
