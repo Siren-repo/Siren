@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 
 @Slf4j
 @NoArgsConstructor
@@ -58,10 +59,10 @@ public class CustomOptionResponse {
   }
 
   public static Optional<CustomOptionResponse> fromEntity(CustomOption option) {
-    if (option instanceof BeverageOption) {
-      return Optional.of(mapBeverageOption(((BeverageOption) option)));
-    } else if (option instanceof FoodOption) {
-      return Optional.of(mapFoodOption((FoodOption) option));
+    if ("Beverage".equals(option.getDtype())) {
+      return Optional.of(mapBeverageOption((BeverageOption) Hibernate.unproxy(option)));
+    } else if ("Food".equals(option.getDtype())) {
+      return Optional.of(mapFoodOption((FoodOption) Hibernate.unproxy(option)));
     }
     return Optional.empty();
   }
