@@ -34,7 +34,6 @@ import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,6 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-@Slf4j
 public class OrderServiceTest {
   @InjectMocks private OrderService orderService;
   @Mock private OrderRepository orderRepository;
@@ -74,8 +72,12 @@ public class OrderServiceTest {
 
   @Test
   @DisplayName("주문 생성 성공")
-  void createOrder() {
+  void createOrder() throws NoSuchFieldException, IllegalAccessException {
     stock.update(100);
+    CustomOption customOption = orderItems.get(0).getCustomOption();
+    Field field = CustomOption.class.getDeclaredField("dtype");
+    field.setAccessible(true);
+    field.set(customOption, "Beverage");
 
     when(customOptionRepository.save(any())).thenReturn(mock(CustomOption.class));
     when(stockRepository.findByStoreAndItem(
@@ -125,9 +127,14 @@ public class OrderServiceTest {
   @Test
   @DisplayName("주문 취소 요청")
   void cancelOrder() throws NoSuchFieldException, IllegalAccessException {
-    Field field = Order.class.getDeclaredField("id");
-    field.setAccessible(true);
-    field.set(order, 1L);
+    Field orderId = Order.class.getDeclaredField("id");
+    orderId.setAccessible(true);
+    orderId.set(order, 1L);
+
+    CustomOption customOption = orderItems.get(0).getCustomOption();
+    Field dtype = CustomOption.class.getDeclaredField("dtype");
+    dtype.setAccessible(true);
+    dtype.set(customOption, "Beverage");
 
     try (MockedStatic<UserInformation> userInformation = mockStatic(UserInformation.class)) {
       userInformation.when(() -> UserInformation.validStaffOrAdmin(userDto)).thenReturn(true);
@@ -137,7 +144,7 @@ public class OrderServiceTest {
           .thenReturn(Optional.of(mock(Stock.class)));
 
       OrderDetailResponse response = orderService.cancel(order.getId(), userDto);
-      assertThat(response.getOrderState()).isEqualTo(OrderStatus.CANCELLED);
+      assertThat(response.getOrderState()).isEqualTo(OrderStatus.CANCELED);
     }
   }
 
@@ -174,7 +181,11 @@ public class OrderServiceTest {
 
   @Test
   @DisplayName("주문 상태 변경")
-  void updateOrderStatue() {
+  void updateOrderStatue() throws NoSuchFieldException, IllegalAccessException {
+    CustomOption customOption = orderItems.get(0).getCustomOption();
+    Field field = CustomOption.class.getDeclaredField("dtype");
+    field.setAccessible(true);
+    field.set(customOption, "Beverage");
 
     try (MockedStatic<UserInformation> userInformation = mockStatic(UserInformation.class)) {
       userInformation.when(() -> UserInformation.validStaffOrAdmin(userDto)).thenReturn(true);

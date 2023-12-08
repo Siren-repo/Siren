@@ -19,14 +19,12 @@ import com.devlop.siren.global.util.UserInformation;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class OrderService {
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
@@ -52,12 +50,13 @@ public class OrderService {
   @Transactional
   public OrderDetailResponse cancel(Long orderId, UserDetailsDto userDto) {
     UserInformation.validStaffOrAdmin(userDto);
-
-    log.info("{}, {}", orderId, userDto.getEmail());
     Order order = findByOrderId(orderId);
-    if (!OrderStatus.INIT.equals(order.getStatus())) {
+
+    if (!OrderStatus.INIT.equals(order.getStatus())
+        && !OrderStatus.CANCELED.equals(order.getStatus())) {
       throw new GlobalException(ResponseCode.ErrorCode.ALREADY_ORDERED);
     }
+
     order.getOrderItems().stream()
         .forEach(
             orderItem ->
@@ -73,8 +72,6 @@ public class OrderService {
   @Transactional
   public OrderDetailResponse updateStatus(OrderStatusRequest request, UserDetailsDto userDto) {
     UserInformation.validStaffOrAdmin(userDto);
-
-    log.info("{}, {}", request.getOrderId(), userDto.getEmail());
     Order order = findByOrderId(request.getOrderId());
 
     if (OrderStatus.COMPLETED.equals(order.getStatus())) {
@@ -103,7 +100,7 @@ public class OrderService {
 
   private Order findByOrderId(Long orderId) {
     return orderRepository
-        .findByIdWithDetails(orderId)
+        .findById(orderId)
         .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_ORDER));
   }
 }

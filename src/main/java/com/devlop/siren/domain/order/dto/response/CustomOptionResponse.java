@@ -16,10 +16,8 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 
-@Slf4j
 @NoArgsConstructor
 @Getter
 public class CustomOptionResponse {
