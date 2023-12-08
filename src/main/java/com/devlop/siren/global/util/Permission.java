@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Permission {
-  UserRole authority() default UserRole.CUSTOMER;
+  UserRole[] role() default UserRole.CUSTOMER;
 }
