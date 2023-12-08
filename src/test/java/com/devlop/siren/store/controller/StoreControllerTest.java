@@ -12,6 +12,9 @@ import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.dto.request.StoreRegisterRequest;
 import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.service.StoreService;
+import com.devlop.siren.domain.user.domain.UserRole;
+import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.UserFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalTime;
@@ -27,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -46,6 +51,12 @@ public class StoreControllerTest {
     // 테스트시 LocalDateTime 에러 발생하여 모듈 추가
     objectMapper.registerModule(new JavaTimeModule());
 
+    UserDetailsDto dto = UserFixture.get(UserRole.ADMIN);
+
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities()));
+
     mockStore1 =
         Store.builder()
             .storeId(1L)
@@ -53,7 +64,7 @@ public class StoreControllerTest {
             .storePhone("Store Phone 1")
             .city("Store City 1")
             .street("Store Street 1")
-            .zipCode(12345)
+            .zipCode("12345")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .latitude(37.48428)
@@ -67,11 +78,11 @@ public class StoreControllerTest {
   void 매장_등록_성공() throws Exception {
     StoreRegisterRequest storeRegisterRequest =
         StoreRegisterRequest.builder()
-            .storeName("ATWOSOME PLACE2")
+            .storeName("A TWOSOME PLACE2")
             .storePhone("010101010")
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
-            .zipCode(54321)
+            .zipCode("54321")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .build();
@@ -88,7 +99,6 @@ public class StoreControllerTest {
 
   @Test
   @DisplayName("매장 의 오픈 시간과 닫는 시간은 null 일 수있다 성공.")
-  @WithMockUser
   void 매장_등록_매장시간_성공() throws Exception {
     StoreRegisterRequest storeRegisterRequest =
         StoreRegisterRequest.builder()
@@ -96,9 +106,8 @@ public class StoreControllerTest {
             .storePhone("010101010")
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
-            .zipCode(54321)
+            .zipCode("54321")
             .build();
-
     mockMvc
         .perform(
             post("/api/stores/register/")
@@ -119,7 +128,7 @@ public class StoreControllerTest {
             .storePhone("010101010")
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
-            .zipCode(54321)
+            .zipCode("54321")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .build();
@@ -144,7 +153,7 @@ public class StoreControllerTest {
             .storePhone("010101010")
             .city("Seoul")
             .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
-            .zipCode(543211234)
+            .zipCode("543211234")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .build();
@@ -226,7 +235,7 @@ public class StoreControllerTest {
             "Updated Store Phone",
             "Updated City",
             "Updated Street",
-            12345,
+            "12345",
             LocalTime.of(9, 0),
             LocalTime.of(18, 0));
     mockMvc
