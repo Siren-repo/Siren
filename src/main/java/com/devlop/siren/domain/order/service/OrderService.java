@@ -52,8 +52,7 @@ public class OrderService {
     UserInformation.validStaffOrAdmin(userDto);
     Order order = findByOrderId(orderId);
 
-    if (!OrderStatus.INIT.equals(order.getStatus())
-        && !OrderStatus.CANCELED.equals(order.getStatus())) {
+    if (!OrderStatus.INIT.equals(order.getStatus())) {
       throw new GlobalException(ResponseCode.ErrorCode.ALREADY_ORDERED);
     }
 
