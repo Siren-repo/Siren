@@ -26,6 +26,7 @@ import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.fixture.OrderFixture;
 import com.devlop.siren.fixture.UserFixture;
+import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,9 +59,11 @@ public class OrderUseCaseTest {
 
   @Test
   @DisplayName("요청한 request대로 주문을 생성한다 - 음료")
-  void createOrder() {
-    // given
+  void createOrder() throws NoSuchFieldException, IllegalAccessException {
     Item item = ItemFixture.get();
+    Field field = Item.class.getDeclaredField("itemId");
+    field.setAccessible(true);
+    field.set(item, 1L);
 
     List<OrderItemRequest> items = OrderFixture.getOrderItemRequest();
     OrderCreateRequest request = OrderFixture.get(store.getStoreId(), items);
