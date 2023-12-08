@@ -62,7 +62,7 @@ public class Order extends BaseEntity {
   }
 
   public void cancel() {
-    status = OrderStatus.CANCELLED;
+    status = OrderStatus.CANCELED;
   }
 
   private void setUser(User user) {
