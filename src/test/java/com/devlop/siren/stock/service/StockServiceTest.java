@@ -303,7 +303,7 @@ class StockServiceTest {
     assertThatThrownBy(
             () -> stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 4)))
         .isInstanceOf(GlobalException.class)
-        .hasMessageContaining(ErrorCode.ORDER_QUANTITY_IN_STOCK.getMESSAGE());
+        .hasMessageContaining(ErrorCode.OUT_OF_STOCK.getMESSAGE());
   }
 
   @Test
