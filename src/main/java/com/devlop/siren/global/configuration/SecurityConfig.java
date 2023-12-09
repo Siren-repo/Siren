@@ -1,6 +1,5 @@
 package com.devlop.siren.global.configuration;
 
-import com.devlop.siren.global.util.Permission;
 import com.devlop.siren.global.util.PermissionInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
