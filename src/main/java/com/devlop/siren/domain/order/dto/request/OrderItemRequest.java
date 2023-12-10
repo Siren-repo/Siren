@@ -37,7 +37,10 @@ public class OrderItemRequest {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     OrderItemRequest that = (OrderItemRequest) o;
-    return Objects.equals(itemId, that.itemId) && Objects.equals(takeout, that.takeout) && Objects.equals(warm, that.warm) && Objects.equals(customOption, that.customOption);
+    return Objects.equals(itemId, that.itemId)
+        && Objects.equals(takeout, that.takeout)
+        && Objects.equals(warm, that.warm)
+        && Objects.equals(customOption, that.customOption);
   }
 
   @Override

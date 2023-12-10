@@ -44,8 +44,7 @@ public class ItemCreateRequest {
 
   private String allergy;
 
-  @Valid
-  private NutritionCreateRequest nutritionCreateRequest;
+  @Valid private NutritionCreateRequest nutritionCreateRequest;
 
   public static Item toEntity(
       ItemCreateRequest itemCreateRequest,
