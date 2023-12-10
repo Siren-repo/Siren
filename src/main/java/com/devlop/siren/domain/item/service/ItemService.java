@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ItemService {
 
-  ItemResponse create(ItemCreateRequest request, UserDetailsDto user);
+  ItemResponse create(ItemCreateRequest request);
 
   Item findItem(Long itemId);
 
@@ -22,7 +22,7 @@ public interface ItemService {
 
   NutritionDetailResponse findNutritionDetailById(Long itemId);
 
-  Long deleteItemById(Long itemId, UserDetailsDto user);
+  Long deleteItemById(Long itemId);
 
-  Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest, UserDetailsDto user);
+  Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest);
 }

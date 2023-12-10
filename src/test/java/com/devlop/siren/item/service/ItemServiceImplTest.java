@@ -51,29 +51,19 @@ class ItemServiceImplTest {
 
   private ItemCreateRequest validObject;
   private ItemCreateRequest inValidObject;
-  private UserDetailsDto staff;
-  private UserDetailsDto customer;
 
   @BeforeEach
   private void setUp() {
     validObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
     inValidObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "dd"), -5);
-    staff = UserFixture.get(UserRole.ADMIN);
-    customer = UserFixture.get(UserRole.CUSTOMER);
   }
 
   @Test
   @DisplayName("아이템 생성, 조회에 성공한다")
-  public void create() {
+  public void create() throws NoSuchFieldException, IllegalAccessException {
     // Given
     Long itemId = 1L;
-    Item item =
-        ItemCreateRequest.toEntity(
-            validObject,
-            CategoryCreateRequest.toEntity(validObject.getCategoryRequest()),
-            DefaultOptionCreateRequest.toEntity(validObject.getDefaultOptionRequest()),
-            allergyConverter.convertToEntityAttribute(validObject.getAllergy()),
-            NutritionCreateRequest.toEntity(validObject.getNutritionCreateRequest()));
+    Item item = ItemFixture.get(itemId);
 
     // When
     when(categoryRepository.findByCategoryTypeAndCategoryName(any(), any()))
@@ -84,7 +74,7 @@ class ItemServiceImplTest {
     when(itemRepository.save(any(Item.class))).thenReturn(item);
 
     // Then
-    assertThat(itemService.create(validObject, staff).getItemName()).isEqualTo(item.getItemName());
+    assertThat(itemService.create(validObject).getItemName()).isEqualTo(item.getItemName());
     assertThat(itemService.findItemDetailById(itemId).getItemName()).isEqualTo(item.getItemName());
   }
 
@@ -93,24 +83,13 @@ class ItemServiceImplTest {
   public void inValidCreate() {
     // Given
     // When
-    Throwable throwable = catchThrowable(() -> itemService.create(inValidObject, staff));
+    Throwable throwable = catchThrowable(() -> itemService.create(inValidObject));
     // Then
     assertThat(throwable)
         .isInstanceOf(GlobalException.class)
         .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY.getMESSAGE());
   }
 
-  @Test
-  @DisplayName("권한이 없는 경우 아이템 생성을 실패한다")
-  public void failCreate() {
-    // Given
-    // When
-    Throwable throwable = catchThrowable(() -> itemService.create(validObject, customer));
-    // Then
-    assertThat(throwable)
-        .isInstanceOf(GlobalException.class)
-        .hasMessageContaining(ResponseCode.ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
-  }
 
   @Test
   @DisplayName("해당하는 카테고리 네임, 카테고리 타입이 없는 경우 카테고리별 아이템 조회를 실패한다")
@@ -151,7 +130,7 @@ class ItemServiceImplTest {
 
     // When
     Throwable throwable =
-        catchThrowable(() -> itemService.updateItemById(itemId, validObject, staff));
+        catchThrowable(() -> itemService.updateItemById(itemId, validObject));
 
     // Then
     assertThat(throwable)
@@ -159,34 +138,4 @@ class ItemServiceImplTest {
         .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
   }
 
-  @Test
-  @DisplayName("권한이 없는 경우 아이템 수정에 실패한다")
-  public void failUpdateItemById() {
-    // Given
-    Long itemId = 1L;
-
-    // When
-    Throwable throwable =
-        catchThrowable(() -> itemService.updateItemById(itemId, validObject, customer));
-
-    // Then
-    assertThat(throwable)
-        .isInstanceOf(GlobalException.class)
-        .hasMessageContaining(ResponseCode.ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
-  }
-
-  @Test
-  @DisplayName("권한이 없는 경우 아이템 삭제에 실패한다")
-  public void failDeleteItemById() {
-    // Given
-    Long itemId = 1L;
-
-    // When
-    Throwable throwable = catchThrowable(() -> itemService.deleteItemById(itemId, customer));
-
-    // Then
-    assertThat(throwable)
-        .isInstanceOf(GlobalException.class)
-        .hasMessageContaining(ResponseCode.ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
-  }
 }
