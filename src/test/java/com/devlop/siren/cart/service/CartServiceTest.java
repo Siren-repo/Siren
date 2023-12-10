@@ -21,9 +21,7 @@ import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-
 import java.util.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
