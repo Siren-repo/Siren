@@ -21,10 +21,9 @@ import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,8 +82,6 @@ class CartServiceTest {
   @DisplayName("장바구니에 상품을 추가할 수 있다.")
   void add() {
     when(itemRepository.findById(validOrderItemRequest.getItemId())).thenReturn(Optional.of(item));
-    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-
     assertThat(
             cartService
                 .add(validOrderItemRequest, userDetailsDto)
@@ -97,7 +94,6 @@ class CartServiceTest {
   @DisplayName("장바구니에 동일 상품이 있을시 수량을 증가한다.")
   void addToExist() {
     when(itemRepository.findById(validOrderItemRequest.getItemId())).thenReturn(Optional.of(item));
-    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
     when(listOperations.range(cartKey, 0, listOperations.size(cartKey) - 1))
         .thenReturn(List.of(validOrderItemRequest));
     assertThat(
@@ -123,7 +119,6 @@ class CartServiceTest {
     Item allergyItem = ItemFixture.get(EnumSet.of(AllergyType.MILK));
     when(itemRepository.findById(validOrderItemRequest.getItemId()))
         .thenReturn(Optional.of(allergyItem));
-    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
     assertThatThrownBy(() -> cartService.add(validOrderItemRequest, userDetailsDto))
         .isInstanceOf(GlobalException.class)
         .hasMessageContaining(ResponseCode.ErrorCode.CAUSE_ALLERGY_IN_CART.getMESSAGE());

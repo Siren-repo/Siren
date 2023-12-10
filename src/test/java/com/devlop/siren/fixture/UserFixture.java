@@ -33,8 +33,10 @@ public class UserFixture {
     return UserDetailsDto.builder()
         .id(1L)
         .email("test@test.com")
+            .nickName("TEST")
         .password("password")
         .userRole(role)
+            .allergies(EnumSet.of(AllergyType.MILK))
         .isDeleted(false)
         .build();
   }

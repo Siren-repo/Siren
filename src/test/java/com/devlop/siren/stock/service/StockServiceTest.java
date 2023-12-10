@@ -27,6 +27,7 @@ import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.fixture.ItemFixture;
+import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
@@ -65,8 +66,8 @@ class StockServiceTest {
 
   @BeforeEach
   private void setUp() {
-    customer = new UserDetailsDto(2L, "test@test", "test", UserRole.CUSTOMER, false);
-    staff = new UserDetailsDto(1L, "test@test.com", "testtest", UserRole.ADMIN, false);
+    staff = UserFixture.get(UserRole.STAFF);
+    customer = UserFixture.get(UserRole.CUSTOMER);
     validStockDto = new StockCreateRequest(STORE_ID, ITEM_ID, 1);
     inValidItemInStockDto = new StockCreateRequest(STORE_ID, 0L, -1);
     inValidStoreInStockDto = new StockCreateRequest(0L, ITEM_ID, -1);
