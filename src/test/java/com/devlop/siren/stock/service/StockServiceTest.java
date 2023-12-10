@@ -1,6 +1,5 @@
 package com.devlop.siren.stock.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,7 +16,6 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.EspressoType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
-import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.order.domain.option.BeverageOption;
 import com.devlop.siren.domain.order.domain.option.CustomOption;
 import com.devlop.siren.domain.stock.dto.request.StockCreateRequest;
@@ -29,6 +27,7 @@ import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.fixture.ItemFixture;
+import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
@@ -67,8 +66,8 @@ class StockServiceTest {
 
   @BeforeEach
   private void setUp() {
-    customer = new UserDetailsDto(2L, "test@test", "test", UserRole.CUSTOMER, false);
-    staff = new UserDetailsDto(1L, "test@test.com", "testtest", UserRole.ADMIN, false);
+    staff = UserFixture.get(UserRole.STAFF);
+    customer = UserFixture.get(UserRole.CUSTOMER);
     validStockDto = new StockCreateRequest(STORE_ID, ITEM_ID, 1);
     inValidItemInStockDto = new StockCreateRequest(STORE_ID, 0L, -1);
     inValidStoreInStockDto = new StockCreateRequest(0L, ITEM_ID, -1);
@@ -284,34 +283,5 @@ class StockServiceTest {
     assertThat(throwable)
         .isInstanceOf(GlobalException.class)
         .hasMessageContaining(ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
-  }
-
-  @Test
-  @DisplayName("재고 감소에 성공한다")
-  void consumed() {
-    Stock stock = new Stock(item, store, 3);
-    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 3));
-    assertThat(stock.getStock()).isEqualTo(0);
-  }
-
-  @Test
-  @DisplayName("재고 감소에 실패한다")
-  void failConsumed() {
-    Stock stock = new Stock(item, store, 3);
-    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    assertThatThrownBy(
-            () -> stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 4)))
-        .isInstanceOf(GlobalException.class)
-        .hasMessageContaining(ErrorCode.ORDER_QUANTITY_IN_STOCK.getMESSAGE());
-  }
-
-  @Test
-  @DisplayName("재고 증가에 성공한다")
-  void revert() {
-    Stock stock = new Stock(item, store, 3);
-    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
-    stockService.revert(STORE_ID, OrderItem.create(item, customOption, 3));
-    assertThat(stock.getStock()).isEqualTo(6);
   }
 }

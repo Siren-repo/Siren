@@ -13,6 +13,7 @@ import com.devlop.siren.domain.category.repository.CategoryRepository;
 import com.devlop.siren.domain.category.service.CategoryService;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import java.util.Optional;
@@ -39,8 +40,8 @@ class CategoryServiceTest {
   @BeforeEach
   private void setUp() {
     validObject = new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소");
-    staff = new UserDetailsDto(1L, "test@test.com", "12345678", UserRole.ADMIN, false);
-    customer = new UserDetailsDto(2L, "test1@test.com", "12345678", UserRole.CUSTOMER, false);
+    staff = UserFixture.get(UserRole.ADMIN);
+    customer = UserFixture.get(UserRole.CUSTOMER);
   }
 
   @Test

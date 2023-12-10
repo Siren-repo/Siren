@@ -14,6 +14,7 @@ import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.store.utils.GeocodingApi;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.exception.GlobalException;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
@@ -46,8 +47,8 @@ class StoreServiceTest {
 
   @BeforeEach
   void setUp() {
-    admin = new UserDetailsDto(1L, "test@test.com", "testtest", UserRole.ADMIN, false);
-    customer = new UserDetailsDto(2L, "test@test.com", "testtest", UserRole.CUSTOMER, false);
+    admin = UserFixture.get(UserRole.ADMIN);
+    customer = UserFixture.get(UserRole.CUSTOMER);
 
     registerRequest =
         new StoreRegisterRequest(
