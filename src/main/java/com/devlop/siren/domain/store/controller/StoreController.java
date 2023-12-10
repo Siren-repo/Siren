@@ -5,9 +5,11 @@ import com.devlop.siren.domain.store.dto.request.StoreRegisterRequest;
 import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.dto.response.StoreResponse;
 import com.devlop.siren.domain.store.service.StoreService;
+import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.util.Permission;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class StoreController {
   private final StoreService storeService;
 
+  @Permission(role = UserRole.ADMIN)
   @PostMapping("/register")
   public ApiResponse<Void> registerStore(
       @AuthenticationPrincipal UserDetailsDto user,

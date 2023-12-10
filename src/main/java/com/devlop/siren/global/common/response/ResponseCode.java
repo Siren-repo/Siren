@@ -17,6 +17,7 @@ public class ResponseCode {
     DUPLICATED_MEMBER(HttpStatus.CONFLICT, "이미 가입된 이메일입니다"),
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "가입된 유저가 아닙니다"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다"),
+    INVALID_AUTH(HttpStatus.FORBIDDEN, "접근 권한이 없습니다"),
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다"),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 만료되었습니다"),
     ALREADY_LOGGED_OUT(HttpStatus.UNAUTHORIZED, "이미 로그아웃 된 계정입니다"),
