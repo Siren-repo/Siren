@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 public class CartService {
   private static final String CART_KEY = "Cart - UserId";
   private final ItemRepository itemRepository;
-  private final UserRepository userRepository;
   private final RedisTemplate<String, OrderItemRequest> cartRedisTemplate;
   private ListOperations<String, OrderItemRequest> listOperations;
 
