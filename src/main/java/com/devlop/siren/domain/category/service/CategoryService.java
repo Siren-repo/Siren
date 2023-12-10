@@ -25,8 +25,7 @@ public class CategoryService {
   private final CategoryRepository categoryRepository;
 
   @Transactional
-  public CategoryResponse register(CategoryCreateRequest request, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
+  public CategoryResponse register(CategoryCreateRequest request) {
     validateDuplicateCategory(request.getCategoryType(), request.getCategoryName());
     Category category = CategoryCreateRequest.toEntity(request);
     return CategoryResponse.from(categoryRepository.save(category));
