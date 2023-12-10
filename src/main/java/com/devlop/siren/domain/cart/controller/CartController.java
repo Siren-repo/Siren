@@ -3,9 +3,11 @@ package com.devlop.siren.domain.cart.controller;
 import com.devlop.siren.domain.cart.dto.CartDto;
 import com.devlop.siren.domain.cart.service.CartService;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
+import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.util.Permission;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,7 @@ public class CartController {
   private final CartService cartService;
 
   // 장바구니에 추가
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @PostMapping
   public ApiResponse<CartDto> add(
       @Valid @RequestBody OrderItemRequest orderItemRequest,
@@ -28,12 +31,14 @@ public class CartController {
   }
 
   // 장바구니에서 찾기
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @GetMapping
   public ApiResponse<CartDto> find(@AuthenticationPrincipal UserDetailsDto user) {
     return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, cartService.retrieve(user));
   }
 
   // 장바구니 안의 모든 요소들 삭제
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @DeleteMapping("/all")
   public ApiResponse<?> removeAll(@AuthenticationPrincipal UserDetailsDto user) {
     cartService.removeAll(user);
@@ -41,6 +46,7 @@ public class CartController {
   }
 
   // 장바구니 안의 특정 요소 삭제
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @PutMapping("/remove")
   public ApiResponse<CartDto> remove(
       @Valid @RequestBody OrderItemRequest orderItemRequest,
@@ -49,6 +55,7 @@ public class CartController {
   }
 
   // 장바구니 안에서 특정 요소 수정
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @PutMapping("/update")
   public ApiResponse<CartDto> update(
       @Valid @RequestBody OrderItemRequest orderItemRequest,
