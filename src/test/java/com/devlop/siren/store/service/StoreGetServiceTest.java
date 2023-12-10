@@ -9,6 +9,8 @@ import com.devlop.siren.domain.store.dto.response.StoreResponse;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.global.exception.GlobalException;
+
+import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +29,7 @@ public class StoreGetServiceTest {
   @Mock private Store mockStore3;
 
   @BeforeEach
-  public void init() {
+  public void init() throws NoSuchFieldException, IllegalAccessException {
     MockitoAnnotations.initMocks(this);
 
     List<Store> fakeStores = new ArrayList<>();
@@ -35,7 +37,6 @@ public class StoreGetServiceTest {
     for (long i = 1; i <= 3; i++) {
       Store fakeStore =
           Store.builder()
-              .storeId(i)
               .storeName("Store Name " + i)
               .storePhone("Store Phone " + i)
               .city("Store City " + i)
@@ -50,6 +51,11 @@ public class StoreGetServiceTest {
     mockStore1 = fakeStores.get(0);
     mockStore2 = fakeStores.get(1);
     mockStore3 = fakeStores.get(2);
+    Field idField = Store.class.getDeclaredField("storeId");
+    idField.setAccessible(true);
+    idField.set(mockStore1, 1L);
+    idField.set(mockStore2, 2L);
+    idField.set(mockStore3, 3L);
   }
 
   @Test
