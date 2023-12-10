@@ -8,10 +8,8 @@ import com.devlop.siren.domain.stock.entity.Stock;
 import com.devlop.siren.domain.stock.repository.StockRepository;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
-import com.devlop.siren.global.util.UserInformation;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,16 +46,14 @@ public class StockService {
   }
 
   @Transactional
-  public StockResponse create(StockCreateRequest request, UserDetailsDto user) {
-    UserInformation.validStaffOrAdmin(user);
+  public StockResponse create(StockCreateRequest request) {
     Store store = findByStoreId(request.getStoreId());
     Item item = findByItemId(request.getItemId());
     Stock stock = StockCreateRequest.toEntity(request, item, store);
     return StockResponse.from(stockRepository.save(stock));
   }
 
-  public Page<StockResponse> findAllByStore(Long storeId, UserDetailsDto user, Pageable pageable) {
-    UserInformation.validStaffOrAdmin(user);
+  public Page<StockResponse> findAllByStore(Long storeId, Pageable pageable) {
     Store store = findByStoreId(storeId);
     PageRequest pageRequest =
         PageRequest.of(
@@ -66,23 +62,19 @@ public class StockService {
         .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_STOCKS_IN_STORE));
   }
 
-  public StockResponse findByStoreAndItem(Long storeId, Long itemId, UserDetailsDto user) {
-    UserInformation.validStaffOrAdmin(user);
+  public StockResponse findByStoreAndItem(Long storeId, Long itemId) {
     return StockResponse.from(findStoreAndItem(storeId, itemId));
   }
 
   @Transactional
-  public StockResponse updateStock(
-      Long storeId, Long itemId, Integer newStock, UserDetailsDto user) {
-    UserInformation.validStaffOrAdmin(user);
+  public StockResponse update(Long storeId, Long itemId, Integer newStock) {
     Stock stock = findStoreAndItem(storeId, itemId);
     stock.update(newStock);
     return StockResponse.from(stock);
   }
 
   @Transactional
-  public void deleteStock(Long storeId, Long itemId, UserDetailsDto user) {
-    UserInformation.validStaffOrAdmin(user);
+  public void delete(Long storeId, Long itemId) {
     Stock stock = findStoreAndItem(storeId, itemId);
     stockRepository.delete(stock);
   }
