@@ -15,11 +15,9 @@ import com.devlop.siren.domain.order.dto.request.CustomOptionRequest;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.fixture.OrderFixture;
 import com.devlop.siren.fixture.UserFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Set;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +27,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(CartController.class)

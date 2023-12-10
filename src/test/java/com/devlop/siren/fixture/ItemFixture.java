@@ -12,8 +12,6 @@ import com.devlop.siren.domain.item.entity.option.DefaultOption;
 import com.devlop.siren.domain.item.entity.option.OptionDetails;
 import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
 import com.devlop.siren.domain.item.entity.option.SizeType;
-import com.devlop.siren.domain.store.domain.Store;
-
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;

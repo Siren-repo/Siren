@@ -1,7 +1,6 @@
 package com.devlop.siren.category.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -11,16 +10,9 @@ import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.repository.CategoryRepository;
 import com.devlop.siren.domain.category.service.CategoryService;
-import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.user.domain.UserRole;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.fixture.UserFixture;
-import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-
 import java.lang.reflect.Field;
 import java.util.Optional;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

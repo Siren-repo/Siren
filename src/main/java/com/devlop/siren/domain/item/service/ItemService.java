@@ -6,7 +6,6 @@ import com.devlop.siren.domain.item.dto.response.ItemDetailResponse;
 import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import org.springframework.data.domain.Pageable;
 
 public interface ItemService {

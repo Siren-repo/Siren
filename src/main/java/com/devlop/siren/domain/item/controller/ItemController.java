@@ -63,16 +63,16 @@ public class ItemController {
 
   @Permission(role = {UserRole.ADMIN})
   @DeleteMapping(value = "/{itemId}")
-  public ApiResponse<?> deleteItem(
-      @PathVariable @Min(1L) Long itemId) {
+  public ApiResponse<?> deleteItem(@PathVariable @Min(1L) Long itemId) {
     return ApiResponse.ok(ResponseCode.Normal.DELETE, String.format("ItemId = %d", itemId));
   }
 
   @Permission(role = {UserRole.ADMIN})
   @PutMapping(value = "/{itemId}")
   public ApiResponse<?> updateItem(
-      @PathVariable @Min(1L) Long itemId,
-      @RequestBody @Valid ItemCreateRequest itemCreateRequest) {
-    return ApiResponse.ok(ResponseCode.Normal.UPDATE, String.format("ItemId = %d", itemService.updateItemById(itemId, itemCreateRequest)));
+      @PathVariable @Min(1L) Long itemId, @RequestBody @Valid ItemCreateRequest itemCreateRequest) {
+    return ApiResponse.ok(
+        ResponseCode.Normal.UPDATE,
+        String.format("ItemId = %d", itemService.updateItemById(itemId, itemCreateRequest)));
   }
 }

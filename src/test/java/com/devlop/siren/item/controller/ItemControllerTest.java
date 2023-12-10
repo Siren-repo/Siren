@@ -204,13 +204,14 @@ class ItemControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden())
         .andDo(print());
-    }
+  }
 
   @Test
-  @DisplayName("권한이 없는 경우 아이템 삭제에 실패한다") void failDeleteItem() throws Exception {
+  @DisplayName("권한이 없는 경우 아이템 삭제에 실패한다")
+  void failDeleteItem() throws Exception {
     registerUnAuthorizedUser();
-      mvc.perform(delete("/api/items/{itemId}", 1L).with(csrf()))
-              .andExpect(status().isForbidden())
-              .andDo(print());
+    mvc.perform(delete("/api/items/{itemId}", 1L).with(csrf()))
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 }

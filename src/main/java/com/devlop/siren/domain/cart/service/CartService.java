@@ -6,7 +6,6 @@ import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.domain.user.repository.UserRepository;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import java.util.EnumSet;
