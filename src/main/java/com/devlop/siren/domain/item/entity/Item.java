@@ -62,7 +62,6 @@ public class Item {
 
   @Builder
   public Item(
-      Long itemId,
       String itemName,
       Integer price,
       String image,
@@ -73,7 +72,6 @@ public class Item {
       Category category,
       DefaultOption defaultOption,
       Nutrition nutrition) {
-    this.itemId = itemId;
     this.itemName = itemName;
     this.image = image;
     this.price = price;
