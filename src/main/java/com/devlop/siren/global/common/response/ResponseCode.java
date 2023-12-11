@@ -42,8 +42,7 @@ public class ResponseCode {
     NOT_OPERATING_TIME(HttpStatus.FORBIDDEN, "해당 매장의 영업시간이 아닙니다"),
     NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다"),
     ALREADY_ORDERED(HttpStatus.CONFLICT, "진행중이거나 이미 완료된 주문이라 취소할 수 없습니다"),
-    ALREADY_COMPLETED_ORDER(HttpStatus.CONFLICT, "이미 완료된 주문이라 변경할 수 없습니다");
-
+    ALREADY_COMPLETED_ORDER(HttpStatus.CONFLICT, "이미 완료된 주문이라 변경할 수 없습니다"),
     NOT_FOUND_ITEM_IN_CART(HttpStatus.NOT_FOUND, "장바구니에서 해당하는 아이템을 찾을 수 없습니다"),
     CAUSE_ALLERGY_IN_CART(HttpStatus.BAD_REQUEST, "사용자의 알러지를 유발할 수 있는 아이템입니다.");
 
