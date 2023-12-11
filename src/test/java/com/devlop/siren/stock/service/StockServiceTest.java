@@ -284,4 +284,33 @@ class StockServiceTest {
         .isInstanceOf(GlobalException.class)
         .hasMessageContaining(ErrorCode.NOT_AUTHORITY_USER.getMESSAGE());
   }
+
+  @Test
+  @DisplayName("재고 감소에 성공한다")
+  void consumed() {
+    Stock stock = new Stock(item, store, 3);
+    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+    stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 3));
+    assertThat(stock.getStock()).isEqualTo(0);
+  }
+
+  @Test
+  @DisplayName("재고 감소에 실패한다")
+  void failConsumed() {
+    Stock stock = new Stock(item, store, 3);
+    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+    assertThatThrownBy(
+            () -> stockService.consumed(STORE_ID, OrderItem.create(item, customOption, 4)))
+        .isInstanceOf(GlobalException.class)
+        .hasMessageContaining(ErrorCode.OUT_OF_STOCK.getMESSAGE());
+  }
+
+  @Test
+  @DisplayName("재고 증가에 성공한다")
+  void revert() {
+    Stock stock = new Stock(item, store, 3);
+    when(stockRepository.findByStoreAndItem(ITEM_ID, STORE_ID)).thenReturn(Optional.of(stock));
+    stockService.revert(STORE_ID, OrderItem.create(item, customOption, 3));
+    assertThat(stock.getStock()).isEqualTo(6);
+  }
 }

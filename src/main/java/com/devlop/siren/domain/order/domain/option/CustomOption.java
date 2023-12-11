@@ -27,7 +27,10 @@ public abstract class CustomOption {
   @Column(name = "custom_option_id")
   private Long id;
 
-  @Column(name = "take_out", nullable = false)
+  @Column(insertable = false, updatable = false)
+  private String dtype;
+
+  @Column(name = "take_out", nullable = false, columnDefinition = "TINYINT(1)")
   protected Boolean takeout;
 
   @Column(name = "temperature", nullable = false)
@@ -36,6 +39,10 @@ public abstract class CustomOption {
 
   @Column(name = "additional_amount")
   protected int amount = 0;
+
+  public String getDtype() {
+    return dtype;
+  }
 
   public Boolean getTakeout() {
     return takeout;

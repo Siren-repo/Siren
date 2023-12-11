@@ -1,6 +1,6 @@
 package com.devlop.siren.domain.order.repository;
 
 import com.devlop.siren.domain.order.domain.option.CustomOption;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CustomOptionRepository extends CrudRepository<CustomOption, Long> {}
+public interface CustomOptionRepository extends JpaRepository<CustomOption, Long> {}

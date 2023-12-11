@@ -1,23 +1,25 @@
 package com.devlop.siren.domain.order.dto.request;
 
-import java.util.Objects;
 import javax.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class OrderItemRequest {
-  @NotNull(message = "아이템 Id를 입력해야 합니다.")
+
+  @NotNull(message = "주문할 아이템의 아이디를 필수로 입력해야 합니다")
   private Long itemId;
 
-  @NotNull(message = "Take-Out 값을 입력해야 합니다.")
+  @NotNull(message = "주문할 아이템의 테이크아웃 여부를 필수로 입력해야 합니다")
   private Boolean takeout;
 
-  @NotNull(message = "Warm 값을 입력해야 합니다.")
+  @NotNull(message = "주문할 아이템의 온도를 필수로 입력해야 합니다")
   private Boolean warm;
 
-  @NotNull(message = "수량을 입력해야 합니다.")
+  @NotNull(message = "주문할 아이템의 수량을 필수로 입력해야 합니다")
   private Integer quantity;
 
   private CustomOptionRequest customOption;
