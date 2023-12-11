@@ -37,7 +37,7 @@ public class StoreGetNearByStoreTest {
             .storePhone("Store Phone 1")
             .city("Store City 1")
             .street("Store Street 1")
-            .zipCode(12345)
+            .zipCode("12345")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .latitude(37.48428)
@@ -52,7 +52,7 @@ public class StoreGetNearByStoreTest {
             .storePhone("Store Phone 2")
             .city("Store City 2")
             .street("Store Street 2")
-            .zipCode(23455)
+            .zipCode("23455")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .latitude(37.48428 + 0.0009)
@@ -68,7 +68,7 @@ public class StoreGetNearByStoreTest {
             .storePhone("Store Phone 3")
             .city("Store City 3")
             .street("Store Street 3")
-            .zipCode(34567)
+            .zipCode("34567")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .latitude(37.47428)
@@ -83,7 +83,7 @@ public class StoreGetNearByStoreTest {
             .storePhone("Store Phone def")
             .city("Store City def")
             .street("Store Street def")
-            .zipCode(87654)
+            .zipCode("87654")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .latitude(37.46884)
@@ -114,7 +114,7 @@ public class StoreGetNearByStoreTest {
     assertEquals("Store Phone 1", nearbyStore1.getStorePhone());
     assertEquals("Store City 1", nearbyStore1.getCity());
     assertEquals("Store Street 1", nearbyStore1.getStreet());
-    assertEquals(Integer.valueOf(12345), nearbyStore1.getZipCode());
+    assertEquals("12345", nearbyStore1.getZipCode());
 
     Store nearbyStore2 = nearbyStores.get(1);
     assertEquals(Long.valueOf(2L), nearbyStore2.getStoreId());
@@ -122,7 +122,7 @@ public class StoreGetNearByStoreTest {
     assertEquals("Store Phone 2", nearbyStore2.getStorePhone());
     assertEquals("Store City 2", nearbyStore2.getCity());
     assertEquals("Store Street 2", nearbyStore2.getStreet());
-    assertEquals(Integer.valueOf(23455), nearbyStore2.getZipCode());
+    assertEquals("23455", nearbyStore2.getZipCode());
   }
 
   @Test
@@ -148,7 +148,7 @@ public class StoreGetNearByStoreTest {
     assertEquals("Store Phone 1", nearbyStore1.getStorePhone());
     assertEquals("Store City 1", nearbyStore1.getCity());
     assertEquals("Store Street 1", nearbyStore1.getStreet());
-    assertEquals(Integer.valueOf(12345), nearbyStore1.getZipCode());
+    assertEquals("12345", nearbyStore1.getZipCode());
 
     Store nearbyStore2 = nearbyStores.get(1);
     assertEquals(Long.valueOf(2L), nearbyStore2.getStoreId());
@@ -156,6 +156,6 @@ public class StoreGetNearByStoreTest {
     assertEquals("Store Phone 2", nearbyStore2.getStorePhone());
     assertEquals("Store City 2", nearbyStore2.getCity());
     assertEquals("Store Street 2", nearbyStore2.getStreet());
-    assertEquals(Integer.valueOf(23455), nearbyStore2.getZipCode());
+    assertEquals("23455", nearbyStore2.getZipCode());
   }
 }

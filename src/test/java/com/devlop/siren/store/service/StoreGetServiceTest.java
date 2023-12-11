@@ -40,7 +40,7 @@ public class StoreGetServiceTest {
               .storePhone("Store Phone " + i)
               .city("Store City " + i)
               .street("Store Street " + i)
-              .zipCode(54321 + (int) i)
+              .zipCode("54321" + (int) i)
               .closeTime(LocalTime.of(18, 0))
               .openTime(LocalTime.of(9, 0))
               .build();
@@ -70,9 +70,7 @@ public class StoreGetServiceTest {
     assertEquals("Store Phone 1", storeResponse1.getStorePhone());
     assertEquals("Store City 1", storeResponse1.getCity());
     assertEquals("Store Street 1", storeResponse1.getStreet());
-    assertEquals(
-        Integer.valueOf(54321 + 1),
-        storeResponse1.getZipCode()); // Update with the expected zip code
+    assertEquals("54321" + 1, storeResponse1.getZipCode()); // Update with the expected zip code
     assertEquals(LocalTime.of(9, 0), storeResponse1.getOpenTime());
     assertEquals(LocalTime.of(18, 0), storeResponse1.getCloseTime());
 
@@ -98,8 +96,7 @@ public class StoreGetServiceTest {
     assertEquals("Store Phone 1", store1.getStorePhone());
     assertEquals("Store Street 1", store1.getStreet());
     assertEquals("Store City 1", store1.getCity());
-    assertEquals(
-        Integer.valueOf(54321 + 1), store1.getZipCode()); // Update with the expected zip code
+    assertEquals("54321" + 1, store1.getZipCode()); // Update with the expected zip code
     assertEquals(LocalTime.of(9, 0), store1.getOpenTime());
     assertEquals(LocalTime.of(18, 0), store1.getCloseTime());
 
@@ -108,8 +105,7 @@ public class StoreGetServiceTest {
     assertEquals("Store Phone 2", store2.getStorePhone());
     assertEquals("Store Street 2", store2.getStreet());
     assertEquals("Store City 2", store2.getCity());
-    assertEquals(
-        Integer.valueOf(54321 + 2), store2.getZipCode()); // Update with the expected zip code
+    assertEquals("54321" + 2, store2.getZipCode()); // Update with the expected zip code
     assertEquals(LocalTime.of(9, 0), store2.getOpenTime());
     assertEquals(LocalTime.of(18, 0), store2.getCloseTime());
   }

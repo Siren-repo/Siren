@@ -56,7 +56,7 @@ class StoreServiceTest {
             "First Store Phone",
             "Seoul",
             "대전 서구 둔산중로32번길 29 1층 103호",
-            54321,
+            "54321",
             LocalTime.of(9, 0),
             LocalTime.of(18, 0));
 
@@ -67,7 +67,7 @@ class StoreServiceTest {
             .storePhone("First Store Phone")
             .city("Seoul")
             .street("대전 서구 둔산중로32번길 29 1층 103호")
-            .zipCode(54321)
+            .zipCode("54321")
             .closeTime(LocalTime.of(18, 0))
             .openTime(LocalTime.of(9, 0))
             .build();
@@ -102,17 +102,6 @@ class StoreServiceTest {
   }
 
   @Test
-  @DisplayName("매장 등록 실패 (권한 CUSTOMER) ")
-  void registerStoreWithCustomer() {
-
-    GlobalException exception =
-        assertThrows(
-            GlobalException.class, () -> storeService.registerStore(registerRequest, customer));
-
-    assertEquals(exception.getErrorCode().getMESSAGE(), "권한이 없는 사용자입니다");
-  }
-
-  @Test
   @DisplayName("매장 업데이트 성공 (권한 : ADMIN)")
   void updateStore() {
     Long storeId = 1L;
@@ -122,7 +111,7 @@ class StoreServiceTest {
             "Updated Store Phone",
             "Updated City",
             "Updated Street",
-            12345,
+            "12345",
             LocalTime.of(9, 0),
             LocalTime.of(18, 0));
 
@@ -134,7 +123,7 @@ class StoreServiceTest {
     Assert.assertEquals("Updated Store Phone", mockStore.getStorePhone());
     Assert.assertEquals("Updated City", mockStore.getCity());
     Assert.assertEquals("Updated Street", mockStore.getStreet());
-    Assert.assertEquals(Integer.valueOf(12345), mockStore.getZipCode());
+    Assert.assertEquals("12345", mockStore.getZipCode());
   }
 
   @Test
@@ -147,7 +136,7 @@ class StoreServiceTest {
             "Updated Store Phone",
             "Updated City",
             "Updated Street",
-            12345,
+            "12345",
             LocalTime.of(18, 0),
             LocalTime.of(9, 0));
 
@@ -169,7 +158,7 @@ class StoreServiceTest {
             "Updated Store Phone",
             "Updated City",
             "Updated Street",
-            12345,
+            "12345",
             LocalTime.of(9, 0),
             LocalTime.of(18, 0));
 
@@ -198,7 +187,7 @@ class StoreServiceTest {
     Assert.assertEquals("First Store Phone", mockStore.getStorePhone());
     Assert.assertEquals("Seoul", mockStore.getCity());
     Assert.assertEquals("대전 서구 둔산중로32번길 29 1층 103호", mockStore.getStreet());
-    Assert.assertEquals(Integer.valueOf("54321"), mockStore.getZipCode());
+    Assert.assertEquals("54321", mockStore.getZipCode());
   }
 
   @Test

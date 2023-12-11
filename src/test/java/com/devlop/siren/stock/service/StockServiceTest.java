@@ -79,7 +79,7 @@ class StockServiceTest {
             .storePhone("First Store Phone")
             .city("Seoul")
             .street("대전 서구 둔산중로32번길 29 1층 103호")
-            .zipCode(54321)
+            .zipCode("54321")
             .openTime(LocalTime.of(18, 0))
             .closeTime(LocalTime.of(9, 0))
             .build();
