@@ -1,7 +1,5 @@
 ## 🧩 Summary
 
----
-
 스타벅스의 Siren Order 서비스를 간단하게 구현해보고, 분산환경으로 구성하여 안정적인 트래픽 처리를 할 수 있도록 구현하는 것을 목표로 프로젝트를 진행하고 있습니다
 
 - 유저는 매장을 선택하여 원하는 아이템을 담고 주문을 진행할 수 있습니다
@@ -13,8 +11,6 @@
 [API Design WIKI](https://github.com/Siren-repo/Siren/wiki/%E2%9C%8D%EF%B8%8F-API-Design)
 
 ## 🏡  Team
-
----
 
 | <img src="https://avatars.githubusercontent.com/u/35358294?v=4" width="130" height="130"> | <img src ="https://avatars.githubusercontent.com/u/98626972?v=4" width="130" height="130"> 
 |:-----------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:| 
@@ -28,7 +24,7 @@
 
 ---
 
-Java 11, Spring Boot, Gradle, MySQL 8.0, Redis, Spring Data JPA, Spring Security, JWT, SSEmitter, Apache Kafka
+Java 11, Spring Boot, Gradle, MySQL 8.0, Redis, Spring Data JPA, Spring Security, JWT
 
 junit5, mockito, H2 Database
 
@@ -38,17 +34,15 @@ REST API Docs, JACOCO
 
 ## 🎨  Architecture (2023.12 ver)
 
----
-
 ### ERD
 
-![img_4.png](.github/imgs/img_4.png)
+![](https://github.com/Siren-repo/Siren/blob/develop/imgs/img_4.png?raw=true)
 
 ### System Architecture
 
 - 단일 서버 버전
 
-  ![img_3.png](.github/imgs/img_3.png)
+  ![](https://github.com/Siren-repo/Siren/blob/develop/imgs/img_3.png?raw=true)
 
 ### CI/CD Pipeline
 
@@ -57,8 +51,6 @@ REST API Docs, JACOCO
 [배포전략 WIKI](https://github.com/Siren-repo/Siren/wiki/%E2%98%81%EF%B8%8F-Deploy-Strategy)
 
 ## 🎯 We Interested in
-
----
 
 ### Tech Issue
 
@@ -81,8 +73,6 @@ REST API Docs, JACOCO
 
 ## 🔨 ISSUE
 
----
-
 [#2](https://github.com/Siren-repo/Siren/issues/2) 코드통합/배포 안정적으로 진행하기
 [Post](https://yooyouny.tistory.com/)
 
@@ -94,7 +84,6 @@ REST API Docs, JACOCO
 
 ## 🏃🏼‍ Sprint
 
----
 [스프린트 정보](https://github.com/Siren-repo/Siren/milestones)
 
 [프로젝트 백로그](https://github.com/orgs/Siren-repo/projects/1/views/1)
