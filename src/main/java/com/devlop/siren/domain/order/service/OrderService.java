@@ -1,5 +1,6 @@
 package com.devlop.siren.domain.order.service;
 
+import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.order.domain.Order;
 import com.devlop.siren.domain.order.domain.OrderItem;
 import com.devlop.siren.domain.order.domain.OrderStatus;
@@ -7,7 +8,9 @@ import com.devlop.siren.domain.order.dto.request.OrderStatusRequest;
 import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.order.repository.CustomOptionRepository;
 import com.devlop.siren.domain.order.repository.OrderItemRepository;
+import com.devlop.siren.domain.order.repository.OrderLockRepository;
 import com.devlop.siren.domain.order.repository.OrderRepository;
+import com.devlop.siren.domain.order.repository.StockLockRepository;
 import com.devlop.siren.domain.stock.repository.StockRepository;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.user.domain.User;
@@ -20,6 +23,7 @@ import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -30,17 +34,27 @@ public class OrderService {
   private final OrderItemRepository orderItemRepository;
   private final CustomOptionRepository customOptionRepository;
   private final StockRepository stockRepository;
+  private final StockLockRepository stockLockRepository;
+  private final OrderLockRepository orderLockRepository;
 
-  @Transactional
+  static final String LOCK_TIME_OUT = "3000";
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public OrderDetailResponse create(
       User user, Store store, List<OrderItem> orderItems, LocalTime orderTime) {
     isStoreOperating(store, orderTime);
     Order newOrder = Order.of(user, store, orderItems);
+
     orderItems.forEach(
         orderItem -> {
           customOptionRepository.save(orderItem.getCustomOption());
-          consumeStock(
-              orderItem.getQuantity(), store.getStoreId(), orderItem.getItem().getItemId());
+          stockLockRepository.executeWithLock(
+              getNamedLockNameWithStock(orderItem.getItem(), store),
+              LOCK_TIME_OUT,
+              () -> {
+                consumeStock(
+                    orderItem.getQuantity(), store.getStoreId(), orderItem.getItem().getItemId());
+              });
           orderItem.setOrder(newOrder);
           orderItemRepository.save(orderItem);
         });
@@ -56,15 +70,30 @@ public class OrderService {
       throw new GlobalException(ResponseCode.ErrorCode.ALREADY_ORDERED);
     }
 
+    Store orderedStore = order.getStore();
+
     order.getOrderItems().stream()
         .forEach(
-            orderItem ->
-                revertStock(
-                    orderItem.getQuantity(),
-                    order.getStore().getStoreId(),
-                    orderItem.getItem().getItemId()));
+            orderItem -> {
+              Item item = orderItem.getItem();
+              stockLockRepository.executeWithLock(
+                  getNamedLockNameWithStock(item, orderedStore),
+                  LOCK_TIME_OUT,
+                  () -> {
+                    revertStock(
+                        orderItem.getQuantity(),
+                        orderedStore.getStoreId(),
+                        orderItem.getItem().getItemId());
+                  });
+            });
 
-    order.cancel();
+    orderLockRepository.executeWithLock(
+        getNamedLockNameWithOrder(order),
+        LOCK_TIME_OUT,
+        () -> {
+          order.cancel();
+        });
+
     return OrderDetailResponse.of(order);
   }
 
@@ -77,8 +106,20 @@ public class OrderService {
       throw new GlobalException(ErrorCode.ALREADY_COMPLETED_ORDER);
     }
 
-    order.setStatus(request.getStatus());
+    orderLockRepository.executeWithLock(
+        getNamedLockNameWithOrder(order),
+        LOCK_TIME_OUT,
+        () -> order.setStatus(request.getStatus()));
+
     return OrderDetailResponse.of(order);
+  }
+
+  private String getNamedLockNameWithStock(Item item, Store store) {
+    return String.format("order-%s-%s", store.getStoreId().toString(), item.getItemId().toString());
+  }
+
+  private String getNamedLockNameWithOrder(Order order) {
+    return String.format("order-%s", order.getId().toString());
   }
 
   private void isStoreOperating(Store store, LocalTime now) {

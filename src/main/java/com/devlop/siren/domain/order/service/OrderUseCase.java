@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class OrderUseCase {
   private final ItemServiceImpl itemService;
   private final UserService userService;
 
+  @Transactional
   public OrderDetailResponse create(OrderCreateRequest request, UserDetailsDto userDto) {
     Store store = storeService.findStore(request.getStoreId());
     User user = userService.findUser(userDto.getEmail());
