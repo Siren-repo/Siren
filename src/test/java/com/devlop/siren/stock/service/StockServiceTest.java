@@ -313,5 +313,4 @@ class StockServiceTest {
     stockService.revert(STORE_ID, OrderItem.create(item, customOption, 3));
     assertThat(stock.getStock()).isEqualTo(6);
   }
-
 }
