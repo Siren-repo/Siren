@@ -21,6 +21,7 @@ import com.devlop.siren.domain.item.utils.AllergyConverter;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.fixture.ItemFixture;
+import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
 import java.util.EnumSet;
@@ -57,8 +58,8 @@ class ItemServiceImplTest {
   private void setUp() {
     validObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);
     inValidObject = ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "dd"), -5);
-    staff = new UserDetailsDto(1L, "test@test.com", "12345678", UserRole.ADMIN, false);
-    customer = new UserDetailsDto(2L, "test1@test.com", "12345678", UserRole.CUSTOMER, false);
+    staff = UserFixture.get(UserRole.ADMIN);
+    customer = UserFixture.get(UserRole.CUSTOMER);
   }
 
   @Test

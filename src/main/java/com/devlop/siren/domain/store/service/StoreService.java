@@ -29,7 +29,6 @@ public class StoreService {
 
   @Transactional
   public void registerStore(StoreRegisterRequest storeRegisterRequest, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
     try {
       GeocodingResult[] latLong = geocodingApi.geocodeAddress(storeRegisterRequest.getStreet());
 

@@ -67,7 +67,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
       authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-      log.info("Success token verification");
+
+      log.info("Token verification successful. URI: {}", request.getRequestURI());
 
     } catch (RuntimeException e) {
       if (e instanceof GlobalException) {

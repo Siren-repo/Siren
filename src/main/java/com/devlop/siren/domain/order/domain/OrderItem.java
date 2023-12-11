@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class OrderItem {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "order_item_id")
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -26,7 +27,7 @@ public class OrderItem {
   @JoinColumn(name = "item_id")
   private Item item;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "custom_option_id")
   private CustomOption customOption;
 
