@@ -46,7 +46,8 @@ public class OrderDetailResponse {
                         item.getId(),
                         item.getItem().getItemName(),
                         item.getQuantity(),
-                        item.getCustomOption()))
+                        item.getCustomOption(),
+                        item.getItem().getCategory()))
             .collect(Collectors.toList());
 
     return OrderDetailResponse.builder()

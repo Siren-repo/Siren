@@ -1,5 +1,6 @@
 package com.devlop.siren.domain.order.dto.response;
 
+import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.DrizzleDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.EspressoDetail;
 import com.devlop.siren.domain.item.entity.option.OptionDetails.FoamDetail;
@@ -16,7 +17,7 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.Hibernate;
+import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor
 @Getter
@@ -56,13 +57,16 @@ public class CustomOptionResponse {
     this.potion = potion;
   }
 
-  public static Optional<CustomOptionResponse> fromEntity(CustomOption option) {
-    if ("Beverage".equals(option.getDtype())) {
-      return Optional.of(mapBeverageOption((BeverageOption) Hibernate.unproxy(option)));
-    } else if ("Food".equals(option.getDtype())) {
-      return Optional.of(mapFoodOption((FoodOption) Hibernate.unproxy(option)));
+  public static Optional<CustomOptionResponse> fromEntity(
+      CustomOption option, CategoryType category) {
+    switch (category.name()) {
+      case "BEVERAGE":
+        return Optional.of(mapBeverageOption((BeverageOption) option));
+      case "FOOD":
+        return Optional.of(mapFoodOption((FoodOption) option));
+      default:
+        return Optional.empty();
     }
-    return Optional.empty();
   }
 
   private static CustomOptionResponse mapBeverageOption(BeverageOption option) {
