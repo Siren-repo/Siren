@@ -11,7 +11,7 @@ public class StoreUpdateRequest {
   private String storePhone;
   private String city;
   private String street;
-  private Integer zipCode;
+  private String zipCode;
   private LocalTime openTime;
   private LocalTime closeTime;
 
@@ -20,7 +20,7 @@ public class StoreUpdateRequest {
       String storePhone,
       String city,
       String street,
-      Integer zipCode,
+      String zipCode,
       LocalTime openTime,
       LocalTime closeTime) {
     this.storeName = storeName;

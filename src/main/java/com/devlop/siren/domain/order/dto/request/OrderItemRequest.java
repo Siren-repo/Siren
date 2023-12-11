@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class OrderItemRequest {
+
   @NotNull(message = "주문할 아이템의 아이디를 필수로 입력해야 합니다")
   private Long itemId;
 
@@ -30,5 +32,21 @@ public class OrderItemRequest {
     this.warm = warm;
     this.quantity = quantity;
     this.customOption = customOption;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    OrderItemRequest that = (OrderItemRequest) o;
+    return Objects.equals(itemId, that.itemId)
+        && Objects.equals(takeout, that.takeout)
+        && Objects.equals(warm, that.warm)
+        && Objects.equals(customOption, that.customOption);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(itemId, takeout, warm, customOption);
   }
 }

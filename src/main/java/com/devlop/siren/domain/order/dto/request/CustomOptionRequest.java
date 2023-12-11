@@ -9,10 +9,12 @@ import com.devlop.siren.domain.item.entity.option.OptionTypeGroup.MilkType;
 import com.devlop.siren.domain.item.entity.option.SizeType;
 import java.util.Set;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@EqualsAndHashCode
 @Getter
 public class CustomOptionRequest {
   private SizeType cupSize;

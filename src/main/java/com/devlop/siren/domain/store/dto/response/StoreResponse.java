@@ -12,7 +12,7 @@ public class StoreResponse {
   private String storePhone;
   private String city;
   private String street;
-  private Integer zipCode;
+  private String zipCode;
   private LocalTime openTime;
   private LocalTime closeTime;
 
