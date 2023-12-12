@@ -15,11 +15,13 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @DiscriminatorValue("Food")
 @NoArgsConstructor
+@Getter
 @Table(name = "food_options")
 public class FoodOption extends CustomOption {
   @ElementCollection

@@ -5,6 +5,7 @@ import com.devlop.siren.domain.user.domain.User;
 import com.devlop.siren.global.common.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,7 +40,7 @@ public class Order extends BaseEntity {
   @JoinColumn(name = "store_id")
   private Store store;
 
-  @OneToMany(mappedBy = "order", orphanRemoval = true)
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
   private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
   @Enumerated(EnumType.STRING)
@@ -61,7 +62,7 @@ public class Order extends BaseEntity {
   }
 
   public void cancel() {
-    status = OrderStatus.CANCELLED;
+    status = OrderStatus.CANCELED;
   }
 
   private void setUser(User user) {
@@ -83,10 +84,10 @@ public class Order extends BaseEntity {
   }
 
   private void setOrderItem(List<OrderItem> items) {
-    orderItems = items;
+    orderItems.addAll(items);
   }
 
-  private void setStatus(OrderStatus status) {
+  public void setStatus(OrderStatus status) {
     this.status = status;
   }
 }
