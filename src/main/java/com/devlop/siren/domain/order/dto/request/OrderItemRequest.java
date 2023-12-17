@@ -1,9 +1,11 @@
 package com.devlop.siren.domain.order.dto.request;
 
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

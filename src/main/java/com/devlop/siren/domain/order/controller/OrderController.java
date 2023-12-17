@@ -5,10 +5,12 @@ import com.devlop.siren.domain.order.dto.request.OrderStatusRequest;
 import com.devlop.siren.domain.order.dto.response.OrderDetailResponse;
 import com.devlop.siren.domain.order.service.OrderService;
 import com.devlop.siren.domain.order.service.OrderUseCase;
+import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.Normal;
+import com.devlop.siren.global.util.Permission;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +38,14 @@ public class OrderController {
     return ApiResponse.ok(ResponseCode.Normal.CREATE, orderUseCase.create(request, requestUser));
   }
 
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF})
   @PutMapping("/{orderId}/cancel")
   public ApiResponse<OrderDetailResponse> cancel(
       @PathVariable @NotNull Long orderId, @AuthenticationPrincipal UserDetailsDto requestUser) {
     return ApiResponse.ok(Normal.UPDATE, orderService.cancel(orderId, requestUser));
   }
 
+  @Permission(role = {UserRole.ADMIN, UserRole.STAFF})
   @PutMapping("/status")
   public ApiResponse<OrderDetailResponse> updateStatus(
       @RequestBody @Valid OrderStatusRequest request,
