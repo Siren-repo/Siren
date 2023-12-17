@@ -22,7 +22,6 @@ public class CartController {
   private final CartService cartService;
 
   // 장바구니에 추가
-  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @PostMapping
   public ApiResponse<CartDto> add(
       @Valid @RequestBody OrderItemRequest orderItemRequest,
@@ -31,14 +30,12 @@ public class CartController {
   }
 
   // 장바구니에서 찾기
-  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @GetMapping
   public ApiResponse<CartDto> find(@AuthenticationPrincipal UserDetailsDto user) {
     return ApiResponse.ok(ResponseCode.Normal.RETRIEVE, cartService.retrieve(user));
   }
 
   // 장바구니 안의 모든 요소들 삭제
-  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @DeleteMapping("/all")
   public ApiResponse<?> removeAll(@AuthenticationPrincipal UserDetailsDto user) {
     cartService.removeAll(user);
@@ -46,7 +43,6 @@ public class CartController {
   }
 
   // 장바구니 안의 특정 요소 삭제
-  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @PutMapping("/remove")
   public ApiResponse<CartDto> remove(
       @Valid @RequestBody OrderItemRequest orderItemRequest,
@@ -55,7 +51,6 @@ public class CartController {
   }
 
   // 장바구니 안에서 특정 요소 수정
-  @Permission(role = {UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER})
   @PutMapping("/update")
   public ApiResponse<CartDto> update(
       @Valid @RequestBody OrderItemRequest orderItemRequest,

@@ -44,14 +44,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
       }
     }
 
-    if (annotations.contains(UserRole.CUSTOMER)) {
-      if (contextRole.name().equals(UserRole.CUSTOMER.name())) {
-        log.info("Successfully authenticated as CUSTOMER");
-        return true; // Check @Permission
-      }
-    }
-    // Customer 권한 체크부분이 누락되어 있어서 추가
-
     throw new GlobalException(ErrorCode.INVALID_AUTH);
   }
 }
