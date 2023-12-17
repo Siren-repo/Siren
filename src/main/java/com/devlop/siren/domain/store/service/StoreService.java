@@ -6,10 +6,8 @@ import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.dto.response.StoreResponse;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.utils.GeocodingApi;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-import com.devlop.siren.global.util.UserInformation;
 import com.google.maps.model.GeocodingResult;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Slf4j
 public class StoreService {
-
+  private static final double EARTH_RADIUS_KM = 6371.0;
   private final GeocodingApi geocodingApi;
   private final StoreRepository storeRepository;
-  private static final double EARTH_RADIUS_KM = 6371.0;
 
   @Transactional
-  public void registerStore(StoreRegisterRequest storeRegisterRequest, UserDetailsDto user) {
+  public void registerStore(StoreRegisterRequest storeRegisterRequest) {
     try {
       GeocodingResult[] latLong = geocodingApi.geocodeAddress(storeRegisterRequest.getStreet());
 
@@ -48,9 +46,9 @@ public class StoreService {
     }
   }
 
+  @Transactional
   public void updateStore(
-      Long storeId, StoreUpdateRequest storeUpdateRequest, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
+      Long storeId, StoreUpdateRequest storeUpdateRequest) {
     Store store =
         storeRepository
             .findByStoreId(storeId)
@@ -59,9 +57,7 @@ public class StoreService {
   }
 
   @Transactional
-  public Long deleteStore(Long storeId, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
-
+  public Long deleteStore(Long storeId) {
     Store store =
         storeRepository
             .findByStoreId(storeId)
@@ -85,7 +81,6 @@ public class StoreService {
   }
 
   public List<Store> getNearbyStores(Double latitude, Double longitude, Double radiusKm) {
-
     List<Store> nearbyStores = new ArrayList<>();
     List<Store> allStores = storeRepository.findAll();
 
@@ -99,7 +94,6 @@ public class StoreService {
         nearbyStores.add(store);
       }
     }
-
     return nearbyStores;
   }
 
