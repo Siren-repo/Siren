@@ -56,9 +56,11 @@ public class ItemServiceImpl implements ItemService {
   }
 
   private ItemResponse createFood(ItemCreateRequest request, Category itemCategory) {
+    Nutrition nutrition = NutritionCreateRequest.toEntity(request.getNutritionCreateRequest());
+    nutritionRepository.save(nutrition);
     EnumSet<AllergyType> allergies =
         allergyConverter.convertToEntityAttribute(request.getAllergy());
-    Item item = ItemCreateRequest.toEntity(request, itemCategory, null, allergies, null);
+    Item item = ItemCreateRequest.toEntity(request, itemCategory, null, allergies, nutrition);
     return ItemResponse.from(itemRepository.save(item));
   }
 
@@ -141,8 +143,7 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   @Transactional
-  public Long updateItemById(
-      Long itemId, ItemCreateRequest itemCreateRequest) {
+  public Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest) {
     Item item =
         itemRepository
             .findByIdWithOption(itemId)
