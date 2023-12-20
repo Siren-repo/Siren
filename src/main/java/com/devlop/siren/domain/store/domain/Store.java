@@ -50,7 +50,6 @@ public class Store {
 
   @Builder
   public Store(
-      Long storeId,
       String storeName,
       String storePhone,
       String city,
@@ -60,7 +59,6 @@ public class Store {
       LocalTime closeTime,
       Double latitude,
       Double longitude) {
-    this.storeId = storeId;
     this.storeName = storeName;
     this.storePhone = storePhone;
     this.city = city;

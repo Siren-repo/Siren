@@ -57,12 +57,12 @@ public class OrderServiceTest {
   private static OrderStatusRequest orderStatusRequest;
 
   @BeforeEach
-  private void setUp() {
+  private void setUp() throws NoSuchFieldException, IllegalAccessException {
     user = UserFixture.get("test@test.com", "password", "nickname");
     userDto = UserFixture.get(UserRole.STAFF);
     store = OrderFixture.get(LocalTime.of(9, 0), LocalTime.of(21, 0));
-    orderItems = OrderFixture.getOrderItem(ItemFixture.get());
-    stock = Stock.builder().item(ItemFixture.get()).stock(1).store(store).build();
+    orderItems = OrderFixture.getOrderItem(ItemFixture.get(1L));
+    stock = Stock.builder().item(ItemFixture.get(1L)).stock(1).store(store).build();
     order = OrderFixture.getOrder(user, store, orderItems);
     orderStatusRequest = new OrderStatusRequest(1L, OrderStatus.READY);
   }

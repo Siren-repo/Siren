@@ -55,17 +55,7 @@ class StoreServiceTest {
             LocalTime.of(9, 0),
             LocalTime.of(18, 0));
 
-    mockStore =
-        Store.builder()
-            .storeId(1L)
-            .storeName("First Store Name")
-            .storePhone("First Store Phone")
-            .city("Seoul")
-            .street("대전 서구 둔산중로32번길 29 1층 103호")
-            .zipCode("54321")
-            .closeTime(LocalTime.of(18, 0))
-            .openTime(LocalTime.of(9, 0))
-            .build();
+    mockStore = StoreFixture.get(1L);
   }
 
   @Test

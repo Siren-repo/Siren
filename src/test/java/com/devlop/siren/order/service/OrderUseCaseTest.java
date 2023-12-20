@@ -50,7 +50,7 @@ public class OrderUseCaseTest {
   private static UserDetailsDto userDto;
 
   @BeforeEach
-  void init() {
+  void init() throws NoSuchFieldException, IllegalAccessException {
     store = OrderFixture.get(LocalTime.of(9, 0), LocalTime.of(20, 0));
     itemCreateRequest =
         ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000);

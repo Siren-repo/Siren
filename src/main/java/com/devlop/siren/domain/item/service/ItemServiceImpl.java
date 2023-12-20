@@ -18,10 +18,8 @@ import com.devlop.siren.domain.item.repository.DefaultOptionRepository;
 import com.devlop.siren.domain.item.repository.ItemRepository;
 import com.devlop.siren.domain.item.repository.NutritionRepository;
 import com.devlop.siren.domain.item.utils.AllergyConverter;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-import com.devlop.siren.global.util.UserInformation;
 import java.util.EnumSet;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +42,7 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   @Transactional
-  public ItemResponse create(ItemCreateRequest request, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
+  public ItemResponse create(ItemCreateRequest request) {
     Category itemCategory =
         categoryRepository
             .findByCategoryTypeAndCategoryName(
@@ -59,9 +56,11 @@ public class ItemServiceImpl implements ItemService {
   }
 
   private ItemResponse createFood(ItemCreateRequest request, Category itemCategory) {
+    Nutrition nutrition = NutritionCreateRequest.toEntity(request.getNutritionCreateRequest());
+    nutritionRepository.save(nutrition);
     EnumSet<AllergyType> allergies =
         allergyConverter.convertToEntityAttribute(request.getAllergy());
-    Item item = ItemCreateRequest.toEntity(request, itemCategory, null, allergies, null);
+    Item item = ItemCreateRequest.toEntity(request, itemCategory, null, allergies, nutrition);
     return ItemResponse.from(itemRepository.save(item));
   }
 
@@ -133,8 +132,7 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   @Transactional
-  public Long deleteItemById(Long itemId, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
+  public Long deleteItemById(Long itemId) {
     try {
       itemRepository.deleteById(itemId);
     } catch (Exception e) {
@@ -145,9 +143,7 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   @Transactional
-  public Long updateItemById(
-      Long itemId, ItemCreateRequest itemCreateRequest, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
+  public Long updateItemById(Long itemId, ItemCreateRequest itemCreateRequest) {
     Item item =
         itemRepository
             .findByIdWithOption(itemId)

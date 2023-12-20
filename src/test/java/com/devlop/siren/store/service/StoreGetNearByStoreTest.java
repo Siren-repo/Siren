@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
+import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +28,11 @@ public class StoreGetNearByStoreTest {
   @Mock private Store mockStore4;
 
   @BeforeEach
-  public void init() {
+  public void init() throws NoSuchFieldException, IllegalAccessException {
     MockitoAnnotations.initMocks(this);
 
     mockStore1 =
         Store.builder()
-            .storeId(1L)
             .storeName("Store Name 1")
             .storePhone("Store Phone 1")
             .city("Store City 1")
@@ -47,7 +47,6 @@ public class StoreGetNearByStoreTest {
     // 위로 1km
     mockStore2 =
         Store.builder()
-            .storeId(2L)
             .storeName("Store Name 2")
             .storePhone("Store Phone 2")
             .city("Store City 2")
@@ -63,7 +62,6 @@ public class StoreGetNearByStoreTest {
 
     mockStore3 =
         Store.builder()
-            .storeId(3L)
             .storeName("Store Name 3")
             .storePhone("Store Phone 3")
             .city("Store City 3")
@@ -78,7 +76,6 @@ public class StoreGetNearByStoreTest {
     // 37.46884, 126.8973
     mockStore4 =
         Store.builder()
-            .storeId(4L)
             .storeName("Store Name def")
             .storePhone("Store Phone def")
             .city("Store City def")
@@ -89,6 +86,13 @@ public class StoreGetNearByStoreTest {
             .latitude(37.46884)
             .longitude(126.8973)
             .build();
+
+    Field idField = Store.class.getDeclaredField("storeId");
+    idField.setAccessible(true);
+    idField.set(mockStore1, 1L);
+    idField.set(mockStore2, 2L);
+    idField.set(mockStore3, 3L);
+    idField.set(mockStore4, 4L);
   }
 
   @Test

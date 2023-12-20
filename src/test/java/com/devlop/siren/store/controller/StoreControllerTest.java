@@ -46,7 +46,7 @@ public class StoreControllerTest {
   @Mock private Store mockStore1;
 
   @BeforeEach
-  public void init() {
+  public void init() throws NoSuchFieldException, IllegalAccessException {
     objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
 
@@ -58,7 +58,6 @@ public class StoreControllerTest {
 
     mockStore1 =
         Store.builder()
-            .storeId(1L)
             .storeName("Store Name 1")
             .storePhone("Store Phone 1")
             .city("Store City 1")
