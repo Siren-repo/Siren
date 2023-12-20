@@ -5,10 +5,8 @@ import com.devlop.siren.domain.category.dto.response.CategoryResponse;
 import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.category.repository.CategoryRepository;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.exception.GlobalException;
-import com.devlop.siren.global.util.UserInformation;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,8 +23,7 @@ public class CategoryService {
   private final CategoryRepository categoryRepository;
 
   @Transactional
-  public CategoryResponse register(CategoryCreateRequest request, UserDetailsDto user) {
-    UserInformation.validAdmin(user);
+  public CategoryResponse register(CategoryCreateRequest request) {
     validateDuplicateCategory(request.getCategoryType(), request.getCategoryName());
     Category category = CategoryCreateRequest.toEntity(request);
     return CategoryResponse.from(categoryRepository.save(category));

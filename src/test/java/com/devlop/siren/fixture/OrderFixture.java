@@ -17,6 +17,7 @@ import com.devlop.siren.domain.order.dto.request.OrderCreateRequest;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.user.domain.User;
+import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
@@ -81,20 +82,24 @@ public class OrderFixture {
             3));
   }
 
-  public static Store get(LocalTime open, LocalTime close) {
-    return Store.builder()
-        .storeId(1L)
-        .city("Seoul")
-        .storeId(1L)
-        .storeName("강남대로신사")
-        .street("서울특별시 서초구 강남대로 595")
-        .zipCode(12345)
-        .latitude(37.5148446)
-        .storePhone("1522-3232")
-        .longitude(127.0194574)
-        .openTime(open)
-        .closeTime(close)
-        .build();
+  public static Store get(LocalTime open, LocalTime close)
+      throws NoSuchFieldException, IllegalAccessException {
+    Store store =
+        Store.builder()
+            .city("Seoul")
+            .storeName("강남대로신사")
+            .street("서울특별시 서초구 강남대로 595")
+            .zipCode(12345)
+            .latitude(37.5148446)
+            .storePhone("1522-3232")
+            .longitude(127.0194574)
+            .openTime(open)
+            .closeTime(close)
+            .build();
+    Field idField = Store.class.getDeclaredField("storeId");
+    idField.setAccessible(true);
+    idField.set(store, 1L);
+    return store;
   }
 
   public static List<OrderItemRequest> getOrderItemOfBeverage() {

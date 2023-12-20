@@ -14,6 +14,7 @@ import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.store.utils.GeocodingApi;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.StoreFixture;
 import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.exception.GlobalException;
 import com.google.maps.errors.ApiException;
@@ -46,7 +47,7 @@ class StoreServiceTest {
   @Mock private UserDetailsDto customer;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws NoSuchFieldException, IllegalAccessException {
     admin = UserFixture.get(UserRole.ADMIN);
     customer = UserFixture.get(UserRole.CUSTOMER);
 
@@ -60,17 +61,7 @@ class StoreServiceTest {
             LocalTime.of(9, 0),
             LocalTime.of(18, 0));
 
-    mockStore =
-        Store.builder()
-            .storeId(1L)
-            .storeName("First Store Name")
-            .storePhone("First Store Phone")
-            .city("Seoul")
-            .street("대전 서구 둔산중로32번길 29 1층 103호")
-            .zipCode("54321")
-            .closeTime(LocalTime.of(18, 0))
-            .openTime(LocalTime.of(9, 0))
-            .build();
+    mockStore = StoreFixture.get(1L);
   }
 
   @Test

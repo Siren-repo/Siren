@@ -34,8 +34,7 @@ public class Category {
   private CategoryType categoryType;
 
   @Builder
-  public Category(Long categoryId, String categoryName, CategoryType categoryType) {
-    this.categoryId = categoryId;
+  public Category(String categoryName, CategoryType categoryType) {
     this.categoryName = categoryName;
     this.categoryType = categoryType;
   }
