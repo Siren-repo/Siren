@@ -1,6 +1,7 @@
 package com.devlop.siren.domain.order.dto.request;
 
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class OrderCreateRequest {
   private Long storeId;
 
   @NotNull(message = "주문 아이템이 입력되지 않았습니다")
+  @Valid
   private List<OrderItemRequest> items;
 
   @Builder

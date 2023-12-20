@@ -45,7 +45,7 @@ public class Stock {
 
   public void consumed(int quantity) {
     if (stock < quantity) {
-      throw new GlobalException(ResponseCode.ErrorCode.ORDER_QUANTITY_IN_STOCK);
+      throw new GlobalException(ResponseCode.ErrorCode.OUT_OF_STOCK);
     }
     this.stock -= quantity;
   }

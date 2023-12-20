@@ -8,16 +8,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.devlop.siren.domain.category.dto.request.CategoryCreateRequest;
-import com.devlop.siren.domain.category.entity.Category;
 import com.devlop.siren.domain.category.entity.CategoryType;
 import com.devlop.siren.domain.item.dto.request.ItemCreateRequest;
-import com.devlop.siren.domain.item.dto.request.NutritionCreateRequest;
-import com.devlop.siren.domain.item.entity.AllergyType;
 import com.devlop.siren.domain.item.entity.Item;
-import com.devlop.siren.domain.item.entity.option.DefaultOption;
-import com.devlop.siren.domain.item.entity.option.OptionDetails;
-import com.devlop.siren.domain.item.entity.option.OptionTypeGroup;
-import com.devlop.siren.domain.item.entity.option.SizeType;
 import com.devlop.siren.domain.item.service.ItemServiceImpl;
 import com.devlop.siren.domain.order.dto.request.OrderCreateRequest;
 import com.devlop.siren.domain.order.dto.request.OrderItemRequest;
@@ -33,10 +26,9 @@ import com.devlop.siren.domain.user.service.UserService;
 import com.devlop.siren.fixture.ItemFixture;
 import com.devlop.siren.fixture.OrderFixture;
 import com.devlop.siren.fixture.UserFixture;
+import java.lang.reflect.Field;
 import java.time.LocalTime;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,24 +59,13 @@ public class OrderUseCaseTest {
 
   @Test
   @DisplayName("요청한 request대로 주문을 생성한다 - 음료")
-  void createOrder() {
-    // given
-    NutritionCreateRequest nutrition = new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0);
-    Item item =
-        ItemCreateRequest.toEntity(
-            itemCreateRequest,
-            Category.builder().categoryName("에스프레소").categoryType(CategoryType.BEVERAGE).build(),
-            new DefaultOption(
-                new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2),
-                Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2)),
-                OptionTypeGroup.MilkType.ORIGINAL,
-                OptionTypeGroup.FoamType.MILK,
-                OptionTypeGroup.DrizzleType.CHOCOLATE,
-                SizeType.TALL),
-            EnumSet.of(AllergyType.PEANUT, AllergyType.MILK),
-            NutritionCreateRequest.toEntity(nutrition));
+  void createOrder() throws NoSuchFieldException, IllegalAccessException {
+    Item item = ItemFixture.get();
+    Field field = Item.class.getDeclaredField("itemId");
+    field.setAccessible(true);
+    field.set(item, 1L);
 
-    List<OrderItemRequest> items = OrderFixture.getOrderItemRequest(item);
+    List<OrderItemRequest> items = OrderFixture.getOrderItemRequest();
     OrderCreateRequest request = OrderFixture.get(store.getStoreId(), items);
 
     when(storeService.findStore(anyLong())).thenReturn(store);
