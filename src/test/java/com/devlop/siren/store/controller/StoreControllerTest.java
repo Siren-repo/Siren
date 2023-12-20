@@ -48,7 +48,6 @@ public class StoreControllerTest {
   @BeforeEach
   public void init() throws NoSuchFieldException, IllegalAccessException {
     objectMapper = new ObjectMapper();
-    // 테스트시 LocalDateTime 에러 발생하여 모듈 추가
     objectMapper.registerModule(new JavaTimeModule());
 
     UserDetailsDto dto = UserFixture.get(UserRole.ADMIN);
@@ -72,8 +71,7 @@ public class StoreControllerTest {
   }
 
   @Test
-  @DisplayName("매장 정상 등록시 성공.")
-  @WithMockUser
+  @DisplayName("어드민이 매장을 등록한다")
   void 매장_등록_성공() throws Exception {
     StoreRegisterRequest storeRegisterRequest =
         StoreRegisterRequest.builder()
@@ -88,11 +86,38 @@ public class StoreControllerTest {
 
     mockMvc
         .perform(
-            post("/api/stores/register")
+            post("/api/stores")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(storeRegisterRequest)))
         .andExpect(status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @DisplayName("어드민이 아닌 유저라 매장 등록에 실패한다")
+  void 매장_등록_실패_권한실패() throws Exception {
+    UserDetailsDto dto = UserFixture.get(UserRole.STAFF);
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities()));
+    StoreRegisterRequest storeRegisterRequest =
+        StoreRegisterRequest.builder()
+            .storeName("A TWOSOME PLACE2")
+            .storePhone("010101010")
+            .city("Seoul")
+            .street("서울 구로구 디지털로32길 97-39 2층 (우)08391")
+            .zipCode("54321")
+            .closeTime(LocalTime.of(18, 0))
+            .openTime(LocalTime.of(9, 0))
+            .build();
+    mockMvc
+        .perform(
+            post("/api/stores")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(storeRegisterRequest)))
+        .andExpect(status().isForbidden())
         .andDo(print());
   }
 
@@ -109,7 +134,7 @@ public class StoreControllerTest {
             .build();
     mockMvc
         .perform(
-            post("/api/stores/register/")
+            post("/api/stores")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(storeRegisterRequest)))
@@ -118,7 +143,6 @@ public class StoreControllerTest {
   }
 
   @Test
-  @WithMockUser
   @DisplayName("매장 의 이름을 등록하지 않았을 경우 실패.")
   void 매장_등록_실패() throws Exception {
     StoreRegisterRequest storeRegisterRequest =
@@ -134,7 +158,7 @@ public class StoreControllerTest {
 
     mockMvc
         .perform(
-            post("/api/stores/register")
+            post("/api/stores")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(storeRegisterRequest)))
@@ -143,7 +167,6 @@ public class StoreControllerTest {
   }
 
   @Test
-  @WithMockUser
   @DisplayName("매장 의 우편 번호는 5글자 이상 일 경우 실패.")
   void 매장_등록_우편번호_실패() throws Exception {
     StoreRegisterRequest storeRegisterRequest =
@@ -159,7 +182,7 @@ public class StoreControllerTest {
 
     mockMvc
         .perform(
-            post("/api/stores/register")
+            post("/api/stores")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(storeRegisterRequest)))
@@ -168,13 +191,26 @@ public class StoreControllerTest {
   }
 
   @ParameterizedTest
-  @WithMockUser
   @ValueSource(longs = {1L, 2L})
-  @DisplayName("정상적인 삭제 의 경우")
+  @DisplayName("매장 삭제")
   void deleteItem(Long storeId) throws Exception {
     mockMvc
-        .perform(delete("/api/stores/delete/{storeId}", storeId).with(csrf()))
+        .perform(delete("/api/stores/{storeId}", storeId).with(csrf()))
         .andExpect(status().isOk())
+        .andDo(print());
+  }
+
+  @ParameterizedTest
+  @ValueSource(longs = {1L, 2L})
+  @DisplayName("권한이 없어 매장 삭제에 실패한다")
+  void deleteItemWithNoAuth(Long storeId) throws Exception {
+    UserDetailsDto dto = UserFixture.get(UserRole.STAFF);
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities()));
+    mockMvc
+        .perform(delete("/api/stores/{storeId}", storeId).with(csrf()))
+        .andExpect(status().isForbidden())
         .andDo(print());
   }
 
@@ -225,7 +261,6 @@ public class StoreControllerTest {
 
   @Test
   @DisplayName("매장 정보 업데이트")
-  @WithMockUser
   void updateStore() throws Exception {
     Long storeId = 1L;
     StoreUpdateRequest storeUpdateRequest =
@@ -239,11 +274,38 @@ public class StoreControllerTest {
             LocalTime.of(18, 0));
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/api/stores/update/{storeId}", storeId)
+            MockMvcRequestBuilders.put("/api/stores/{storeId}", storeId)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(storeUpdateRequest)))
         .andExpect(status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @DisplayName("권한이 없어 매장 정보 업데이트에 실패한다")
+  void updateStoreWithNotAuth() throws Exception {
+    Long storeId = 1L;
+    UserDetailsDto dto = UserFixture.get(UserRole.STAFF);
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities()));
+    StoreUpdateRequest storeUpdateRequest =
+        new StoreUpdateRequest(
+            "Updated Store Name",
+            "Updated Store Phone",
+            "Updated City",
+            "Updated Street",
+            "12345",
+            LocalTime.of(9, 0),
+            LocalTime.of(18, 0));
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/api/stores/{storeId}", storeId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(storeUpdateRequest)))
+        .andExpect(status().isForbidden())
         .andDo(print());
   }
 }

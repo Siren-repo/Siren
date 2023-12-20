@@ -12,10 +12,7 @@ import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.store.utils.GeocodingApi;
-import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.fixture.StoreFixture;
-import com.devlop.siren.fixture.UserFixture;
 import com.devlop.siren.global.exception.GlobalException;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
@@ -47,10 +44,7 @@ class StoreServiceTest {
   @Mock private UserDetailsDto customer;
 
   @BeforeEach
-  void setUp() throws NoSuchFieldException, IllegalAccessException {
-    admin = UserFixture.get(UserRole.ADMIN);
-    customer = UserFixture.get(UserRole.CUSTOMER);
-
+  void setUp() {
     registerRequest =
         new StoreRegisterRequest(
             "First Store Name",
@@ -74,7 +68,7 @@ class StoreServiceTest {
     when(geocodingApi.geocodeAddress(any(String.class)))
         .thenReturn(new GeocodingResult[] {mockGeocodingResult});
 
-    storeService.registerStore(registerRequest, admin);
+    storeService.registerStore(registerRequest);
 
     verify(storeRepository).save(any(Store.class));
   }
@@ -86,8 +80,7 @@ class StoreServiceTest {
     when(geocodingApi.geocodeAddress(any(String.class))).thenReturn(new GeocodingResult[0]);
 
     GlobalException exception =
-        assertThrows(
-            GlobalException.class, () -> storeService.registerStore(registerRequest, admin));
+        assertThrows(GlobalException.class, () -> storeService.registerStore(registerRequest));
 
     assertEquals(exception.getErrorCode().getMESSAGE(), "지오코딩 위도 경도 조회시 에러발생");
   }
@@ -108,35 +101,13 @@ class StoreServiceTest {
 
     when(storeRepository.findByStoreId(1L)).thenReturn(Optional.of(mockStore));
 
-    storeService.updateStore(storeId, storeUpdateRequest, admin);
+    storeService.updateStore(storeId, storeUpdateRequest);
 
     Assert.assertEquals("Updated Store Name", mockStore.getStoreName());
     Assert.assertEquals("Updated Store Phone", mockStore.getStorePhone());
     Assert.assertEquals("Updated City", mockStore.getCity());
     Assert.assertEquals("Updated Street", mockStore.getStreet());
     Assert.assertEquals("12345", mockStore.getZipCode());
-  }
-
-  @Test
-  @DisplayName("매장 업데이트 실패 (권한 : CUSTOMER)")
-  void updateStoreWithCustomer() {
-    Long storeId = 1L;
-    StoreUpdateRequest storeUpdateRequest =
-        new StoreUpdateRequest(
-            "Updated Store Name",
-            "Updated Store Phone",
-            "Updated City",
-            "Updated Street",
-            "12345",
-            LocalTime.of(18, 0),
-            LocalTime.of(9, 0));
-
-    GlobalException exception =
-        assertThrows(
-            GlobalException.class,
-            () -> storeService.updateStore(storeId, storeUpdateRequest, customer));
-
-    assertEquals(exception.getErrorCode().getMESSAGE(), "권한이 없는 사용자입니다");
   }
 
   @Test
@@ -155,8 +126,7 @@ class StoreServiceTest {
 
     GlobalException exception =
         assertThrows(
-            GlobalException.class,
-            () -> storeService.updateStore(storeId, storeUpdateRequest, admin));
+            GlobalException.class, () -> storeService.updateStore(storeId, storeUpdateRequest));
 
     assertEquals(exception.getErrorCode().getMESSAGE(), "매장이 존재하지 않습니다.");
   }
@@ -171,7 +141,7 @@ class StoreServiceTest {
 
     when(storeRepository.findByStoreId(storeId)).thenReturn(Optional.of(mockStore));
 
-    storeService.updateStore(storeId, storeUpdateRequest, admin);
+    storeService.updateStore(storeId, storeUpdateRequest);
 
     // then
     Assert.assertEquals("Updated Store Name", mockStore.getStoreName());
@@ -189,31 +159,20 @@ class StoreServiceTest {
 
     when(storeRepository.findByStoreId(storeId)).thenReturn(Optional.of(mockStore));
 
-    Long deletedStoreId = storeService.deleteStore(storeId, admin);
+    Long deletedStoreId = storeService.deleteStore(storeId);
 
     assertEquals(storeId, deletedStoreId);
   }
 
   @Test
-  @DisplayName("매장 삭제 실패 (권한 : CUSTOMER) ")
-  void deleteStoreWithCustomer() {
-    Long storeId = 1L;
-    GlobalException exception =
-        assertThrows(GlobalException.class, () -> storeService.deleteStore(storeId, customer));
-
-    assertEquals(exception.getErrorCode().getMESSAGE(), "권한이 없는 사용자입니다");
-  }
-
-  @Test
   @DisplayName("존재 하지 않는 매장 삭제 (권한 : ADMIN) ")
   void deleteStoreWithAdminNull() {
-
     Long storeId = 2L;
 
     when(storeRepository.findByStoreId(storeId)).thenReturn(Optional.empty());
 
     GlobalException exception =
-        assertThrows(GlobalException.class, () -> storeService.deleteStore(storeId, admin));
+        assertThrows(GlobalException.class, () -> storeService.deleteStore(storeId));
 
     assertEquals(exception.getErrorCode().getMESSAGE(), "매장이 존재하지 않습니다.");
   }

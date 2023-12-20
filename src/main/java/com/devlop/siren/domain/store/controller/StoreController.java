@@ -6,14 +6,12 @@ import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.dto.response.StoreResponse;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.user.domain.UserRole;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.util.Permission;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,12 +21,10 @@ public class StoreController {
   private final StoreService storeService;
 
   @Permission(role = UserRole.ADMIN)
-  @PostMapping("/register")
+  @PostMapping
   public ApiResponse<Void> registerStore(
-      @AuthenticationPrincipal UserDetailsDto user,
       @RequestBody @Valid StoreRegisterRequest storeRegisterRequest) {
-
-    storeService.registerStore(storeRegisterRequest, user);
+    storeService.registerStore(storeRegisterRequest);
     return ApiResponse.ok(ResponseCode.Normal.CREATE, null);
   }
 
@@ -51,19 +47,18 @@ public class StoreController {
         ResponseCode.Normal.RETRIEVE, storeService.getNearbyStores(latitude, longitude, radiusKm));
   }
 
-  @PutMapping("/update/{storeId}")
+  @Permission(role = UserRole.ADMIN)
+  @PutMapping("/{storeId}")
   public ApiResponse<?> updateStore(
-      @PathVariable("storeId") Long storeId,
-      @RequestBody StoreUpdateRequest storeUpdateRequest,
-      @AuthenticationPrincipal UserDetailsDto user) {
-    storeService.updateStore(storeId, storeUpdateRequest, user);
+      @PathVariable("storeId") Long storeId, @RequestBody StoreUpdateRequest storeUpdateRequest) {
+    storeService.updateStore(storeId, storeUpdateRequest);
     return ApiResponse.ok(ResponseCode.Normal.UPDATE, String.format("updateId > %d", storeId));
   }
 
-  @DeleteMapping("/delete/{storeId}")
-  public ApiResponse<?> deleteStore(
-      @PathVariable("storeId") Long storeId, @AuthenticationPrincipal UserDetailsDto user) {
-    Long deleteId = storeService.deleteStore(storeId, user);
+  @Permission(role = UserRole.ADMIN)
+  @DeleteMapping("/{storeId}")
+  public ApiResponse<?> deleteStore(@PathVariable("storeId") Long storeId) {
+    Long deleteId = storeService.deleteStore(storeId);
     return ApiResponse.ok(ResponseCode.Normal.DELETE, String.format("삭제 된 ID > %d", deleteId));
   }
 }

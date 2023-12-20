@@ -30,7 +30,6 @@ import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
 class StockServiceTest {
-
   @Mock private ItemRepository itemRepository;
   @Mock private StoreRepository storeRepository;
   @Mock private StockRepository stockRepository;

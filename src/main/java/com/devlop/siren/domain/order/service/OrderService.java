@@ -15,7 +15,6 @@ import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ResponseCode;
 import com.devlop.siren.global.common.response.ResponseCode.ErrorCode;
 import com.devlop.siren.global.exception.GlobalException;
-import com.devlop.siren.global.util.UserInformation;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,6 @@ public class OrderService {
 
   @Transactional
   public OrderDetailResponse cancel(Long orderId, UserDetailsDto userDto) {
-    UserInformation.validStaffOrAdmin(userDto);
     Order order = findByOrderId(orderId);
 
     if (!OrderStatus.INIT.equals(order.getStatus())) {
@@ -70,7 +68,6 @@ public class OrderService {
 
   @Transactional
   public OrderDetailResponse updateStatus(OrderStatusRequest request, UserDetailsDto userDto) {
-    UserInformation.validStaffOrAdmin(userDto);
     Order order = findByOrderId(request.getOrderId());
 
     if (OrderStatus.COMPLETED.equals(order.getStatus())) {
