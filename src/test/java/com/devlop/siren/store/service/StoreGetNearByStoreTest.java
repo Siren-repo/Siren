@@ -3,11 +3,9 @@ package com.devlop.siren.store.service;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import com.devlop.siren.domain.item.entity.Item;
 import com.devlop.siren.domain.store.domain.Store;
 import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
-
 import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -95,8 +93,6 @@ public class StoreGetNearByStoreTest {
     idField.set(mockStore2, 2L);
     idField.set(mockStore3, 3L);
     idField.set(mockStore4, 4L);
-
-
   }
 
   @Test

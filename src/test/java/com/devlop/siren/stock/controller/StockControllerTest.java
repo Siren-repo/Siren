@@ -42,20 +42,22 @@ class StockControllerTest {
   private UserDetailsDto unAuthorizedUser;
 
   @BeforeEach
-  public void setUp(){
+  public void setUp() {
     validObject = new StockCreateRequest(STORE_ID, ITEM_ID, 1);
-    inValidObject  = new StockCreateRequest(STORE_ID, ITEM_ID, -1);
+    inValidObject = new StockCreateRequest(STORE_ID, ITEM_ID, -1);
     userDetailsDto = UserFixture.get(UserRole.ADMIN);
     unAuthorizedUser = UserFixture.get(UserRole.CUSTOMER);
     SecurityContextHolder.getContext()
-            .setAuthentication(
-                    new UsernamePasswordAuthenticationToken(userDetailsDto, null, userDetailsDto.getAuthorities()));
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                userDetailsDto, null, userDetailsDto.getAuthorities()));
   }
 
-  private void registerUnAuthorizedUser(){
+  private void registerUnAuthorizedUser() {
     SecurityContextHolder.getContext()
-            .setAuthentication(
-                    new UsernamePasswordAuthenticationToken(unAuthorizedUser, null, unAuthorizedUser.getAuthorities()));
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                unAuthorizedUser, null, unAuthorizedUser.getAuthorities()));
   }
 
   @Test
@@ -89,13 +91,13 @@ class StockControllerTest {
   void failCreate() throws Exception {
     registerUnAuthorizedUser();
     mvc.perform(
-                    post("/api/stocks")
-                            .with(csrf())
-                            .content(objectMapper.writeValueAsString(inValidObject))
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden())
-            .andDo(print());
+            post("/api/stocks")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(inValidObject))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 
   @Test
@@ -114,7 +116,9 @@ class StockControllerTest {
   @DisplayName("권한에 맞지 않으면 매장에 따른 재고 리스트 조회에 실패한다 - DTO 검증")
   void failFindAllByStore() throws Exception {
     registerUnAuthorizedUser();
-    mvc.perform(get("/api/stocks/{storeId}", STORE_ID)).andExpect(status().isForbidden()).andDo(print());
+    mvc.perform(get("/api/stocks/{storeId}", STORE_ID))
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 
   @Test
@@ -138,8 +142,8 @@ class StockControllerTest {
   void failFindStockDetail() throws Exception {
     registerUnAuthorizedUser();
     mvc.perform(get("/api/stocks/{storeId}/{itemId}", STORE_ID, ITEM_ID))
-            .andExpect(status().isForbidden())
-            .andDo(print());
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 
   @Test
@@ -173,13 +177,13 @@ class StockControllerTest {
   void failUpdate() throws Exception {
     registerUnAuthorizedUser();
     mvc.perform(
-                    put("/api/stocks/{storeId}/{itemId}", STORE_ID, ITEM_ID)
-                            .with(csrf())
-                            .content(objectMapper.writeValueAsString(validObject.getStock()))
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden())
-            .andDo(print());
+            put("/api/stocks/{storeId}/{itemId}", STORE_ID, ITEM_ID)
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(validObject.getStock()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 
   @Test
@@ -211,11 +215,11 @@ class StockControllerTest {
   void failDeleteStock() throws Exception {
     registerUnAuthorizedUser();
     mvc.perform(
-                    delete("/api/stocks/{storeId}/{itemId}", STORE_ID, ITEM_ID)
-                            .with(csrf())
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden())
-            .andDo(print());
+            delete("/api/stocks/{storeId}/{itemId}", STORE_ID, ITEM_ID)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 }

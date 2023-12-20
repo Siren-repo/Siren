@@ -67,16 +67,14 @@ public class StockController {
       @PathVariable @Min(1L) Long storeId,
       @PathVariable @Min(1L) Long itemId,
       @RequestParam @NotNull @Min(0) Integer stock) {
-    return ApiResponse.ok(
-        ResponseCode.Normal.UPDATE, stockService.update(storeId, itemId, stock));
+    return ApiResponse.ok(ResponseCode.Normal.UPDATE, stockService.update(storeId, itemId, stock));
   }
 
   // 재고를 삭제
   @Permission(role = {UserRole.ADMIN, UserRole.STAFF})
   @DeleteMapping(value = "/{storeId}/{itemId}")
   public ApiResponse<?> delete(
-      @PathVariable @Min(1L) Long storeId,
-      @PathVariable @Min(1L) Long itemId) {
+      @PathVariable @Min(1L) Long storeId, @PathVariable @Min(1L) Long itemId) {
     stockService.delete(storeId, itemId);
     return ApiResponse.ok(
         ResponseCode.Normal.DELETE, String.format("StoreId = %d ItemId = %d", storeId, itemId));

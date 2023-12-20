@@ -1,7 +1,6 @@
 package com.devlop.siren.fixture;
 
 import com.devlop.siren.domain.store.domain.Store;
-
 import java.lang.reflect.Field;
 import java.time.LocalTime;
 

@@ -38,18 +38,20 @@ public class ItemFixture {
   }
 
   public static Item get(Long itemId) throws NoSuchFieldException, IllegalAccessException {
-    Item item =  ItemCreateRequest.toEntity(
-        ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000),
-        Category.builder().categoryName("에스프레소").categoryType(CategoryType.BEVERAGE).build(),
-        new DefaultOption(
-            new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2),
-            Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2)),
-            OptionTypeGroup.MilkType.ORIGINAL,
-            OptionTypeGroup.FoamType.MILK,
-            OptionTypeGroup.DrizzleType.CHOCOLATE,
-            SizeType.TALL),
-        EnumSet.of(AllergyType.PEANUT, AllergyType.MILK),
-        NutritionCreateRequest.toEntity(new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0)));
+    Item item =
+        ItemCreateRequest.toEntity(
+            ItemFixture.get(new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소"), 5000),
+            Category.builder().categoryName("에스프레소").categoryType(CategoryType.BEVERAGE).build(),
+            new DefaultOption(
+                new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2),
+                Set.of(new OptionDetails.SyrupDetail(OptionTypeGroup.SyrupType.VANILLA, 2)),
+                OptionTypeGroup.MilkType.ORIGINAL,
+                OptionTypeGroup.FoamType.MILK,
+                OptionTypeGroup.DrizzleType.CHOCOLATE,
+                SizeType.TALL),
+            EnumSet.of(AllergyType.PEANUT, AllergyType.MILK),
+            NutritionCreateRequest.toEntity(
+                new NutritionCreateRequest(0, 2, 3, 0, 1, 2, 2, 0, 0, 0)));
     Field idField = Item.class.getDeclaredField("itemId");
     idField.setAccessible(true);
     idField.set(item, itemId);

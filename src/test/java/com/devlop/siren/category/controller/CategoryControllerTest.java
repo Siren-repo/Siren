@@ -37,7 +37,6 @@ class CategoryControllerTest {
   private UserDetailsDto userDetailsDto;
   private UserDetailsDto unAuthorizedUser;
 
-
   @BeforeEach
   private void setUp() {
     validObject = new CategoryCreateRequest(CategoryType.BEVERAGE, "에스프레소");
@@ -45,16 +44,16 @@ class CategoryControllerTest {
     userDetailsDto = UserFixture.get(UserRole.ADMIN);
     unAuthorizedUser = UserFixture.get(UserRole.CUSTOMER);
     SecurityContextHolder.getContext()
-            .setAuthentication(
-                    new UsernamePasswordAuthenticationToken(
-                            userDetailsDto, null, userDetailsDto.getAuthorities()));
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                userDetailsDto, null, userDetailsDto.getAuthorities()));
   }
 
   private void registerUnAuthorizedUser() {
     SecurityContextHolder.getContext()
-            .setAuthentication(
-                    new UsernamePasswordAuthenticationToken(
-                            unAuthorizedUser, null, unAuthorizedUser.getAuthorities()));
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                unAuthorizedUser, null, unAuthorizedUser.getAuthorities()));
   }
 
   @Test
@@ -97,13 +96,13 @@ class CategoryControllerTest {
     // then
     registerUnAuthorizedUser();
     mvc.perform(
-                    post("/api/categories")
-                            .with(csrf())
-                            .content(objectMapper.writeValueAsString(validObject))
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden())
-            .andDo(print());
+            post("/api/categories")
+                .with(csrf())
+                .content(objectMapper.writeValueAsString(validObject))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden())
+        .andDo(print());
   }
 
   @Test

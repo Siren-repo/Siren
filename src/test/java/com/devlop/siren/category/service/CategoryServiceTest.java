@@ -33,7 +33,6 @@ class CategoryServiceTest {
   @BeforeEach
   private void setUp() {
     validObject = new CategoryCreateRequest(CategoryType.of("음료"), "에스프레소");
-
   }
 
   @Test
@@ -49,7 +48,6 @@ class CategoryServiceTest {
     assertThat(categoryService.register(validObject).getCategoryName())
         .isEqualTo(validObject.getCategoryName());
   }
-
 
   @Test
   @DisplayName("이미 생성된 카테고리를 중복생성할 수 없다")

@@ -85,7 +85,6 @@ class ItemServiceImplTest {
         .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_CATEGORY.getMESSAGE());
   }
 
-
   @Test
   @DisplayName("해당하는 카테고리 네임, 카테고리 타입이 없는 경우 카테고리별 아이템 조회를 실패한다")
   public void inValidFindAllByCategory() {
@@ -124,13 +123,11 @@ class ItemServiceImplTest {
     Long itemId = 1L;
 
     // When
-    Throwable throwable =
-        catchThrowable(() -> itemService.updateItemById(itemId, validObject));
+    Throwable throwable = catchThrowable(() -> itemService.updateItemById(itemId, validObject));
 
     // Then
     assertThat(throwable)
         .isInstanceOf(GlobalException.class)
         .hasMessageContaining(ResponseCode.ErrorCode.NOT_FOUND_ITEM.getMESSAGE());
   }
-
 }

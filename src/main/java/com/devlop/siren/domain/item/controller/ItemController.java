@@ -7,20 +7,16 @@ import com.devlop.siren.domain.item.dto.response.ItemResponse;
 import com.devlop.siren.domain.item.dto.response.NutritionDetailResponse;
 import com.devlop.siren.domain.item.service.ItemService;
 import com.devlop.siren.domain.user.domain.UserRole;
-import com.devlop.siren.domain.user.dto.UserDetailsDto;
 import com.devlop.siren.global.common.response.ApiResponse;
 import com.devlop.siren.global.common.response.ResponseCode;
+import com.devlop.siren.global.util.Permission;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-
-import com.devlop.siren.global.util.Permission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

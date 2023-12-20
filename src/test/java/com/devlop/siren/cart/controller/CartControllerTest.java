@@ -41,32 +41,34 @@ class CartControllerTest {
   private OrderItemRequest invalidOrderItemRequest;
   private UserDetailsDto userDetailsDto;
 
-
   @BeforeEach
-  void setUp(){
-    validOrderItemRequest = OrderItemRequest.builder()
+  void setUp() {
+    validOrderItemRequest =
+        OrderItemRequest.builder()
             .itemId(1L)
             .warm(false)
             .takeout(false)
             .quantity(5)
             .customOption(
-                    CustomOptionRequest.builder()
-                            .cupSize(SizeType.TALL)
-                            .drizzles(
-                                    Set.of(
-                                            new OptionDetails.DrizzleDetail(OptionTypeGroup.DrizzleType.CARAMEL, 2)))
-                            .espresso(
-                                    new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2))
-                            .milk(OptionTypeGroup.MilkType.ORIGINAL)
-                            .build())
+                CustomOptionRequest.builder()
+                    .cupSize(SizeType.TALL)
+                    .drizzles(
+                        Set.of(
+                            new OptionDetails.DrizzleDetail(
+                                OptionTypeGroup.DrizzleType.CARAMEL, 2)))
+                    .espresso(
+                        new OptionDetails.EspressoDetail(OptionTypeGroup.EspressoType.ORIGINAL, 2))
+                    .milk(OptionTypeGroup.MilkType.ORIGINAL)
+                    .build())
             .build();
     invalidOrderItemRequest = OrderItemRequest.builder().build();
     userDetailsDto = UserFixture.get(UserRole.CUSTOMER);
     SecurityContextHolder.getContext()
-            .setAuthentication(
-                    new UsernamePasswordAuthenticationToken(
-                            userDetailsDto, null, userDetailsDto.getAuthorities()));
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                userDetailsDto, null, userDetailsDto.getAuthorities()));
   }
+
   @Test
   @DisplayName("valid 조건에 맞는 파라미터를 넘기면 장바구니 생성에 성공한다 - DTO 검증")
   void add() throws Exception {
@@ -92,7 +94,6 @@ class CartControllerTest {
         .andExpect(status().isBadRequest())
         .andDo(print());
   }
-
 
   @Test
   @DisplayName("장바구니 조회에 성공한다 - DTO 검증")

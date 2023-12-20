@@ -14,7 +14,6 @@ import com.devlop.siren.domain.store.dto.request.StoreUpdateRequest;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.user.domain.UserRole;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
-import com.devlop.siren.fixture.StoreFixture;
 import com.devlop.siren.fixture.UserFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -58,7 +57,8 @@ public class StoreControllerTest {
         .setAuthentication(
             new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities()));
 
-    mockStore1 = Store.builder()
+    mockStore1 =
+        Store.builder()
             .storeName("Store Name 1")
             .storePhone("Store Phone 1")
             .city("Store City 1")
