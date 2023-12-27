@@ -44,16 +44,39 @@ spring:
       host: ${CART_REDIS_HOST}
       port: ${CART_REDIS_PORT}
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DATASOURCE_IP}:${DATASOURCE_PORT}/${DATASOURCE_DATABASE}?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://${DATASOURCE_IP}:${DATASOURCE_MASTER_PORT}/${DATASOURCE_DATABASE}?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      username: ${DATASOURCE_USERNAME}
+      password: ${DATASOURCE_PASSWORD}
+      read-only: false
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://${DATASOURCE_IP}:${DATASOURCE_SLAVE_PORT}/${DATASOURCE_DATABASE}?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      username: ${DATASOURCE_USERNAME}
+      password: ${DATASOURCE_PASSWORD}
+      read-only: true
   jpa:
     database: MYSQL
     hibernate:
       ddl-auto: update
-    show-sql: true
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+
 ---
 
 spring:
