@@ -13,6 +13,7 @@ import com.devlop.siren.domain.store.repository.StoreRepository;
 import com.devlop.siren.domain.store.service.StoreService;
 import com.devlop.siren.domain.store.utils.GeocodingApi;
 import com.devlop.siren.domain.user.dto.UserDetailsDto;
+import com.devlop.siren.fixture.StoreFixture;
 import com.devlop.siren.global.exception.GlobalException;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
@@ -44,7 +45,7 @@ class StoreServiceTest {
   @Mock private UserDetailsDto customer;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws NoSuchFieldException, IllegalAccessException {
     registerRequest =
         new StoreRegisterRequest(
             "First Store Name",

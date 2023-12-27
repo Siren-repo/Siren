@@ -60,7 +60,7 @@ public class OrderUseCaseTest {
   @Test
   @DisplayName("요청한 request대로 주문을 생성한다 - 음료")
   void createOrder() throws NoSuchFieldException, IllegalAccessException {
-    Item item = ItemFixture.get();
+    Item item = ItemFixture.get(1L);
     Field field = Item.class.getDeclaredField("itemId");
     field.setAccessible(true);
     field.set(item, 1L);
