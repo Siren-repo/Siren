@@ -89,7 +89,7 @@ public class OrderFixture {
             .city("Seoul")
             .storeName("강남대로신사")
             .street("서울특별시 서초구 강남대로 595")
-            .zipCode(12345)
+            .zipCode("12345")
             .latitude(37.5148446)
             .storePhone("1522-3232")
             .longitude(127.0194574)

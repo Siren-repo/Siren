@@ -48,7 +48,7 @@ public class OrderControllerTest {
   private OrderCreateRequest validOrderCreateRequest;
 
   @BeforeEach
-  void init() {
+  void init() throws NoSuchFieldException, IllegalAccessException {
     store = OrderFixture.get(LocalTime.of(9, 00), LocalTime.of(18, 00));
     orderItemRequest = OrderFixture.getOrderItemRequest();
     validOrderCreateRequest = OrderFixture.get(store.getStoreId(), orderItemRequest);
